@@ -1,0 +1,97 @@
+@page "/summarize"
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+@inject ILogger<Summarize> Logger
+
+<PageTitle>Summarize Requirements</PageTitle>
+
+<div class="container mt-4">
+    <h2>Summarize Requirements Document</h2>
+    
+    <div class="mb-3">
+        <label for="documentContent" class="form-label">Requirements Document Content</label>
+        <textarea class="form-control" id="documentContent" rows="10" @bind="documentContent" placeholder="Paste your requirements document here..."></textarea>
+    </div>
+    
+    <button class="btn btn-primary" @onclick="SummarizeDocument" disabled="@isProcessing">
+        @if (isProcessing)
+        {
+            <span class="spinner-border spinner-border-sm" role="status"></span>
+            <span>Processing...</span>
+        }
+        else
+        {
+            <span>Summarize</span>
+        }
+    </button>
+    
+    @if (!string.IsNullOrEmpty(summary))
+    {
+        <div class="mt-4">
+            <h3>Summary</h3>
+            <div class="card">
+                <div class="card-body">
+                    <p>@summary</p>
+                </div>
+            </div>
+        </div>
+    }
+    
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger mt-3" role="alert">
+            @errorMessage
+        </div>
+    }
+</div>
+
+@code {
+    private string documentContent = string.Empty;
+    private string summary = string.Empty;
+    private string errorMessage = string.Empty;
+    private bool isProcessing = false;
+
+    private async Task SummarizeDocument()
+    {
+        if (string.IsNullOrWhiteSpace(documentContent))
+        {
+            errorMessage = "Please enter document content.";
+            return;
+        }
+
+        isProcessing = true;
+        errorMessage = string.Empty;
+        summary = string.Empty;
+
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("RequirementsApi");
+            var request = new { content = documentContent };
+            var response = await httpClient.PostAsJsonAsync("/api/requirements/summarize", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<SummarizeResponse>();
+                summary = result?.Summary ?? "No summary generated.";
+            }
+            else
+            {
+                errorMessage = $"Error: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error summarizing document");
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+
+    private class SummarizeResponse
+    {
+        public string Summary { get; set; } = string.Empty;
+    }
+}

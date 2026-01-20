@@ -1,0 +1,32 @@
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Requirements Assistant</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink href="summarize">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Summarize
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink href="user-stories">
+                <span class="bi bi-card-list-nav-menu" aria-hidden="true"></span> User Stories
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink href="ask">
+                <span class="bi bi-question-circle-nav-menu" aria-hidden="true"></span> Ask Questions
+            </NavLink>
+        </div>
+    </nav>
+</div>

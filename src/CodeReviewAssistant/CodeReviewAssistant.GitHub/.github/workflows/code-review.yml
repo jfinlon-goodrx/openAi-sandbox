@@ -1,0 +1,31 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run Code Review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          dotnet run --project CodeReviewAssistant.GitHub -- \
+            --repo ${{ github.repository }} \
+            --pr ${{ github.event.pull_request.number }} \
+            --token ${{ secrets.GITHUB_TOKEN }}

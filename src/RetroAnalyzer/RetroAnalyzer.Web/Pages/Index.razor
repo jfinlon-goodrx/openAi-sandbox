@@ -1,0 +1,97 @@
+@page "/"
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+
+<PageTitle>Retrospective Analyzer</PageTitle>
+
+<div class="container mt-4">
+    <h2>Analyze Retrospective Comments</h2>
+    
+    <div class="mb-3">
+        <label for="comments" class="form-label">Retrospective Comments (one per line)</label>
+        <textarea class="form-control" id="comments" rows="10" @bind="commentsText" placeholder="Enter retrospective comments, one per line..."></textarea>
+    </div>
+    
+    <div class="btn-group" role="group">
+        <button class="btn btn-primary" @onclick="ExtractActionItems" disabled="@isProcessing">Extract Action Items</button>
+        <button class="btn btn-secondary" @onclick="IdentifyThemes" disabled="@isProcessing">Identify Themes</button>
+        <button class="btn btn-info" @onclick="AnalyzeSentiment" disabled="@isProcessing">Analyze Sentiment</button>
+        <button class="btn btn-success" @onclick="GetSuggestions" disabled="@isProcessing">Get Suggestions</button>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(result))
+    {
+        <div class="mt-4">
+            <h3>Results</h3>
+            <div class="card">
+                <div class="card-body">
+                    <pre>@result</pre>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string commentsText = string.Empty;
+    private string result = string.Empty;
+    private bool isProcessing = false;
+
+    private async Task ExtractActionItems()
+    {
+        await ProcessRequest("/api/retro/extract-action-items", "Extracting action items...");
+    }
+
+    private async Task IdentifyThemes()
+    {
+        await ProcessRequest("/api/retro/identify-themes", "Identifying themes...");
+    }
+
+    private async Task AnalyzeSentiment()
+    {
+        await ProcessRequest("/api/retro/analyze-sentiment", "Analyzing sentiment...");
+    }
+
+    private async Task GetSuggestions()
+    {
+        await ProcessRequest("/api/retro/improvement-suggestions", "Generating suggestions...");
+    }
+
+    private async Task ProcessRequest(string endpoint, string processingMessage)
+    {
+        if (string.IsNullOrWhiteSpace(commentsText))
+        {
+            result = "Please enter comments.";
+            return;
+        }
+
+        isProcessing = true;
+        result = processingMessage;
+
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("RetroApi");
+            var comments = commentsText.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var request = new { comments };
+            var response = await httpClient.PostAsJsonAsync(endpoint, request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                result = content;
+            }
+            else
+            {
+                result = $"Error: {response.StatusCode}";
+            }
+        }
+        catch (Exception ex)
+        {
+            result = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+}
