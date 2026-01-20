@@ -22,31 +22,56 @@ public class CoverImageGenerator
 
     /// <summary>
     /// Generates a cover image using DALL-E based on description
-    /// Note: This is a placeholder - DALL-E API integration would go here
     /// </summary>
-    public async Task<string> GenerateCoverImageAsync(
+    public async Task<CoverImageResult> GenerateCoverImageAsync(
         string description,
         string size = "1024x1024",
+        string quality = "standard",
         CancellationToken cancellationToken = default)
     {
-        // Note: DALL-E API integration would be implemented here
-        // For now, this returns the description that can be used with DALL-E API
-        
         _logger.LogInformation("Generating cover image with description: {Description}", description);
         
-        // In production, you would call DALL-E API:
-        // var imageUrl = await _dalleClient.GenerateImageAsync(description, size);
-        // return imageUrl;
-        
-        return $"Image generation requested for: {description}";
+        try
+        {
+            // Use DALL-E 3 for high-quality book covers
+            var response = await _openAIClient.GenerateImageAsync(
+                prompt: description,
+                model: "dall-e-3",
+                size: size,
+                quality: quality,
+                n: 1,
+                cancellationToken: cancellationToken);
+
+            if (response.Data == null || !response.Data.Any())
+            {
+                throw new InvalidOperationException("No image data returned from DALL-E API");
+            }
+
+            var imageData = response.Data.First();
+            var result = new CoverImageResult
+            {
+                ImageUrl = imageData.Url ?? throw new InvalidOperationException("No image URL returned"),
+                RevisedPrompt = imageData.RevisedPrompt,
+                Description = description
+            };
+
+            _logger.LogInformation("Cover image generated successfully. URL: {Url}", result.ImageUrl);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating cover image");
+            throw;
+        }
     }
 
     /// <summary>
     /// Generates cover image from markdown repository
     /// </summary>
-    public async Task<string> GenerateCoverFromMarkdownAsync(
+    public async Task<CoverImageResult> GenerateCoverFromMarkdownAsync(
         string markdownContent,
         string? genre = null,
+        string size = "1024x1024",
         CancellationToken cancellationToken = default)
     {
         var publishingService = new PublishingService(_openAIClient, _logger);
@@ -55,6 +80,18 @@ public class CoverImageGenerator
             genre,
             cancellationToken);
 
-        return await GenerateCoverImageAsync(description.Description, cancellationToken: cancellationToken);
+        // Combine the description with style and mood information for better results
+        var enhancedPrompt = $"{description.Description}. Style: {description.Style}. Mood: {description.Mood}. " +
+                           $"Color palette: {string.Join(", ", description.ColorPalette)}. " +
+                           $"Professional book cover design, high quality, suitable for publishing.";
+
+        return await GenerateCoverImageAsync(enhancedPrompt, size, cancellationToken: cancellationToken);
     }
+}
+
+public class CoverImageResult
+{
+    public string ImageUrl { get; set; } = string.Empty;
+    public string? RevisedPrompt { get; set; }
+    public string Description { get; set; } = string.Empty;
 }

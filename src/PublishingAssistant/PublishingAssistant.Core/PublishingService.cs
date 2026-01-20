@@ -295,6 +295,11 @@ public class PublishingService
         string targetFormat,
         CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(markdownContent))
+        {
+            throw new ArgumentException("Markdown content cannot be empty", nameof(markdownContent));
+        }
+
         targetFormat = targetFormat.ToLowerInvariant();
 
         return targetFormat switch
@@ -303,7 +308,7 @@ public class PublishingService
             "plaintext" => Markdown.ToPlainText(markdownContent),
             "epub" => await ConvertToEpubAsync(markdownContent, cancellationToken),
             "pdf" => await ConvertToPdfAsync(markdownContent, cancellationToken),
-            _ => throw new NotSupportedException($"Format {targetFormat} is not supported")
+            _ => throw new NotSupportedException($"Format {targetFormat} is not supported. Supported formats: html, plaintext, epub, pdf")
         };
     }
 
@@ -345,12 +350,14 @@ public class PublishingService
 
     private async Task<string> ConvertToEpubAsync(string markdownContent, CancellationToken cancellationToken)
     {
-        // Convert markdown to HTML first, then provide instructions for EPUB conversion
+        // Convert markdown to HTML first
         var html = Markdown.ToHtml(markdownContent);
         
+        // Create EPUB structure using AI to generate proper XML
         var prompt = new PromptBuilder()
-            .WithSystemMessage("You are an expert in EPUB format conversion.")
-            .WithInstruction("Convert the following HTML content to EPUB format structure. Provide the EPUB XML structure.")
+            .WithSystemMessage("You are an expert in EPUB format conversion. Generate valid EPUB 3.0 XML structure.")
+            .WithInstruction("Convert the following HTML content to EPUB format. Provide the complete EPUB package document (OPF) XML structure " +
+                           "including metadata, manifest, and spine sections. Use proper EPUB 3.0 namespace and structure.")
             .WithInput(html)
             .Build();
 
@@ -359,21 +366,63 @@ public class PublishingService
             Model = _model,
             Messages = new List<ChatMessage>
             {
+                new() { Role = "system", Content = "You are an expert in EPUB format conversion." },
                 new() { Role = "user", Content = prompt }
             },
             Temperature = 0.2,
-            MaxTokens = 5000
+            MaxTokens = 8000
         };
 
         var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
-        return response.Choices.FirstOrDefault()?.Message?.Content ?? html;
+        var epubXml = response.Choices.FirstOrDefault()?.Message?.Content ?? html;
+        
+        // Return EPUB XML structure
+        // Note: In production, you would also need to create:
+        // - mimetype file
+        // - META-INF/container.xml
+        // - OEBPS/content.opf (the generated XML)
+        // - OEBPS/chapter files
+        // - Then zip it all together
+        
+        return epubXml;
     }
 
     private async Task<string> ConvertToPdfAsync(string markdownContent, CancellationToken cancellationToken)
     {
-        // Convert to HTML first, then provide PDF conversion instructions
+        // Convert markdown to HTML
         var html = Markdown.ToHtml(markdownContent);
-        return html; // In production, use a library like Puppeteer or wkhtmltopdf
+        
+        // Enhance HTML for PDF conversion with proper styling
+        var prompt = new PromptBuilder()
+            .WithSystemMessage("You are an expert in PDF document formatting.")
+            .WithInstruction("Enhance the following HTML for PDF conversion. Add proper CSS styling for print, " +
+                           "including page breaks, margins, typography, and layout suitable for a book manuscript. " +
+                           "Return the complete HTML document with embedded CSS.")
+            .WithInput(html)
+            .Build();
+
+        var request = new ChatCompletionRequest
+        {
+            Model = _model,
+            Messages = new List<ChatMessage>
+            {
+                new() { Role = "system", Content = "You are an expert in PDF document formatting." },
+                new() { Role = "user", Content = prompt }
+            },
+            Temperature = 0.2,
+            MaxTokens = 6000
+        };
+
+        var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
+        var pdfReadyHtml = response.Choices.FirstOrDefault()?.Message?.Content ?? html;
+        
+        // Note: In production, use a library like:
+        // - PuppeteerSharp for headless Chrome PDF generation
+        // - SelectPdf for .NET
+        // - wkhtmltopdf wrapper
+        // Example: await pdfGenerator.ConvertHtmlToPdfAsync(pdfReadyHtml);
+        
+        return pdfReadyHtml;
     }
 
     private BookReview ParseReviewFromFunctionCall(string argumentsJson)

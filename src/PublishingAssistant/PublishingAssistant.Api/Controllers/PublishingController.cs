@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using OpenAIShared;
 using PublishingAssistant.Core;
 
 namespace PublishingAssistant.Api.Controllers;
@@ -99,6 +101,50 @@ public class PublishingController : ControllerBase
     }
 
     /// <summary>
+    /// Generates actual cover image using DALL-E
+    /// </summary>
+    [HttpPost("generate-cover-image")]
+    public async Task<ActionResult<CoverImageResult>> GenerateCoverImage([FromBody] GenerateCoverRequest request)
+    {
+        try
+        {
+            var coverGenerator = new CoverImageGenerator(
+                HttpContext.RequestServices.GetRequiredService<OpenAIClient>(),
+                HttpContext.RequestServices.GetRequiredService<ILogger<CoverImageGenerator>>());
+
+            CoverImageResult result;
+            
+            if (!string.IsNullOrEmpty(request.MarkdownContent))
+            {
+                // Generate from markdown repository
+                result = await coverGenerator.GenerateCoverFromMarkdownAsync(
+                    request.MarkdownContent,
+                    request.Genre,
+                    request.Size ?? "1024x1024");
+            }
+            else if (!string.IsNullOrEmpty(request.Description))
+            {
+                // Generate from description
+                result = await coverGenerator.GenerateCoverImageAsync(
+                    request.Description,
+                    request.Size ?? "1024x1024",
+                    request.Quality ?? "standard");
+            }
+            else
+            {
+                return BadRequest(new { error = "Either markdownContent or description must be provided" });
+            }
+
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating cover image");
+            return StatusCode(500, new { error = "Failed to generate cover image", message = ex.Message });
+        }
+    }
+
+    /// <summary>
     /// Converts markdown to various formats
     /// </summary>
     [HttpPost("convert")]
@@ -170,4 +216,13 @@ public class ConvertRequest
 public class ContentRequest
 {
     public string Content { get; set; } = string.Empty;
+}
+
+public class GenerateCoverRequest
+{
+    public string? MarkdownContent { get; set; }
+    public string? Description { get; set; }
+    public string? Genre { get; set; }
+    public string? Size { get; set; }
+    public string? Quality { get; set; }
 }

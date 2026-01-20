@@ -238,6 +238,63 @@ public class OpenAIClient : IDisposable
         return result;
     }
 
+    /// <summary>
+    /// Generates an image using DALL-E API
+    /// </summary>
+    public async Task<ImageGenerationResponse> GenerateImageAsync(
+        string prompt,
+        string model = "dall-e-3",
+        string size = "1024x1024",
+        string quality = "standard",
+        int n = 1,
+        CancellationToken cancellationToken = default)
+    {
+        var requestBody = new
+        {
+            model = model,
+            prompt = prompt,
+            n = n,
+            size = size,
+            quality = quality
+        };
+
+        var json = JsonSerializer.Serialize(requestBody, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _retryPolicy.ExecuteAsync(async () =>
+        {
+            var httpResponse = await _httpClient.PostAsync("/images/generations", content, cancellationToken);
+            httpResponse.EnsureSuccessStatusCode();
+            return httpResponse;
+        });
+
+        var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+        var result = JsonSerializer.Deserialize<ImageGenerationResponse>(responseContent, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        if (result == null)
+        {
+            throw new InvalidOperationException("Failed to deserialize OpenAI API response");
+        }
+
+        if (_config.EnableLogging)
+        {
+            _logger.LogInformation(
+                "Image generation completed. Model: {Model}, Size: {Size}, Images: {Count}",
+                model,
+                size,
+                result.Data?.Count ?? 0);
+        }
+
+        return result;
+    }
+
     public void Dispose()
     {
         _httpClient?.Dispose();
@@ -339,4 +396,17 @@ public class EmbeddingData
 public class TranscriptionResponse
 {
     public string Text { get; set; } = string.Empty;
+}
+
+public class ImageGenerationResponse
+{
+    public long Created { get; set; }
+    public List<ImageData> Data { get; set; } = new();
+}
+
+public class ImageData
+{
+    public string? Url { get; set; }
+    public string? B64Json { get; set; }
+    public string? RevisedPrompt { get; set; }
 }

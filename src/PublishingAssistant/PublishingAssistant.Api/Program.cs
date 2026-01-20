@@ -34,6 +34,12 @@ builder.Services.AddScoped<PublishingService>(sp =>
     var model = builder.Configuration["OpenAI:DefaultModel"] ?? "gpt-4-turbo-preview";
     return new PublishingService(openAIClient, logger, model);
 });
+builder.Services.AddScoped<CoverImageGenerator>(sp =>
+{
+    var openAIClient = sp.GetRequiredService<OpenAIClient>();
+    var logger = sp.GetRequiredService<ILogger<CoverImageGenerator>>();
+    return new CoverImageGenerator(openAIClient, logger);
+});
 
 var app = builder.Build();
 
