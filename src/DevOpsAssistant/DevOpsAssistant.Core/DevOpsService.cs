@@ -686,8 +686,9 @@ public class DevOpsService
             .WithSystemMessage("You are analyzing a pull request for deployment readiness.")
             .WithInstruction($"Analyze this pull request for deployment readiness:\n\n" +
                            $"Title: {pr.Title}\n" +
-                           $"Description: {pr.Body}\n" +
-                           $"Files Changed:\n{filesSummary}\n\n" +
+                           $"Description: {pr.Body ?? "No description"}\n" +
+                           $"State: {pr.State}\n" +
+                           $"Files Changed ({files.Count}):\n{filesSummary}\n\n" +
                            "Assess: deployment risk, breaking changes, migration needs, " +
                            "rollback considerations, and deployment checklist.")
             .Build();

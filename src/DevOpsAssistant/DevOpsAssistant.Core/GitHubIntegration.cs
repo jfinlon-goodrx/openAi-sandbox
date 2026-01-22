@@ -357,18 +357,6 @@ public class WorkflowRun
     public string HtmlUrl { get; set; } = string.Empty;
 }
 
-public class PullRequest
-{
-    public int Number { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Body { get; set; } = string.Empty;
-    public string State { get; set; } = string.Empty;
-    public string Head { get; set; } = new();
-    public string Base { get; set; } = new();
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-    public string HtmlUrl { get; set; } = string.Empty;
-}
 
 public class PrFile
 {
