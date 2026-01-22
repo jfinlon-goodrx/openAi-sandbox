@@ -185,9 +185,42 @@ public async Task ProcessMeeting(Stream audioFile, List<string> attendees)
 **Issue:** Meeting transcription errors
 - **Solution:** Ensure good audio quality, use appropriate language parameter
 
+## Slack Integration
+
+Share retrospective insights, meeting summaries, and action items with your team via Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After retrospective analysis
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📊 Retrospective Analysis",
+    text: $"Sentiment: {sentiment.OverallSentiment}\n\nThemes: {string.Join(", ", themes)}",
+    fields: actionItems.Select(ai => new SlackField
+    {
+        Title = ai.Description,
+        Value = $"Owner: {ai.Owner ?? "Unassigned"}"
+    }).ToList(),
+    channel: "#retrospectives"
+);
+
+// After meeting analysis
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📝 Meeting Summary",
+    text: summary,
+    fields: actionItems.Select(ai => new SlackField
+    {
+        Title = ai.Description,
+        Value = $"Owner: {ai.Owner ?? "Unassigned"}"
+    }).ToList(),
+    channel: "#meetings"
+);
+```
+
 ## Resources
 
 - [Retrospective Analyzer Documentation](../project-docs/retro-analyzer.md)
 - [Meeting Analyzer Documentation](../project-docs/meeting-analyzer.md)
 - [Requirements Assistant Documentation](../project-docs/requirements-assistant.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Best Practices](../best-practices/)

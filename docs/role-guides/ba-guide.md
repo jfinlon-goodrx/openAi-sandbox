@@ -168,8 +168,29 @@ foreach (var story in userStories)
 **Issue:** Stories lack detail
 - **Solution:** Use more specific prompts, provide examples of well-written stories
 
+## Slack Integration
+
+Share requirements summaries and user story generation results with stakeholders via Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After processing requirements
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📋 Requirements Processed",
+    text: $"Summary: {summary}\n\nUser Stories Generated: {userStories.Count}",
+    fields: userStories.Select(us => new SlackField
+    {
+        Title = us.Title,
+        Value = $"As a {us.AsA}, I want {us.IWant}"
+    }).ToList(),
+    channel: "#requirements"
+);
+```
+
 ## Resources
 
 - [Requirements Assistant Documentation](../project-docs/requirements-assistant.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started Guide](../getting-started/)
 - [Best Practices](../best-practices/)

@@ -73,8 +73,35 @@ Set up automated code reviews in your CI/CD pipeline:
 
 2. Add secrets to your GitHub repository:
    - `OPENAI_API_KEY`: Your OpenAI API key
+   - `SLACK_WEBHOOK_URL`: (Optional) For Slack notifications
 
 3. The workflow will automatically review pull requests
+
+### GitHub Actions + Slack Notifications
+
+Get notified in Slack when code reviews complete:
+
+```yaml
+- name: Notify Slack
+  if: always()
+  env:
+    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  run: |
+    curl -X POST $SLACK_WEBHOOK_URL \
+      -H 'Content-Type: application/json' \
+      -d '{
+        "text": "🔍 Code Review Completed",
+        "blocks": [{
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "*PR Review Completed*\n<${{ github.event.pull_request.html_url }}|PR #${{ github.event.pull_request.number }}>"
+          }
+        }]
+      }'
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) and [GitHub Actions Workflows](../../samples/GitHubExamples/GitHubActionsWorkflows.md) for more examples.
 
 ## Daily Workflow Examples
 
@@ -151,9 +178,32 @@ public async Task GenerateTestsForFile(string filePath)
 **Issue:** High API costs
 - **Solution:** Use GPT-3.5 for simpler tasks, cache results when possible
 
+## Slack Integration
+
+Send code review summaries and test generation results to Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After code review
+await slackIntegration.SendPrNotificationAsync(
+    repository: "my-org/my-repo",
+    prNumber: 123,
+    title: "Add new feature",
+    author: "john.doe",
+    status: "Open",
+    prUrl: "https://github.com/my-org/my-repo/pull/123",
+    channel: "#code-review"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Resources
 
 - [Code Review Assistant Documentation](../project-docs/code-review-assistant.md)
 - [Test Case Generator Documentation](../project-docs/test-case-generator.md)
 - [Documentation Generator Documentation](../project-docs/documentation-generator.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
+- [GitHub Actions Workflows](../../samples/GitHubExamples/GitHubActionsWorkflows.md) ⭐ NEW
 - [Best Practices](../best-practices/)

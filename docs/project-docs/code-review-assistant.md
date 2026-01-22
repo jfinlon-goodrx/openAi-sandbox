@@ -155,11 +155,33 @@ Edit `.github/workflows/code-review.yml`:
       --pr ${{ github.event.pull_request.number }}
 ```
 
+## Slack Integration
+
+Send code review summaries to Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After code review
+await slackIntegration.SendPrNotificationAsync(
+    repository: "my-org/my-repo",
+    prNumber: 123,
+    title: "Add new feature",
+    author: "john.doe",
+    status: "Open",
+    prUrl: "https://github.com/my-org/my-repo/pull/123",
+    channel: "#code-review"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) and [GitHub Actions + Slack Workflows](../../samples/GitHubExamples/SlackGitHubWorkflows.md) for more examples.
+
 ## Best Practices
 
 1. **Review AI Suggestions**: Always review AI-generated comments
 2. **Use Appropriate Models**: Use GPT-4 for code review (more accurate)
 3. **Set Low Temperature**: Use 0.2-0.3 for deterministic reviews
+4. **Integrate with Slack**: Send review summaries to team channels
 4. **Focus on Critical Issues**: Prioritize security and performance
 5. **Learn from Reviews**: Use feedback to improve coding practices
 

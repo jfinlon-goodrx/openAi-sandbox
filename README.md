@@ -62,6 +62,7 @@ Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
 - [Project Documentation](docs/project-docs/) - Detailed project docs for all 11 projects
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
+- [Integrations](docs/integrations/) - **Slack**, GitHub Actions, Jira, Confluence integration guides ⭐ NEW
 - [Integrations](docs/integrations/) - Slack, GitHub Actions, Jira, Confluence integration guides
 
 ### New Guides
@@ -75,6 +76,17 @@ Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
 - **[DevOps Guide](docs/role-guides/devops-guide.md)** - Complete guide for DevOps workflows
 - **[DevOps Assistant](docs/project-docs/devops-assistant.md)** - Project documentation
 - Log analysis, CI/CD optimization, infrastructure review, security scanning, and container analysis
+- **GitHub Actions** and **Slack** integration for automated workflows
+
+## Integrations
+
+All projects support integration with:
+- **Slack** ⭐ NEW - Notifications, daily summaries, incident reports, deployment updates
+- **GitHub Actions** - Automated code reviews, pipeline optimization, deployment checks
+- **Jira** - Ticket creation, sprint planning, action item tracking
+- **Confluence** - Requirements processing, documentation management
+
+See [Integration Guides](docs/integrations/) for setup and examples.
 
 ## Contributing
 

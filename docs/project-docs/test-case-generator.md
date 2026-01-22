@@ -178,8 +178,31 @@ public void Add_TwoNumbers_ReturnsSum()
 **Issue:** Too many tests generated
 - **Solution:** Adjust prompts to focus on high-priority scenarios
 
+## Slack Integration
+
+Share test case generation results with your team:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After generating test cases
+await slackIntegration.SendFormattedMessageAsync(
+    title: "🧪 Test Cases Generated",
+    text: $"Generated {testCases.Count} test cases for feature: {featureName}",
+    fields: testCases.Take(5).Select(tc => new SlackField
+    {
+        Title = tc.Name,
+        Value = tc.Description
+    }).ToList(),
+    channel: "#qa"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Related Documentation
 
 - [Tester Guide](../role-guides/tester-guide.md)
 - [Developer Guide](../role-guides/developer-guide.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started](../getting-started/)

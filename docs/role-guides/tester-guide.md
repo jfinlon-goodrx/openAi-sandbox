@@ -224,8 +224,29 @@ foreach (var testCase in testCases)
 **Issue:** Edge cases not identified
 - **Solution:** Use specific prompts asking for boundary conditions
 
+## Slack Integration
+
+Share test case generation results and test plans with your team:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After generating test cases
+await slackIntegration.SendFormattedMessageAsync(
+    title: "🧪 Test Cases Generated",
+    text: $"Generated {testCases.Count} test cases for feature: {featureName}",
+    fields: testCases.Take(5).Select(tc => new SlackField
+    {
+        Title = tc.Name,
+        Value = tc.Description
+    }).ToList(),
+    channel: "#qa"
+);
+```
+
 ## Resources
 
 - [Test Case Generator Documentation](../project-docs/test-case-generator.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started Guide](../getting-started/)
 - [Best Practices](../best-practices/)

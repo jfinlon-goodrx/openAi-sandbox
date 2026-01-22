@@ -229,7 +229,30 @@ var suggestions = await retroService.GenerateImprovementSuggestionsAsync(comment
 **Issue:** Jira integration fails
 - **Solution:** Verify API token and project key, check permissions
 
+## Slack Integration
+
+Share retrospective insights with your team via Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After analysis
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📊 Retrospective Analysis",
+    text: $"Sentiment: {sentiment.OverallSentiment}\n\nThemes: {string.Join(", ", themes)}",
+    fields: actionItems.Select(ai => new SlackField
+    {
+        Title = ai.Description,
+        Value = $"Owner: {ai.Owner ?? "Unassigned"}"
+    }).ToList(),
+    channel: "#retrospectives"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Related Documentation
 
 - [PM Guide](../role-guides/pm-guide.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started](../getting-started/)

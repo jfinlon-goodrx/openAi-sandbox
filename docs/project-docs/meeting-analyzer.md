@@ -224,8 +224,31 @@ var ticketKeys = await jiraIntegration.CreateTicketsFromActionItemsAsync(
 **Issue:** File upload fails
 - **Solution:** Check file size limits, ensure supported format
 
+## Slack Integration
+
+Share meeting summaries and action items with attendees via Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After meeting analysis
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📝 Meeting Summary",
+    text: summary,
+    fields: actionItems.Select(ai => new SlackField
+    {
+        Title = ai.Description,
+        Value = $"Owner: {ai.Owner ?? "Unassigned"}"
+    }).ToList(),
+    channel: "#meetings"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Related Documentation
 
 - [PM Guide](../role-guides/pm-guide.md)
 - [BA Guide](../role-guides/ba-guide.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started](../getting-started/)

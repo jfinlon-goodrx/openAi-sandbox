@@ -217,8 +217,31 @@ foreach (var story in stories)
 3. **Iterate**: Use AI as a starting point, then refine manually
 4. **Maintain Traceability**: Link stories back to source documents
 
+## Slack Integration
+
+Share requirements summaries and user stories with stakeholders via Slack:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After processing requirements
+await slackIntegration.SendFormattedMessageAsync(
+    title: "📋 Requirements Processed",
+    text: $"Summary: {summary}\n\nUser Stories Generated: {userStories.Count}",
+    fields: userStories.Select(us => new SlackField
+    {
+        Title = us.Title,
+        Value = $"As a {us.AsA}, I want {us.IWant}"
+    }).ToList(),
+    channel: "#requirements"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Related Documentation
 
 - [BA Guide](../role-guides/ba-guide.md)
 - [PM Guide](../role-guides/pm-guide.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started](../getting-started/)

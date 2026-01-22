@@ -99,17 +99,17 @@ DevOps Engineer workflows for infrastructure and CI/CD management.
 
 | Project | OpenAI APIs Used | Integrations | Use Cases |
 |---------|-----------------|--------------|-----------|
-| Requirements Assistant | GPT-4 | Confluence | BA, PM |
-| Test Case Generator | GPT-4 | - | Developer, Tester |
-| Retro Analyzer | GPT-4, Embeddings | Jira | PM, SDM |
-| Code Review Assistant | GPT-4 | GitHub Actions | Developer |
-| Documentation Generator | GPT-4 | - | Developer |
-| Meeting Analyzer | Whisper, GPT-4 | - | PM, SDM |
+| Requirements Assistant | GPT-4 | Confluence, Slack | BA, PM |
+| Test Case Generator | GPT-4 | Slack | Developer, Tester |
+| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | PM, SDM |
+| Code Review Assistant | GPT-4 | GitHub Actions, Slack | Developer |
+| Documentation Generator | GPT-4 | Slack | Developer |
+| Meeting Analyzer | Whisper, GPT-4 | Slack | PM, SDM |
 | Publishing Assistant | GPT-4, DALL-E, Vision | - | Publishing |
 | Pharmacy Assistant | GPT-4 | - | Pharmacy |
 | Advertising Assistant | GPT-4 | - | Advertising |
-| SDM Assistant | GPT-4 | Jira, Confluence | SDM |
-| DevOps Assistant | GPT-4 | GitHub Actions, Azure DevOps | DevOps |
+| SDM Assistant | GPT-4 | Jira, Confluence, Slack | SDM |
+| DevOps Assistant | GPT-4 | GitHub Actions, Azure DevOps, Slack | DevOps |
 
 ## Getting Started
 
@@ -130,6 +130,7 @@ Some projects require additional setup:
 - **Jira Integration**: API token from Atlassian
 - **Confluence Integration**: API token from Atlassian
 - **GitHub Integration**: GitHub token for Actions
+- **Slack Integration**: Webhook URL from Slack (see [Slack Integration Guide](../integrations/slack-integration.md)) ⭐ NEW
 
 See [Setup Guide](../getting-started/01-setup.md) for detailed instructions.
 

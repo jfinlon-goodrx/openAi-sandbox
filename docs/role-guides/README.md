@@ -110,8 +110,10 @@ All guides support integration with:
 - **Jira** - For ticket management
 - **Confluence** - For documentation
 - **GitHub** - For code reviews and CI/CD
+- **Slack** - For notifications and team updates ⭐ NEW
 
 See [Setup Guide](../getting-started/01-setup.md) for configuration instructions.
+See [Integration Guides](../integrations/) for detailed integration documentation.
 
 ## Best Practices
 

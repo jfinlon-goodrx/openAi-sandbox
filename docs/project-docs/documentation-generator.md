@@ -184,7 +184,24 @@ Add to your `.csproj`:
 **Issue:** Missing information
 - **Solution:** Include more context in code comments
 
+## Slack Integration
+
+Notify your team when documentation is generated:
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// After generating documentation
+await slackIntegration.SendMessageAsync(
+    text: $"📚 Documentation generated for {projectName}\n\n{apiDocs.Substring(0, Math.Min(200, apiDocs.Length))}...",
+    channel: "#documentation"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Related Documentation
 
 - [Developer Guide](../role-guides/developer-guide.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [Getting Started](../getting-started/)
