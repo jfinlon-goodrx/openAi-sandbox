@@ -39,6 +39,21 @@ For Product Managers who want to:
 - Meeting Analyzer
 - Requirements Assistant
 
+### [Project Manager Guide](project-manager-guide.md) ⭐ NEW
+For Project Managers who need to:
+- Generate project status reports
+- Analyze risks and create mitigation plans
+- Manage stakeholder communications
+- Process meeting minutes and action items
+- Plan and schedule projects
+- Analyze change requests
+- Track budget and forecast costs
+
+**Key Projects:**
+- SDM Assistant (status reports, risk analysis)
+- Meeting Analyzer (meeting processing)
+- Requirements Assistant (requirements analysis)
+
 ### [Tester Guide](tester-guide.md)
 For QA Engineers and Testers who need to:
 - Generate test cases from user stories
