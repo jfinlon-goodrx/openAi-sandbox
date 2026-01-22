@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -99,6 +100,23 @@ public static class ServiceCollectionExtensions
             var openAIClient = serviceProvider.GetRequiredService<OpenAIClient>();
             var logger = serviceProvider.GetRequiredService<ILogger<RAGService>>();
             return new RAGService(openAIClient, logger);
+        });
+
+        // Register StreamingService
+        services.AddScoped<StreamingService>(serviceProvider =>
+        {
+            var openAIClient = serviceProvider.GetRequiredService<OpenAIClient>();
+            var logger = serviceProvider.GetRequiredService<ILogger<StreamingService>>();
+            return new StreamingService(openAIClient, logger);
+        });
+
+        // Register CachingService
+        services.AddMemoryCache();
+        services.AddScoped<CachingService>(serviceProvider =>
+        {
+            var cache = serviceProvider.GetRequiredService<IMemoryCache>();
+            var logger = serviceProvider.GetRequiredService<ILogger<CachingService>>();
+            return new CachingService(cache, logger);
         });
 
         return services;
