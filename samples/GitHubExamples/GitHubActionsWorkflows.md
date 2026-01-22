@@ -320,10 +320,15 @@ curl -X POST http://localhost:7007/api/devops/analyze-pr-deployment \
   }'
 ```
 
+## Slack Integration
+
+See [Slack + GitHub Actions Workflows](SlackGitHubWorkflows.md) for examples combining GitHub Actions with Slack notifications.
+
 ## Best Practices
 
 1. **Use Secrets**: Always store API keys in GitHub Secrets
 2. **Rate Limiting**: Be mindful of GitHub API rate limits
 3. **Caching**: Cache workflow runs data when possible
 4. **Error Handling**: Handle API failures gracefully
-5. **Notifications**: Post results as PR comments or issues
+5. **Notifications**: Post results as PR comments, issues, or Slack channels
+6. **Slack Integration**: Send notifications to Slack for better visibility
