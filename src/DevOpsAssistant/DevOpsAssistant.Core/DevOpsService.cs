@@ -10,16 +10,19 @@ namespace DevOpsAssistant.Core;
 public class DevOpsService
 {
     private readonly OpenAIClient _openAIClient;
+    private readonly GitHubIntegration? _githubIntegration;
     private readonly ILogger<DevOpsService> _logger;
     private readonly string _model;
 
     public DevOpsService(
         OpenAIClient openAIClient,
         ILogger<DevOpsService> logger,
+        GitHubIntegration? githubIntegration = null,
         string model = "gpt-4-turbo-preview")
     {
         _openAIClient = openAIClient;
         _logger = logger;
+        _githubIntegration = githubIntegration;
         _model = model;
     }
 
@@ -542,6 +545,204 @@ public class DevOpsService
             AnalyzedAt = DateTime.UtcNow
         };
     }
+
+    /// <summary>
+    /// Analyzes GitHub Actions workflow and provides optimization recommendations
+    /// </summary>
+    public async Task<GitHubWorkflowAnalysis> AnalyzeGitHubWorkflowAsync(
+        string owner,
+        string repo,
+        string workflowPath,
+        CancellationToken cancellationToken = default)
+    {
+        if (_githubIntegration == null)
+        {
+            throw new InvalidOperationException("GitHub integration not configured");
+        }
+
+        // Get workflow file
+        var workflowContent = await _githubIntegration.GetWorkflowFileAsync(owner, repo, workflowPath, cancellationToken);
+        
+        // Get recent workflow runs
+        var workflowRuns = await _githubIntegration.GetWorkflowRunsAsync(owner, repo, limit: 10, cancellationToken);
+
+        var runsSummary = string.Join("\n", workflowRuns.Select(r => 
+            $"Run #{r.RunNumber}: {r.Status} - {r.Conclusion}, Duration: {r.UpdatedAt - r.CreatedAt}"));
+
+        var prompt = new PromptBuilder()
+            .WithSystemMessage("You are an expert at analyzing and optimizing GitHub Actions workflows.")
+            .WithInstruction($"Analyze the following GitHub Actions workflow file and recent execution data.\n\n" +
+                           $"Workflow File:\n{workflowContent}\n\n" +
+                           $"Recent Runs:\n{runsSummary}\n\n" +
+                           "Provide: performance analysis, optimization opportunities, caching strategies, " +
+                           "parallelization suggestions, and best practice recommendations.")
+            .Build();
+
+        var request = new ChatCompletionRequest
+        {
+            Model = _model,
+            Messages = new List<ChatMessage>
+            {
+                new() { Role = "user", Content = prompt }
+            },
+            Temperature = 0.3,
+            MaxTokens = 2000
+        };
+
+        var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
+        var analysis = response.Choices.FirstOrDefault()?.Message?.Content ?? "";
+
+        return new GitHubWorkflowAnalysis
+        {
+            Owner = owner,
+            Repo = repo,
+            WorkflowPath = workflowPath,
+            Analysis = analysis,
+            WorkflowRunsAnalyzed = workflowRuns.Count,
+            AnalyzedAt = DateTime.UtcNow
+        };
+    }
+
+    /// <summary>
+    /// Generates optimized GitHub Actions workflow file
+    /// </summary>
+    public async Task<OptimizedWorkflow> GenerateOptimizedWorkflowAsync(
+        string currentWorkflow,
+        PipelineOptimization optimization,
+        CancellationToken cancellationToken = default)
+    {
+        var prompt = new PromptBuilder()
+            .WithSystemMessage("You are an expert at creating optimized GitHub Actions workflows.")
+            .WithInstruction($"Based on the following optimization recommendations, generate an improved GitHub Actions workflow file.\n\n" +
+                           $"Current Workflow:\n{currentWorkflow}\n\n" +
+                           $"Optimization Recommendations:\n{optimization.Recommendations}\n\n" +
+                           "Generate a complete, optimized workflow YAML file with all improvements applied.")
+            .Build();
+
+        var request = new ChatCompletionRequest
+        {
+            Model = _model,
+            Messages = new List<ChatMessage>
+            {
+                new() { Role = "user", Content = prompt }
+            },
+            Temperature = 0.3,
+            MaxTokens = 3000
+        };
+
+        var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
+        var optimizedWorkflow = response.Choices.FirstOrDefault()?.Message?.Content ?? "";
+
+        // Extract YAML from markdown code blocks if present
+        if (optimizedWorkflow.Contains("```yaml"))
+        {
+            var start = optimizedWorkflow.IndexOf("```yaml") + 7;
+            var end = optimizedWorkflow.IndexOf("```", start);
+            if (end > start)
+            {
+                optimizedWorkflow = optimizedWorkflow.Substring(start, end - start).Trim();
+            }
+        }
+        else if (optimizedWorkflow.Contains("```"))
+        {
+            var start = optimizedWorkflow.IndexOf("```") + 3;
+            var end = optimizedWorkflow.IndexOf("```", start);
+            if (end > start)
+            {
+                optimizedWorkflow = optimizedWorkflow.Substring(start, end - start).Trim();
+            }
+        }
+
+        return new OptimizedWorkflow
+        {
+            OriginalWorkflow = currentWorkflow,
+            OptimizedWorkflow = optimizedWorkflow,
+            OptimizationSummary = optimization.Summary,
+            GeneratedAt = DateTime.UtcNow
+        };
+    }
+
+    /// <summary>
+    /// Analyzes pull request for deployment readiness
+    /// </summary>
+    public async Task<PrDeploymentAnalysis> AnalyzePrForDeploymentAsync(
+        string owner,
+        string repo,
+        int prNumber,
+        CancellationToken cancellationToken = default)
+    {
+        if (_githubIntegration == null)
+        {
+            throw new InvalidOperationException("GitHub integration not configured");
+        }
+
+        var pr = await _githubIntegration.GetPullRequestAsync(owner, repo, prNumber, cancellationToken);
+        var files = await _githubIntegration.GetPullRequestFilesAsync(owner, repo, prNumber, cancellationToken);
+
+        var filesSummary = string.Join("\n", files.Select(f => 
+            $"{f.Filename}: {f.Status} (+{f.Additions}/-{f.Deletions})"));
+
+        var prompt = new PromptBuilder()
+            .WithSystemMessage("You are analyzing a pull request for deployment readiness.")
+            .WithInstruction($"Analyze this pull request for deployment readiness:\n\n" +
+                           $"Title: {pr.Title}\n" +
+                           $"Description: {pr.Body}\n" +
+                           $"Files Changed:\n{filesSummary}\n\n" +
+                           "Assess: deployment risk, breaking changes, migration needs, " +
+                           "rollback considerations, and deployment checklist.")
+            .Build();
+
+        var request = new ChatCompletionRequest
+        {
+            Model = _model,
+            Messages = new List<ChatMessage>
+            {
+                new() { Role = "user", Content = prompt }
+            },
+            Temperature = 0.3,
+            MaxTokens = 2000
+        };
+
+        var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
+        var analysis = response.Choices.FirstOrDefault()?.Message?.Content ?? "";
+
+        return new PrDeploymentAnalysis
+        {
+            PrNumber = prNumber,
+            PrTitle = pr.Title,
+            Analysis = analysis,
+            FilesChanged = files.Count,
+            AnalyzedAt = DateTime.UtcNow
+        };
+    }
+}
+
+// Additional data models
+public class GitHubWorkflowAnalysis
+{
+    public string Owner { get; set; } = string.Empty;
+    public string Repo { get; set; } = string.Empty;
+    public string WorkflowPath { get; set; } = string.Empty;
+    public string Analysis { get; set; } = string.Empty;
+    public int WorkflowRunsAnalyzed { get; set; }
+    public DateTime AnalyzedAt { get; set; }
+}
+
+public class OptimizedWorkflow
+{
+    public string OriginalWorkflow { get; set; } = string.Empty;
+    public string OptimizedWorkflow { get; set; } = string.Empty;
+    public string OptimizationSummary { get; set; } = string.Empty;
+    public DateTime GeneratedAt { get; set; }
+}
+
+public class PrDeploymentAnalysis
+{
+    public int PrNumber { get; set; }
+    public string PrTitle { get; set; } = string.Empty;
+    public string Analysis { get; set; } = string.Empty;
+    public int FilesChanged { get; set; }
+    public DateTime AnalyzedAt { get; set; }
 }
 
 // Data models

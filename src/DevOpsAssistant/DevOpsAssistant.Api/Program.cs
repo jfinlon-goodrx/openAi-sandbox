@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OpenAIShared;
 using DevOpsAssistant.Core;
@@ -28,12 +29,30 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddOpenAIServices(builder.Configuration);
 
+// Register GitHub integration if token is provided
+var githubToken = builder.Configuration["GitHub:Token"];
+if (!string.IsNullOrEmpty(githubToken))
+{
+    builder.Services.AddHttpClient<GitHubIntegration>((serviceProvider, client) =>
+    {
+        client.BaseAddress = new Uri("https://api.github.com");
+    });
+    builder.Services.AddScoped<GitHubIntegration>(sp =>
+    {
+        var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+        var httpClient = httpClientFactory.CreateClient(nameof(GitHubIntegration));
+        var logger = sp.GetRequiredService<ILogger<GitHubIntegration>>();
+        return new GitHubIntegration(httpClient, logger, githubToken!);
+    });
+}
+
 builder.Services.AddScoped<DevOpsService>(sp =>
 {
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
     var logger = sp.GetRequiredService<ILogger<DevOpsService>>();
+    var githubIntegration = sp.GetService<GitHubIntegration>();
     var model = builder.Configuration["OpenAI:DefaultModel"] ?? "gpt-4-turbo-preview";
-    return new DevOpsService(openAIClient, logger, model);
+    return new DevOpsService(openAIClient, logger, githubIntegration, model);
 });
 
 var app = builder.Build();

@@ -136,7 +136,8 @@ var securityReport = await devOpsService.GenerateSecurityReportAsync(securitySca
 
 1. **Configure GitHub Token:**
    - Go to GitHub Settings → Developer settings → Personal access tokens
-   - Create token with `repo` and `workflow` scopes
+   - Create token with `repo`, `workflow`, and `actions:read` scopes
+   - Or use `GITHUB_TOKEN` in GitHub Actions (automatically provided)
 
 2. **Configure in appsettings.json:**
 ```json
@@ -147,6 +148,24 @@ var securityReport = await devOpsService.GenerateSecurityReportAsync(securitySca
   }
 }
 ```
+
+3. **In GitHub Actions, use secrets:**
+```yaml
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+```
+
+### GitHub Actions Workflow Examples
+
+See [GitHub Actions Workflow Examples](../../samples/GitHubExamples/GitHubActionsWorkflows.md) for complete workflow templates including:
+- Automated code review
+- Pipeline optimization
+- PR deployment readiness checks
+- Incident response automation
+- Weekly performance reports
+- Infrastructure code review
+- Security scanning
 
 ### Azure DevOps
 
@@ -203,31 +222,67 @@ await jiraIntegration.CreateTicketAsync(
 await notificationService.PostIncidentAsync(report);
 ```
 
-### Workflow 2: Pipeline Optimization
+### Workflow 2: GitHub Actions Pipeline Optimization
 
 ```csharp
-// 1. Get pipeline execution data
-var pipelineRuns = await githubIntegration.GetPipelineRunsAsync(repo, lastNDays: 30);
+// 1. Get GitHub Actions workflow runs
+var githubIntegration = new GitHubIntegration(httpClient, logger, githubToken);
+var workflowRuns = await githubIntegration.GetWorkflowRunsAsync(owner, repo, limit: 30);
 
-// 2. Analyze performance
-var analysis = await devOpsService.AnalyzePipelineAsync(pipelineRuns);
-
-// 3. Get optimizations
-var optimizations = await devOpsService.OptimizePipelineAsync(analysis);
-
-// 4. Generate updated workflow file
-var optimizedWorkflow = await devOpsService.GenerateWorkflowFileAsync(
-    originalWorkflow: currentWorkflow,
-    optimizations: optimizations
+// 2. Analyze workflow performance
+var workflowAnalysis = await devOpsService.AnalyzeGitHubWorkflowAsync(
+    owner: owner,
+    repo: repo,
+    workflowPath: ".github/workflows/ci.yml"
 );
+
+// 3. Get optimization recommendations
+var pipelineAnalysis = await devOpsService.AnalyzePipelineAsync(
+    pipelineLogs: JsonSerializer.Serialize(workflowRuns),
+    pipelineType: "GitHub Actions"
+);
+
+var optimizations = await devOpsService.OptimizePipelineAsync(pipelineAnalysis);
+
+// 4. Generate optimized workflow file
+var currentWorkflow = await githubIntegration.GetWorkflowFileAsync(owner, repo, ".github/workflows/ci.yml");
+var optimized = await devOpsService.GenerateOptimizedWorkflowAsync(currentWorkflow, optimizations);
 
 // 5. Create PR with optimizations
 await githubIntegration.CreatePullRequestAsync(
+    owner: owner,
     repo: repo,
     title: "CI/CD Pipeline Optimizations",
     body: optimizations.Summary,
-    changes: new[] { (".github/workflows/ci.yml", optimizedWorkflow) }
+    head: "pipeline-optimization",
+    @base: "main"
 );
+
+// 6. Update workflow file in the branch (would need to commit first)
+await githubIntegration.CreateOrUpdateWorkflowAsync(
+    owner: owner,
+    repo: repo,
+    workflowPath: ".github/workflows/ci.yml",
+    content: optimized.OptimizedWorkflow,
+    branch: "pipeline-optimization"
+);
+```
+
+### Workflow 2b: PR Deployment Readiness Check
+
+```csharp
+// Analyze PR before merging to main
+var prAnalysis = await devOpsService.AnalyzePrForDeploymentAsync(
+    owner: owner,
+    repo: repo,
+    prNumber: prNumber
+);
+
+// Post analysis as PR comment
+if (prAnalysis.Analysis.Contains("high risk"))
+{
+    await githubIntegration.PostPrCommentAsync(owner, repo, prNumber, prAnalysis.Analysis);
+}
 ```
 
 ### Workflow 3: Infrastructure Review
@@ -307,9 +362,56 @@ var drPlan = await devOpsService.GenerateDisasterRecoveryPlanAsync(
 **Issue:** Security scan false positives
 - **Solution:** Fine-tune prompts with your security policies
 
+## GitHub-Specific Workflows
+
+### Daily: Monitor Pipeline Performance
+
+```csharp
+// Get yesterday's workflow runs
+var runs = await githubIntegration.GetWorkflowRunsAsync(owner, repo, limit: 20);
+var yesterdayRuns = runs.Where(r => r.CreatedAt.Date == DateTime.UtcNow.AddDays(-1).Date);
+
+// Analyze performance
+var analysis = await devOpsService.AnalyzePipelineAsync(
+    JsonSerializer.Serialize(yesterdayRuns),
+    "GitHub Actions"
+);
+```
+
+### Weekly: Generate Performance Report
+
+```csharp
+// Get last week's runs
+var weeklyRuns = await githubIntegration.GetWorkflowRunsAsync(owner, repo, limit: 100);
+var lastWeek = weeklyRuns.Where(r => r.CreatedAt >= DateTime.UtcNow.AddDays(-7));
+
+// Generate report
+var report = await devOpsService.AnalyzeMetricsAsync(
+    JsonSerializer.Serialize(lastWeek),
+    TimeSpan.FromDays(7)
+);
+
+// Post to GitHub Discussions or create issue
+```
+
+### On PR: Deployment Readiness
+
+```csharp
+// Automatically analyze PRs for deployment readiness
+var prAnalysis = await devOpsService.AnalyzePrForDeploymentAsync(owner, repo, prNumber);
+
+// Check for breaking changes or migration needs
+if (prAnalysis.Analysis.Contains("breaking change"))
+{
+    // Flag for manual review
+}
+```
+
 ## Resources
 
 - [DevOps Assistant Documentation](../project-docs/devops-assistant.md)
+- [GitHub Actions Workflow Examples](../../samples/GitHubExamples/GitHubActionsWorkflows.md) ⭐ NEW
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
+- [GitHub API Documentation](https://docs.github.com/en/rest)
 - [Azure DevOps Documentation](https://docs.microsoft.com/azure/devops/)
 - [Terraform Documentation](https://www.terraform.io/docs)

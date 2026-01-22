@@ -439,6 +439,44 @@ curl -X POST http://localhost:7007/api/devops/security-scan \
   }'
 ```
 
+#### Analyze GitHub Actions Workflow
+
+```bash
+curl -X POST http://localhost:7007/api/devops/analyze-github-workflow \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_GITHUB_TOKEN" \
+  -d '{
+    "owner": "your-org",
+    "repo": "your-repo",
+    "workflowPath": ".github/workflows/ci.yml"
+  }'
+```
+
+#### Analyze PR for Deployment Readiness
+
+```bash
+curl -X POST http://localhost:7007/api/devops/analyze-pr-deployment \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_GITHUB_TOKEN" \
+  -d '{
+    "owner": "your-org",
+    "repo": "your-repo",
+    "prNumber": 123
+  }'
+```
+
+#### Optimize GitHub Actions Workflow
+
+```bash
+curl -X POST http://localhost:7007/api/devops/optimize-github-workflow \
+  -H "Content-Type: application/json" \
+  -d '{
+    "currentWorkflow": "name: CI\non: push\n...",
+    "pipelineAnalysis": { /* PipelineAnalysis object */ },
+    "targetMetrics": ["build_time", "deployment_time"]
+  }'
+```
+
 ### Retrospective Analyzer
 
 #### Extract Action Items

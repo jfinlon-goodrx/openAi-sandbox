@@ -274,15 +274,60 @@ Console.WriteLine(report.Report);
 ### GitHub Actions Integration
 
 ```csharp
-// In GitHub Actions workflow
-var devOpsService = new DevOpsService(openAIClient, logger);
-var pipelineLogs = GetPipelineLogs();
-var analysis = await devOpsService.AnalyzePipelineAsync(pipelineLogs);
-var optimization = await devOpsService.OptimizePipelineAsync(analysis);
+// Setup GitHub integration
+var githubIntegration = new GitHubIntegration(httpClient, logger, githubToken);
+var devOpsService = new DevOpsService(openAIClient, logger, githubIntegration);
+
+// Analyze GitHub Actions workflow
+var workflowAnalysis = await devOpsService.AnalyzeGitHubWorkflowAsync(
+    owner: "your-org",
+    repo: "your-repo",
+    workflowPath: ".github/workflows/ci.yml"
+);
+
+// Get workflow runs
+var runs = await githubIntegration.GetWorkflowRunsAsync("your-org", "your-repo", limit: 10);
+
+// Analyze pipeline performance
+var pipelineAnalysis = await devOpsService.AnalyzePipelineAsync(
+    JsonSerializer.Serialize(runs),
+    "GitHub Actions"
+);
+
+// Optimize and generate improved workflow
+var optimization = await devOpsService.OptimizePipelineAsync(pipelineAnalysis);
+var optimized = await devOpsService.GenerateOptimizedWorkflowAsync(
+    currentWorkflow: await githubIntegration.GetWorkflowFileAsync("your-org", "your-repo", ".github/workflows/ci.yml"),
+    optimization: optimization
+);
 
 // Create PR with optimizations
-await CreateOptimizationPR(optimization);
+await githubIntegration.CreatePullRequestAsync(
+    owner: "your-org",
+    repo: "your-repo",
+    title: "Pipeline Optimizations",
+    body: optimization.Summary,
+    head: "pipeline-optimization",
+    @base: "main"
+);
 ```
+
+### PR Deployment Readiness
+
+```csharp
+// Analyze PR before deployment
+var prAnalysis = await devOpsService.AnalyzePrForDeploymentAsync(
+    owner: "your-org",
+    repo: "your-repo",
+    prNumber: 123
+);
+
+// Check deployment readiness
+Console.WriteLine($"Files Changed: {prAnalysis.FilesChanged}");
+Console.WriteLine($"Analysis: {prAnalysis.Analysis}");
+```
+
+See [GitHub Actions Workflow Examples](../../samples/GitHubExamples/GitHubActionsWorkflows.md) for complete workflow templates.
 
 ### Azure DevOps Integration
 

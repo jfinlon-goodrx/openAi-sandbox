@@ -255,6 +255,94 @@ public class DevOpsController : ControllerBase
             return StatusCode(500, new { error = "Failed to analyze Kubernetes manifests", message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Analyzes GitHub Actions workflow
+    /// </summary>
+    [HttpPost("analyze-github-workflow")]
+    public async Task<ActionResult<GitHubWorkflowAnalysis>> AnalyzeGitHubWorkflow([FromBody] AnalyzeGitHubWorkflowRequest request)
+    {
+        try
+        {
+            var analysis = await _devOpsService.AnalyzeGitHubWorkflowAsync(
+                request.Owner,
+                request.Repo,
+                request.WorkflowPath);
+            return Ok(analysis);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error analyzing GitHub workflow");
+            return StatusCode(500, new { error = "Failed to analyze GitHub workflow", message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Generates optimized GitHub Actions workflow
+    /// </summary>
+    [HttpPost("optimize-github-workflow")]
+    public async Task<ActionResult<OptimizedWorkflow>> OptimizeGitHubWorkflow([FromBody] OptimizeGitHubWorkflowRequest request)
+    {
+        try
+        {
+            var optimization = await _devOpsService.OptimizePipelineAsync(
+                request.PipelineAnalysis,
+                request.TargetMetrics?.ToArray());
+            
+            var optimized = await _devOpsService.GenerateOptimizedWorkflowAsync(
+                request.CurrentWorkflow,
+                optimization);
+            
+            return Ok(optimized);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error optimizing GitHub workflow");
+            return StatusCode(500, new { error = "Failed to optimize GitHub workflow", message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Analyzes pull request for deployment readiness
+    /// </summary>
+    [HttpPost("analyze-pr-deployment")]
+    public async Task<ActionResult<PrDeploymentAnalysis>> AnalyzePrDeployment([FromBody] AnalyzePrDeploymentRequest request)
+    {
+        try
+        {
+            var analysis = await _devOpsService.AnalyzePrForDeploymentAsync(
+                request.Owner,
+                request.Repo,
+                request.PrNumber);
+            return Ok(analysis);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error analyzing PR for deployment");
+            return StatusCode(500, new { error = "Failed to analyze PR for deployment", message = ex.Message });
+        }
+    }
+}
+
+public class AnalyzeGitHubWorkflowRequest
+{
+    public string Owner { get; set; } = string.Empty;
+    public string Repo { get; set; } = string.Empty;
+    public string WorkflowPath { get; set; } = string.Empty;
+}
+
+public class OptimizeGitHubWorkflowRequest
+{
+    public string CurrentWorkflow { get; set; } = string.Empty;
+    public PipelineAnalysis PipelineAnalysis { get; set; } = new();
+    public List<string>? TargetMetrics { get; set; }
+}
+
+public class AnalyzePrDeploymentRequest
+{
+    public string Owner { get; set; } = string.Empty;
+    public string Repo { get; set; } = string.Empty;
+    public int PrNumber { get; set; }
 }
 
 // Request models
