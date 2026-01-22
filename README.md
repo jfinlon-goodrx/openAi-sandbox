@@ -223,32 +223,103 @@ openAi-sandbox/
 
 - **.NET 8.0 SDK** or later
 - **OpenAI API key** (Enterprise subscription recommended)
+- **Docker** (optional, for containerized deployment)
+- **SQL Server** (optional, for database features)
 - **Optional Integrations:**
   - Slack webhook URL (for notifications)
-  - GitHub token (for Actions and API access)
+  - GitHub token (for Actions, API access, and Autonomous Agent)
   - Jira API token (for ticket management)
   - Confluence API token (for documentation)
 
 ## Recent Improvements ⭐ NEW
 
-The project now includes production-ready improvements:
+The project now includes comprehensive production-ready improvements:
 
-- **Testing Infrastructure**: Unit tests with mocking helpers
-- **Streaming Responses**: Server-Sent Events for real-time responses
-- **Caching**: Response caching to reduce API costs
+### Phase 1: Foundation
+- **Testing Infrastructure**: Unit tests with mocking helpers (`OpenAIMockHelper`)
+- **Integration Tests**: End-to-end API testing with `WebApplicationFactory`
+- **Authentication**: API key and JWT authentication middleware
+- **Error Handling**: Circuit breaker pattern with Polly
+- **Health Checks**: Health check endpoints for all APIs
+
+### Phase 2: Production Readiness
+- **Streaming Responses**: Server-Sent Events (SSE) for real-time responses
+- **Caching Service**: Response caching with IMemoryCache to reduce API costs
 - **Rate Limiting**: Token bucket algorithm for request throttling
-- **Authentication**: API key authentication middleware
-- **Health Checks**: Health check endpoints for monitoring
+- **Structured Logging**: Serilog with JSON formatting and file sinks
+- **Metrics Service**: Track API usage, costs, and performance metrics
+
+### Phase 3: Advanced Features
+- **Autonomous Development Agent**: AI-powered code analysis, improvement generation, and automated PR creation
+- **Database Integration**: Entity Framework Core with SQL Server and In-Memory support
+- **Docker Deployment**: Multi-stage Dockerfiles and Docker Compose setup
+- **SignalR Real-Time**: Live updates for retrospective analysis and collaborative features
+
+### Quick Wins
 - **Correlation IDs**: Request tracking across services
 - **Request/Response Logging**: Comprehensive logging middleware
-- **CORS**: Cross-origin resource sharing configuration
-- **Response Compression**: GZip/Brotli compression
+- **CORS Configuration**: Cross-origin resource sharing setup
+- **Response Compression**: GZip/Brotli compression middleware
 
-See [Improvements Documentation](docs/improvements/) for details and examples.
+See [Improvements Documentation](docs/improvements/) for details, examples, and guides.
+
+## Documentation
+
+### Getting Started
+- [Setup Guide](docs/getting-started/01-setup.md) - Environment setup and API key configuration
+- [API Basics](docs/getting-started/02-api-basics.md) - First API call, models, tokens, costs
+- [Prompt Engineering](docs/getting-started/03-prompt-engineering.md) - Writing effective prompts
+- [First Project](docs/getting-started/04-first-project.md) - Building your first AI-powered app
+
+### Role-Specific Guides
+- [Developer Guide](docs/role-guides/developer-guide.md) - Code review, testing, documentation
+- [Business Analyst Guide](docs/role-guides/ba-guide.md) - Requirements processing, user stories
+- [Project Manager Guide](docs/role-guides/project-manager-guide.md) - Status reports, risk analysis
+- [Tester Guide](docs/role-guides/tester-guide.md) - Test case generation, test planning
+- [SDM Guide](docs/role-guides/sdm-guide.md) - Team management, sprint planning, metrics
+- [DevOps Guide](docs/role-guides/devops-guide.md) - CI/CD, infrastructure, monitoring
+
+### Advanced Features
+- [Vision API](docs/advanced-features/vision-api.md) - Image analysis and understanding
+- [RAG Patterns](docs/advanced-features/rag-patterns.md) - Retrieval-Augmented Generation
+- [Batch Processing](docs/advanced-features/batch-processing.md) - Cost-effective bulk operations
+- [Moderation API](docs/advanced-features/moderation-api.md) - Content safety and filtering
+- [JSON Mode](docs/advanced-features/json-mode.md) - Structured output generation
+
+### Improvements & Best Practices
+- [Improvements Overview](docs/improvements/README.md) - All production-ready improvements
+- [Middleware Guide](docs/improvements/middleware-guide.md) - Using common middleware
+- [Streaming Examples](docs/improvements/streaming-examples.md) - Real-time response streaming
+- [JWT Authentication](docs/improvements/jwt-authentication-guide.md) - JWT setup and usage
+- [Serilog Guide](docs/improvements/serilog-guide.md) - Structured logging
+- [Metrics Guide](docs/improvements/metrics-guide.md) - API usage tracking
+- [Autonomous Agent Guide](docs/improvements/autonomous-agent-guide.md) - AI-powered development
+- [SignalR Guide](docs/improvements/signalr-guide.md) - Real-time communication
+- [Docker Guide](docs/deployment/docker-guide.md) - Containerization and deployment
+- [Database Setup](docs/deployment/database-setup.md) - Entity Framework Core configuration
+
+### Concepts
+- [AI Agents and Services](docs/concepts/ai-agents-and-services.md) - Conceptual overview
+- [Autonomous Incident Response](docs/concepts/autonomous-incident-response-agent.md) - Practical example
+
+### Integrations
+- [Slack Integration](docs/integrations/slack-integration.md) - Slack notifications and workflows
+- [GitHub Examples](samples/GitHubExamples/) - GitHub Actions and API examples
+- [REST API Examples](samples/REST-API-Examples/) - Direct API calls without .NET
 
 ## Contributing
 
 This is a learning portfolio. Feel free to explore, modify, and extend the projects to suit your needs.
+
+### Code Standards
+
+This project follows comprehensive coding standards defined in [`.cursorrules`](.cursorrules). Key principles:
+- Shared libraries first - never duplicate code
+- Service registration pattern for DI
+- Thin controllers - delegate to services
+- Comprehensive testing
+- Structured logging
+- Security best practices
 
 ## License
 
