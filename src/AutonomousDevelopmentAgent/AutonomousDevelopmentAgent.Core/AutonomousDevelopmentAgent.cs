@@ -260,8 +260,8 @@ Estimated Effort: {analysis.EstimatedEffort} hours";
             try
             {
                 await _slackIntegration.SendMessageAsync(
+                    $"🤖 Autonomous Agent: {message}",
                     channel: "#devops",
-                    message: $"🤖 Autonomous Agent: {message}",
                     cancellationToken: cancellationToken);
             }
             catch (Exception ex)

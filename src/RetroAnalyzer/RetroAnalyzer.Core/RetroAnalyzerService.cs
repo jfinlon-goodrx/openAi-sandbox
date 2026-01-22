@@ -227,6 +227,70 @@ public class RetroAnalyzerService
         return response.Choices.FirstOrDefault()?.Message?.Content ?? "Unable to generate suggestions.";
     }
 
+    /// <summary>
+    /// Comprehensive retrospective analysis combining all aspects
+    /// </summary>
+    public async Task<RetroAnalysisResult> AnalyzeRetrospectiveAsync(
+        List<string> comments,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Starting comprehensive retrospective analysis for {Count} comments", comments.Count);
+
+        // Run analyses in parallel for better performance
+        var actionItemsTask = ExtractActionItemsAsync(comments, cancellationToken);
+        var themesTask = IdentifyThemesAsync(comments, cancellationToken);
+        var sentimentTask = AnalyzeSentimentAsync(comments, cancellationToken);
+        var suggestionsTask = GenerateImprovementSuggestionsAsync(comments, cancellationToken);
+
+        await Task.WhenAll(actionItemsTask, themesTask, sentimentTask, suggestionsTask);
+
+        // Generate summary
+        var summary = await GenerateSummaryAsync(
+            await actionItemsTask,
+            await themesTask,
+            await sentimentTask,
+            cancellationToken);
+
+        return new RetroAnalysisResult
+        {
+            Summary = summary,
+            ActionItems = await actionItemsTask,
+            Themes = await themesTask,
+            Sentiment = await sentimentTask,
+            ImprovementSuggestions = await suggestionsTask
+        };
+    }
+
+    private async Task<string> GenerateSummaryAsync(
+        List<ActionItem> actionItems,
+        List<string> themes,
+        SentimentAnalysis sentiment,
+        CancellationToken cancellationToken)
+    {
+        var prompt = $@"Generate a comprehensive summary of the retrospective analysis.
+
+Action Items Found: {actionItems.Count}
+Themes Identified: {string.Join(", ", themes)}
+Overall Sentiment: {sentiment.OverallSentiment} (Score: {sentiment.SentimentScore:F2})
+
+Provide a 2-3 paragraph summary highlighting key findings and recommendations.";
+
+        var request = new ChatCompletionRequest
+        {
+            Model = _model,
+            Messages = new List<ChatMessage>
+            {
+                new() { Role = "system", Content = "You are an expert Scrum Master summarizing retrospective findings." },
+                new() { Role = "user", Content = prompt }
+            },
+            Temperature = 0.5,
+            MaxTokens = 500
+        };
+
+        var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
+        return response.Choices.FirstOrDefault()?.Message?.Content ?? "Unable to generate summary.";
+    }
+
     private List<ActionItem> ParseActionItemsFromFunctionCall(string argumentsJson)
     {
         var actionItems = new List<ActionItem>();

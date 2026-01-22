@@ -50,9 +50,22 @@ public class RetroController : ControllerBase
             await _hubContext.Clients.Group(roomId).SendAsync("AnalysisComplete", new
             {
                 Summary = result.Summary,
-                ActionItems = result.ActionItems,
-                Sentiment = result.Sentiment,
-                Themes = result.Themes
+                ActionItems = result.ActionItems.Select(ai => new
+                {
+                    ai.Id,
+                    ai.Description,
+                    ai.Owner,
+                    ai.Priority,
+                    ai.Status
+                }),
+                Sentiment = new
+                {
+                    result.Sentiment.OverallSentiment,
+                    result.Sentiment.SentimentScore,
+                    result.Sentiment.KeyInsights
+                },
+                Themes = result.Themes,
+                ImprovementSuggestions = result.ImprovementSuggestions
             });
             
             await _hubContext.Clients.Group(roomId).SendAsync("AnalysisFinished", new { RoomId = roomId });
@@ -68,7 +81,7 @@ public class RetroController : ControllerBase
     /// Analyzes retrospective comments (non-streaming)
     /// </summary>
     [HttpPost("analyze")]
-    public async Task<ActionResult<object>> AnalyzeRetro(
+    public async Task<ActionResult<RetroAnalysisResult>> AnalyzeRetro(
         [FromBody] AnalyzeRequest request,
         CancellationToken cancellationToken)
     {
