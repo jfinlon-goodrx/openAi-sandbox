@@ -48,6 +48,26 @@ public class CircuitBreakerService
     {
         try
         {
+            return await _circuitBreaker.ExecuteAsync(async () =>
+            {
+                var result = await operation();
+                return result;
+            });
+        }
+        catch (BrokenCircuitException ex)
+        {
+            _logger.LogError(ex, "Circuit breaker is open. Request rejected.");
+            throw new InvalidOperationException("Service temporarily unavailable. Please try again later.", ex);
+        }
+    }
+
+    /// <summary>
+    /// Executes an HTTP operation with circuit breaker protection
+    /// </summary>
+    public async Task<HttpResponseMessage> ExecuteHttpAsync(Func<Task<HttpResponseMessage>> operation)
+    {
+        try
+        {
             return await _circuitBreaker.ExecuteAsync(operation);
         }
         catch (BrokenCircuitException ex)
