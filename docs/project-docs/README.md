@@ -160,3 +160,4 @@ Each project includes:
 - [Getting Started](../getting-started/) - Setup and basics
 - [Best Practices](../best-practices/) - Security, cost optimization
 - [Advanced Features](../advanced-features/) - Advanced OpenAI capabilities
+- [Integrations](../integrations/) - Slack, GitHub Actions, Jira, Confluence integration guides ⭐ NEW

@@ -129,3 +129,4 @@ See [Integration Guides](../integrations/) for detailed integration documentatio
 - [Project Documentation](../project-docs/) - Detailed project docs
 - [Best Practices](../best-practices/) - Security, cost optimization, error handling
 - [Advanced Features](../advanced-features/) - Vision API, RAG, Moderation, Batch Processing
+- [Integration Guides](../integrations/) - Slack, GitHub Actions, Jira, Confluence ⭐ NEW
