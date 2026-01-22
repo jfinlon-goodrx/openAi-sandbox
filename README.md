@@ -4,7 +4,7 @@ A comprehensive portfolio of sample projects demonstrating OpenAI Platform capab
 
 ## Overview
 
-This repository contains seven sample projects that showcase different aspects of the OpenAI Platform:
+This repository contains nine sample projects that showcase different aspects of the OpenAI Platform:
 
 1. **Requirements Processing Assistant** - Document processing, summarization, and Q&A
 2. **Automated Test Case Generator** - Code analysis and test generation
@@ -13,6 +13,8 @@ This repository contains seven sample projects that showcase different aspects o
 5. **Documentation Generator** - Code-to-documentation automation
 6. **Meeting Transcript Analyzer** - Speech-to-text and meeting analysis
 7. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation, and file conversion
+8. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, and side effect analysis
+9. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, and A/B testing
 
 ## Getting Started
 
