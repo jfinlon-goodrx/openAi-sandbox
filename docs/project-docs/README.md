@@ -2,78 +2,60 @@
 
 Detailed documentation for each project in the OpenAI Platform Learning Portfolio.
 
-## Core Development Projects
+## Software Development Projects
 
-### [Requirements Processing Assistant](requirements-assistant.md)
+### Core Development Tools
+
+#### [Requirements Processing Assistant](requirements-assistant.md)
 Document processing, summarization, and Q&A for Business Analysts.
 - Document summarization
 - User story generation
 - Gap analysis
 - Confluence integration
+- Slack notifications
 
-### [Automated Test Case Generator](test-case-generator.md)
+#### [Automated Test Case Generator](test-case-generator.md)
 Code analysis and test generation for Developers and Testers.
 - Test case generation from code
 - User story to test case conversion
 - Test scenario generation
+- Edge case identification
+- Slack integration
 
-### [Sprint Retrospective Analyzer](retro-analyzer.md)
-Text analysis and sentiment tracking for Product Managers.
-- Comment analysis
-- Action item extraction
-- Sentiment tracking
-- Jira integration
-
-### [Intelligent Code Review Assistant](code-review-assistant.md)
+#### [Intelligent Code Review Assistant](code-review-assistant.md)
 Automated code review and suggestions for Developers.
 - Code analysis
 - Security scanning
 - Performance suggestions
 - GitHub Actions integration
+- Slack notifications
 
-### [Documentation Generator](documentation-generator.md)
+#### [Documentation Generator](documentation-generator.md)
 Code-to-documentation automation for Developers.
 - API documentation generation
 - README generation
 - Changelog creation
+- Slack integration
 
-### [Meeting Transcript Analyzer](meeting-analyzer.md)
+### Team Collaboration & Management
+
+#### [Sprint Retrospective Analyzer](retro-analyzer.md)
+Text analysis and sentiment tracking for Product Managers.
+- Comment analysis
+- Action item extraction
+- Sentiment tracking
+- Jira integration
+- Slack notifications
+
+#### [Meeting Transcript Analyzer](meeting-analyzer.md)
 Speech-to-text and meeting analysis for Product Managers.
 - Audio transcription (Whisper API)
 - Meeting summaries
 - Action item extraction
 - Follow-up email generation
+- Slack integration
 
-## Industry-Specific Projects
-
-### [Publishing Assistant](publishing-assistant.md)
-Book reviews, summaries, marketing blurbs, and cover image generation.
-- Book review generation
-- Summary/blurb creation
-- Marketing copy generation
-- Cover image description (DALL-E)
-- File format conversion
-
-### [Pharmacy Assistant](pharmacy-assistant.md)
-Patient education, drug interactions, and prescription management.
-- Patient education materials
-- Drug interaction checking
-- Prescription label generation
-- Adherence planning
-- Side effect analysis
-
-### [Advertising Agency Assistant](advertising-agency-assistant.md)
-Ad copy, campaign strategy, and creative briefs.
-- Ad copy generation
-- Campaign strategy development
-- Target audience analysis
-- Brand voice development
-- Creative brief generation
-- A/B test hypotheses
-
-## Management & Integration Projects
-
-### [SDM Assistant](sdm-assistant.md) ⭐ NEW
+#### [SDM Assistant](sdm-assistant.md) ⭐ NEW
 Software Development Manager workflows with Jira and Confluence integration.
 - Daily activity summaries
 - Standup preparation
@@ -82,8 +64,9 @@ Software Development Manager workflows with Jira and Confluence integration.
 - Status report generation
 - Sprint health analysis
 - Enhanced Jira and Confluence integrations
+- Slack notifications
 
-### [DevOps Assistant](devops-assistant.md) ⭐ NEW
+#### [DevOps Assistant](devops-assistant.md) ⭐ NEW
 DevOps Engineer workflows for infrastructure and CI/CD management.
 - Log analysis and incident response
 - CI/CD pipeline optimization
@@ -94,22 +77,64 @@ DevOps Engineer workflows for infrastructure and CI/CD management.
 - Alerting optimization
 - Security scanning
 - Docker and Kubernetes analysis
+- GitHub Actions integration
+- Slack notifications
+
+## Other Industry Examples
+
+These projects demonstrate how OpenAI Platform capabilities can be applied to different industries beyond software development.
+
+### [Publishing Assistant](publishing-assistant.md)
+Book reviews, summaries, marketing blurbs, and cover image generation.
+- Book review generation
+- Summary/blurb creation
+- Marketing copy generation
+- Cover image description (DALL-E)
+- Vision API for cover image analysis
+- File format conversion
+
+### [Pharmacy Assistant](pharmacy-assistant.md)
+Patient education, drug interactions, and prescription management.
+- Patient education materials
+- Drug interaction checking
+- Prescription label generation
+- Adherence planning
+- Side effect analysis
+- RAG for patient Q&A
+- Moderation API for content safety
+
+### [Advertising Agency Assistant](advertising-agency-assistant.md)
+Ad copy, campaign strategy, and creative briefs.
+- Ad copy generation
+- Campaign strategy development
+- Target audience analysis
+- Brand voice development
+- Creative brief generation
+- A/B test hypotheses
+- Vision API for ad creative analysis
 
 ## Project Features Matrix
+
+### Software Development Projects
 
 | Project | OpenAI APIs Used | Integrations | Use Cases |
 |---------|-----------------|--------------|-----------|
 | Requirements Assistant | GPT-4 | Confluence, Slack | BA, PM |
 | Test Case Generator | GPT-4 | Slack | Developer, Tester |
-| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | PM, SDM |
 | Code Review Assistant | GPT-4 | GitHub Actions, Slack | Developer |
 | Documentation Generator | GPT-4 | Slack | Developer |
+| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | PM, SDM |
 | Meeting Analyzer | Whisper, GPT-4 | Slack | PM, SDM |
-| Publishing Assistant | GPT-4, DALL-E, Vision | - | Publishing |
-| Pharmacy Assistant | GPT-4 | - | Pharmacy |
-| Advertising Assistant | GPT-4 | - | Advertising |
 | SDM Assistant | GPT-4 | Jira, Confluence, Slack | SDM |
-| DevOps Assistant | GPT-4 | GitHub Actions, Azure DevOps, Slack | DevOps |
+| DevOps Assistant | GPT-4 | GitHub Actions, Slack | DevOps |
+
+### Other Industry Examples
+
+| Project | OpenAI APIs Used | Integrations | Use Cases |
+|---------|-----------------|--------------|-----------|
+| Publishing Assistant | GPT-4, DALL-E, Vision | - | Publishing |
+| Pharmacy Assistant | GPT-4, RAG, Moderation | - | Pharmacy |
+| Advertising Assistant | GPT-4, Vision | - | Advertising |
 
 ## Getting Started
 
