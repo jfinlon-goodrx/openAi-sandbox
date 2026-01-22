@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using OpenAIShared;
 using RetroAnalyzer.Core;
+using Shared.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,8 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddOpenAIServices(builder.Configuration);
+builder.Services.AddCommonServices(builder.Configuration);
+
 builder.Services.AddScoped<RetroAnalyzerService>(sp =>
 {
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
@@ -44,9 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseCors();
-app.UseAuthorization();
+app.UseCommonMiddleware();
 app.MapControllers();
 
 app.Run();

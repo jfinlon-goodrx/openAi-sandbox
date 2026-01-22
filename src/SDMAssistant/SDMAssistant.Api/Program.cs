@@ -5,6 +5,7 @@ using OpenAIShared.Configuration;
 using RequirementsAssistant.Core;
 using RetroAnalyzer.Core;
 using SDMAssistant.Core;
+using Shared.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddOpenAIServices(builder.Configuration);
+builder.Services.AddCommonServices(builder.Configuration);
 
 // Register HTTP clients
 builder.Services.AddHttpClient();
@@ -103,9 +105,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseCors();
-app.UseAuthorization();
+app.UseCommonMiddleware();
 app.MapControllers();
 
 app.Run();

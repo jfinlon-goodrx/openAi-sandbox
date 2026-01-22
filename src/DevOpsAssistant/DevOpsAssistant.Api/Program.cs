@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using OpenAIShared;
 using DevOpsAssistant.Core;
+using Shared.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddOpenAIServices(builder.Configuration);
+builder.Services.AddCommonServices(builder.Configuration);
 
 // Register GitHub integration if token is provided
 var githubToken = builder.Configuration["GitHub:Token"];
@@ -63,9 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseCors();
-app.UseAuthorization();
+app.UseCommonMiddleware();
 app.MapControllers();
 
 app.Run();
