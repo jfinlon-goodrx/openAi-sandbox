@@ -104,6 +104,7 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 - [Developer Guide](docs/role-guides/developer-guide.md) - Code review, testing, documentation
 - [Business Analyst Guide](docs/role-guides/ba-guide.md) - Requirements processing, user stories
 - [Product Manager Guide](docs/role-guides/pm-guide.md) - Retrospectives, meetings, planning
+- [Project Manager Guide](docs/role-guides/project-manager-guide.md) ⭐ NEW - Status reports, risk analysis, stakeholder communication, project planning, budget tracking
 - [Tester Guide](docs/role-guides/tester-guide.md) - Test case generation, edge cases
 - [SDM Guide](docs/role-guides/sdm-guide.md) ⭐ - Daily summaries, sprint planning, team management
 - [DevOps Guide](docs/role-guides/devops-guide.md) ⭐ - Log analysis, CI/CD optimization, infrastructure
