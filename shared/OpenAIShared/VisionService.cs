@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenAIShared.Configuration;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace OpenAIShared;
 
@@ -32,7 +34,7 @@ public class VisionService
 
         _retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
-            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.ToManyRequests)
+            .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
             .WaitAndRetryAsync(
                 _config.MaxRetries,
                 retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));

@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAIShared;
 using PublishingAssistant.Core;
-using PublishingAssistant.Core;
 
 namespace PublishingAssistant.Api.Controllers;
 

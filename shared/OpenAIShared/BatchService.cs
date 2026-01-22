@@ -3,6 +3,8 @@ using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using OpenAIShared.Configuration;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace OpenAIShared;
 
