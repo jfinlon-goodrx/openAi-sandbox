@@ -131,6 +131,12 @@ For automated code reviews:
 - Read [API Basics](02-api-basics.md) to understand how to make your first API call
 - Check out [Prompt Engineering](03-prompt-engineering.md) for best practices
 - Build your [First Project](04-first-project.md)
+- Explore [Role Guides](../role-guides/) for role-specific workflows:
+  - [Developer Guide](../role-guides/developer-guide.md)
+  - [Business Analyst Guide](../role-guides/ba-guide.md)
+  - [Product Manager Guide](../role-guides/pm-guide.md)
+  - [Tester Guide](../role-guides/tester-guide.md)
+  - [Software Development Manager Guide](../role-guides/sdm-guide.md) ⭐ NEW
 
 ## Troubleshooting
 
