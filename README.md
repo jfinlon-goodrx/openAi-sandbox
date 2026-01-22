@@ -6,25 +6,27 @@ A comprehensive portfolio of sample projects demonstrating OpenAI Platform capab
 
 This repository contains **eleven production-ready projects** that showcase the full range of OpenAI Platform capabilities:
 
-### Core Development Projects
+### Software Development Projects
 
+**Core Development Tools:**
 1. **Requirements Processing Assistant** - Document processing, summarization, Q&A, and user story generation with Confluence integration
 2. **Automated Test Case Generator** - Code analysis, test generation from code/user stories, and edge case identification
-3. **Sprint Retrospective Analyzer** - Text analysis, sentiment tracking, action item extraction, and Jira integration
-4. **Intelligent Code Review Assistant** - Automated code review, security scanning, performance analysis with GitHub Actions integration
-5. **Documentation Generator** - API documentation, README, and changelog generation from code
+3. **Intelligent Code Review Assistant** - Automated code review, security scanning, performance analysis with GitHub Actions integration
+4. **Documentation Generator** - API documentation, README, and changelog generation from code
+
+**Team Collaboration & Management:**
+5. **Sprint Retrospective Analyzer** - Text analysis, sentiment tracking, action item extraction, and Jira integration
 6. **Meeting Transcript Analyzer** - Speech-to-text transcription (Whisper), meeting summaries, action item extraction, and follow-up emails
+7. **SDM Assistant** - Software Development Manager workflows: daily summaries, sprint planning, velocity analysis, risk identification, status reports with enhanced Jira and Confluence integrations
+8. **DevOps Assistant** - DevOps Engineer workflows: log analysis, incident response, CI/CD optimization, infrastructure review (Terraform/ARM/CloudFormation), security scanning, Docker/Kubernetes analysis with GitHub Actions integration
 
-### Industry-Specific Projects
+### Other Industry Examples
 
-7. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, and file conversion
-8. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
-9. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
+These projects demonstrate how OpenAI Platform can be applied to different industries:
 
-### Management & Integration Projects
-
-10. **SDM Assistant** - Software Development Manager workflows: daily summaries, sprint planning, velocity analysis, risk identification, status reports with enhanced Jira and Confluence integrations
-11. **DevOps Assistant** - DevOps Engineer workflows: log analysis, incident response, CI/CD optimization, infrastructure review (Terraform/ARM/CloudFormation), security scanning, Docker/Kubernetes analysis with GitHub Actions integration
+9. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, and file conversion
+10. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
+11. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
 
 ## Getting Started
 
@@ -142,19 +144,26 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 
 ## Features Matrix
 
+### Software Development Projects
+
 | Project | OpenAI APIs | Integrations | Key Features |
 |---------|-------------|--------------|--------------|
 | Requirements Assistant | GPT-4 | Confluence, Slack | Document processing, user stories, Q&A |
 | Test Case Generator | GPT-4 | Slack | Code analysis, test generation, edge cases |
-| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | Sentiment analysis, action items, themes |
 | Code Review Assistant | GPT-4 | GitHub Actions, Slack | Security scanning, performance, style |
 | Documentation Generator | GPT-4 | Slack | API docs, README, changelogs |
+| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | Sentiment analysis, action items, themes |
 | Meeting Analyzer | Whisper, GPT-4 | Slack | Transcription, summaries, action items |
+| SDM Assistant | GPT-4 | Jira, Confluence, Slack | Daily summaries, sprint planning, velocity |
+| DevOps Assistant | GPT-4 | GitHub Actions, Slack | Log analysis, CI/CD optimization, security |
+
+### Other Industry Examples
+
+| Project | OpenAI APIs | Integrations | Key Features |
+|---------|-------------|--------------|--------------|
 | Publishing Assistant | GPT-4, DALL-E, Vision | - | Reviews, summaries, cover images, file conversion |
 | Pharmacy Assistant | GPT-4, RAG, Moderation | - | Patient education, interactions, prescriptions |
 | Advertising Assistant | GPT-4, Vision | - | Ad copy, campaigns, creative analysis |
-| SDM Assistant | GPT-4 | Jira, Confluence, Slack | Daily summaries, sprint planning, velocity |
-| DevOps Assistant | GPT-4 | GitHub Actions, Slack | Log analysis, CI/CD optimization, security |
 
 ## Sample Code & Examples
 
@@ -180,15 +189,15 @@ openAi-sandbox/
 ├── src/                          # Source code for all 11 projects
 │   ├── RequirementsAssistant/   # Requirements processing
 │   ├── TestCaseGenerator/       # Test case generation
-│   ├── RetroAnalyzer/           # Retrospective analysis
 │   ├── CodeReviewAssistant/    # Code review automation
 │   ├── DocumentationGenerator/  # Documentation generation
+│   ├── RetroAnalyzer/           # Retrospective analysis
 │   ├── MeetingAnalyzer/         # Meeting transcription & analysis
-│   ├── PublishingAssistant/     # Publishing workflows
-│   ├── PharmacyAssistant/       # Pharmacy operations
-│   ├── AdvertisingAgency/       # Advertising workflows
 │   ├── SDMAssistant/            # SDM workflows
-│   └── DevOpsAssistant/         # DevOps workflows
+│   ├── DevOpsAssistant/         # DevOps workflows
+│   ├── PublishingAssistant/     # Publishing workflows (industry example)
+│   ├── PharmacyAssistant/       # Pharmacy operations (industry example)
+│   └── AdvertisingAgency/       # Advertising workflows (industry example)
 ├── shared/                       # Shared libraries
 │   ├── OpenAIShared/            # OpenAI client wrapper
 │   ├── Integrations/            # Slack, GitHub integrations
