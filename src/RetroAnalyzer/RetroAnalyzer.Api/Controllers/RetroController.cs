@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Models;
+using Microsoft.AspNetCore.SignalR;
 using RetroAnalyzer.Core;
+using RetroAnalyzer.Api.Hubs;
 
 namespace RetroAnalyzer.Api.Controllers;
 
@@ -8,79 +9,79 @@ namespace RetroAnalyzer.Api.Controllers;
 [Route("api/[controller]")]
 public class RetroController : ControllerBase
 {
-    private readonly RetroAnalyzerService _retroService;
+    private readonly RetroAnalyzerService _service;
+    private readonly IHubContext<RetroHub> _hubContext;
     private readonly ILogger<RetroController> _logger;
 
     public RetroController(
-        RetroAnalyzerService retroService,
+        RetroAnalyzerService service,
+        IHubContext<RetroHub> hubContext,
         ILogger<RetroController> logger)
     {
-        _retroService = retroService;
+        _service = service;
+        _hubContext = hubContext;
         _logger = logger;
     }
 
-    [HttpPost("extract-action-items")]
-    public async Task<ActionResult<List<ActionItem>>> ExtractActionItems([FromBody] CommentsRequest request)
+    /// <summary>
+    /// Analyzes retrospective comments with real-time updates
+    /// </summary>
+    [HttpPost("analyze-stream")]
+    public async Task AnalyzeRetroStream(
+        [FromBody] AnalyzeRequest request,
+        CancellationToken cancellationToken)
     {
+        var roomId = request.RoomId ?? Guid.NewGuid().ToString();
+        
         try
         {
-            var actionItems = await _retroService.ExtractActionItemsAsync(request.Comments);
-            return Ok(actionItems);
+            // Notify clients that analysis started
+            await _hubContext.Clients.Group(roomId).SendAsync("AnalysisStarted", new { RoomId = roomId });
+
+            // Analyze comments
+            var result = await _service.AnalyzeRetrospectiveAsync(
+                request.Comments,
+                cancellationToken);
+
+            // Send progress updates
+            await _hubContext.Clients.Group(roomId).SendAsync("ProgressUpdate", new { Message = "Extracting action items..." });
+            
+            // Send final result (convert to anonymous object for SignalR)
+            await _hubContext.Clients.Group(roomId).SendAsync("AnalysisComplete", new
+            {
+                Summary = result.Summary,
+                ActionItems = result.ActionItems,
+                Sentiment = result.Sentiment,
+                Themes = result.Themes
+            });
+            
+            await _hubContext.Clients.Group(roomId).SendAsync("AnalysisFinished", new { RoomId = roomId });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error extracting action items");
-            return StatusCode(500, new { error = "Failed to extract action items", message = ex.Message });
+            _logger.LogError(ex, "Error analyzing retrospective");
+            await _hubContext.Clients.Group(roomId).SendAsync("AnalysisError", new { Error = ex.Message });
         }
     }
 
-    [HttpPost("identify-themes")]
-    public async Task<ActionResult<List<string>>> IdentifyThemes([FromBody] CommentsRequest request)
+    /// <summary>
+    /// Analyzes retrospective comments (non-streaming)
+    /// </summary>
+    [HttpPost("analyze")]
+    public async Task<ActionResult<object>> AnalyzeRetro(
+        [FromBody] AnalyzeRequest request,
+        CancellationToken cancellationToken)
     {
-        try
-        {
-            var themes = await _retroService.IdentifyThemesAsync(request.Comments);
-            return Ok(themes);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error identifying themes");
-            return StatusCode(500, new { error = "Failed to identify themes", message = ex.Message });
-        }
-    }
+        var result = await _service.AnalyzeRetrospectiveAsync(
+            request.Comments,
+            cancellationToken);
 
-    [HttpPost("analyze-sentiment")]
-    public async Task<ActionResult<SentimentAnalysis>> AnalyzeSentiment([FromBody] CommentsRequest request)
-    {
-        try
-        {
-            var sentiment = await _retroService.AnalyzeSentimentAsync(request.Comments);
-            return Ok(sentiment);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error analyzing sentiment");
-            return StatusCode(500, new { error = "Failed to analyze sentiment", message = ex.Message });
-        }
-    }
-
-    [HttpPost("improvement-suggestions")]
-    public async Task<ActionResult<string>> GetImprovementSuggestions([FromBody] CommentsRequest request)
-    {
-        try
-        {
-            var suggestions = await _retroService.GenerateImprovementSuggestionsAsync(request.Comments);
-            return Ok(new { suggestions });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error generating suggestions");
-            return StatusCode(500, new { error = "Failed to generate suggestions", message = ex.Message });
-        }
+        return Ok(result);
     }
 }
 
-public class CommentsRequest
+public class AnalyzeRequest
 {
     public List<string> Comments { get; set; } = new();
+    public string? RoomId { get; set; }
 }

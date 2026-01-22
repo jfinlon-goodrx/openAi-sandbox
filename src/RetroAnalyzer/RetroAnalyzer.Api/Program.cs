@@ -30,6 +30,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddOpenAIServices(builder.Configuration);
 builder.Services.AddCommonServices(builder.Configuration);
+builder.Services.AddSignalR();
 
 builder.Services.AddScoped<RetroAnalyzerService>(sp =>
 {
@@ -48,6 +49,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCommonMiddleware();
+
+// SignalR hub
+app.MapHub<RetroAnalyzer.Api.Hubs.RetroHub>("/retroHub");
+
 app.MapControllers();
 
 app.Run();
