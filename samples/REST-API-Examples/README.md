@@ -1,587 +1,582 @@
-# REST API Examples
+# REST API Examples - No Development Environment Required
 
-These examples can be used **without a development environment**. They demonstrate how to interact with the APIs using standard HTTP tools like `curl`, Postman, or any HTTP client.
+Complete examples for testing OpenAI Platform Learning Portfolio APIs without needing a .NET development environment. Updated with all new features including streaming, authentication, metrics, database, and autonomous agent endpoints.
 
-## Prerequisites
+## Quick Start
 
-- An HTTP client (curl, Postman, Insomnia, or browser)
-- OpenAI API key (if calling OpenAI directly)
-- Or a running instance of the API (if using the project APIs)
-
-## Table of Contents
-
-1. [Direct OpenAI API Examples](#direct-openai-api-examples) - Call OpenAI directly
-2. [Project API Examples](#project-api-examples) - Use the project APIs (requires running services)
-3. [Postman Collection](#postman-collection) - Import into Postman
-
----
-
-## Direct OpenAI API Examples
-
-These examples call OpenAI APIs directly, no development environment needed.
-
-### Chat Completions (GPT-4)
+### Option 1: curl (Bash)
 
 ```bash
-curl https://api.openai.com/v1/chat/completions \
+# Set your API key
+export API_KEY="your-api-key-here"
+export BASE_URL="http://localhost:5001"
+
+# Run examples
+bash openai-platform-examples.sh
+```
+
+### Option 2: Python
+
+```bash
+# Install dependencies
+pip install requests
+
+# Set environment variables
+export API_KEY="your-api-key-here"
+export BASE_URL="http://localhost:5001"
+
+# Run examples
+python python-examples.py
+```
+
+### Option 3: Postman
+
+1. Import `postman-collection.json` into Postman
+2. Set collection variables:
+   - `base_url`: `http://localhost:5001`
+   - `api_key`: Your API key
+3. Run requests from the collection
+
+## New Features Examples
+
+### 1. Health Checks
+
+```bash
+# Basic health check
+curl http://localhost:5001/health
+
+# Readiness check
+curl http://localhost:5001/health/ready
+```
+
+### 2. Authentication
+
+#### API Key Authentication
+
+```bash
+curl -X POST http://localhost:5001/api/requirements/summarize \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -H "X-API-Key: your-api-key" \
+  -d '{"content": "System requirements..."}'
+```
+
+#### JWT Authentication
+
+```bash
+# Login to get JWT token
+TOKEN=$(curl -s -X POST http://localhost:5001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@example.com", "password": "password123"}' \
+  | jq -r '.token')
+
+# Use token in subsequent requests
+curl -X GET http://localhost:5001/api/auth/me \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+### 3. Streaming Responses (Server-Sent Events)
+
+```bash
+curl -N -X POST http://localhost:5001/api/streaming/summarize-stream \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -H "Accept: text/event-stream" \
+  -d '{"content": "System requirements..."}'
+```
+
+**Python Example:**
+```python
+import requests
+
+response = requests.post(
+    "http://localhost:5001/api/streaming/summarize-stream",
+    json={"content": "System requirements..."},
+    headers={
+        "X-API-Key": "your-api-key",
+        "Accept": "text/event-stream"
+    },
+    stream=True
+)
+
+for line in response.iter_lines():
+    if line:
+        decoded = line.decode('utf-8')
+        if decoded.startswith('data: '):
+            data = decoded[6:]  # Remove 'data: ' prefix
+            if data == '[DONE]':
+                break
+            print(data)
+```
+
+### 4. Metrics Endpoints
+
+```bash
+# Get all metrics
+curl http://localhost:5001/api/metrics \
+  -H "X-API-Key: your-api-key"
+
+# Get metrics for specific model
+curl http://localhost:5001/api/metrics/gpt-4-turbo-preview \
+  -H "X-API-Key: your-api-key"
+
+# Reset metrics
+curl -X POST http://localhost:5001/api/metrics/reset \
+  -H "X-API-Key: your-api-key"
+```
+
+### 5. Database Endpoints
+
+```bash
+# Get all user stories
+curl http://localhost:5001/api/database/user-stories \
+  -H "X-API-Key: your-api-key"
+
+# Get user story by ID
+curl http://localhost:5001/api/database/user-stories/{id} \
+  -H "X-API-Key: your-api-key"
+
+# Get requirement documents
+curl http://localhost:5001/api/database/requirement-documents \
+  -H "X-API-Key: your-api-key"
+```
+
+### 6. Autonomous Development Agent
+
+```bash
+# Analyze code
+curl -X POST http://localhost:5001/api/autonomousagent/analyze \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
   -d '{
-    "model": "gpt-4-turbo-preview",
-    "messages": [
-      {
-        "role": "system",
-        "content": "You are a helpful assistant."
-      },
-      {
-        "role": "user",
-        "content": "Summarize this requirements document: The system must allow users to login securely and manage their profiles."
-      }
-    ],
-    "temperature": 0.3,
-    "max_tokens": 500
+    "code": "public class UserService { public User GetUser(int id) { return _users.First(u => u.Id == id); } }",
+    "context": "User service for authentication"
+  }'
+
+# Execute full autonomous workflow
+curl -X POST http://localhost:5001/api/autonomousagent/workflow \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "code": "public class UserService { ... }",
+    "context": "User service",
+    "repository": "org/repo",
+    "filePath": "src/Services/UserService.cs"
   }'
 ```
 
-### Generate User Stories
+### 7. SignalR Real-Time (WebSocket)
 
-```bash
-curl https://api.openai.com/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -d '{
-    "model": "gpt-4-turbo-preview",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Generate user stories from: Users need to login, view their dashboard, and update their profile. Format as JSON array with title, asA, iWant, soThat fields."
-      }
-    ],
-    "response_format": {"type": "json_object"},
-    "temperature": 0.3
-  }'
+**Note:** SignalR requires a WebSocket client. Use JavaScript or a SignalR client library.
+
+**JavaScript Example:**
+```javascript
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:5004/retroHub")
+    .build();
+
+await connection.start();
+await connection.invoke("JoinRoom", "retro-room-123");
+
+connection.on("ProgressUpdate", (data) => {
+    console.log("Progress:", data.message);
+});
+
+connection.on("AnalysisComplete", (result) => {
+    console.log("Analysis:", result);
+});
 ```
 
-### Vision API - Analyze Image
-
-```bash
-curl https://api.openai.com/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -d '{
-    "model": "gpt-4-vision-preview",
-    "messages": [
-      {
-        "role": "user",
-        "content": [
-          {
-            "type": "text",
-            "text": "Analyze this book cover. Evaluate visual appeal, typography, and marketability."
-          },
-          {
-            "type": "image_url",
-            "image_url": {
-              "url": "https://example.com/book-cover.jpg"
-            }
-          }
-        ]
-      }
-    ],
-    "max_tokens": 300
-  }'
-```
-
-### Moderation API
-
-```bash
-curl https://api.openai.com/v1/moderations \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -d '{
-    "input": "This is a test message to check for inappropriate content."
-  }'
-```
-
-### Embeddings
-
-```bash
-curl https://api.openai.com/v1/embeddings \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -d '{
-    "model": "text-embedding-ada-002",
-    "input": "Patient education: Metformin is used to treat type 2 diabetes."
-  }'
-```
-
-### Whisper API - Transcribe Audio
-
-```bash
-curl https://api.openai.com/v1/audio/transcriptions \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -F file="@meeting.mp3" \
-  -F model="whisper-1" \
-  -F language="en"
-```
-
-### DALL-E - Generate Image
-
-```bash
-curl https://api.openai.com/v1/images/generations \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
-  -d '{
-    "model": "dall-e-3",
-    "prompt": "A futuristic book cover for a science fiction novel, dark space background with stars, title in bold modern typography",
-    "size": "1024x1024",
-    "quality": "standard",
-    "n": 1
-  }'
-```
-
----
-
-## Project API Examples
-
-These examples use the project APIs. **First, start the API:**
-
-```bash
-cd src/PublishingAssistant/PublishingAssistant.Api
-dotnet run
-```
-
-### Publishing Assistant
-
-#### Generate Book Review
-
-```bash
-curl -X POST http://localhost:5000/api/publishing/review \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "Chapter 1: The story begins in a small town...",
-    "genre": "Science Fiction"
-  }'
-```
-
-#### Generate Summary
-
-```bash
-curl -X POST http://localhost:5000/api/publishing/summary \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "Full manuscript content...",
-    "maxLength": 250
-  }'
-```
-
-#### Generate Marketing Blurb
-
-```bash
-curl -X POST http://localhost:5000/api/publishing/marketing-blurb \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "Book content...",
-    "targetAudience": "Young adults aged 18-25"
-  }'
-```
-
-#### Analyze Cover Image
-
-```bash
-curl -X POST http://localhost:5000/api/publishing/analyze-cover-image \
-  -H "Content-Type: application/json" \
-  -d '{
-    "imageUrl": "https://example.com/cover.jpg",
-    "genre": "Mystery"
-  }'
-```
-
-### Pharmacy Assistant
-
-#### Generate Patient Education
-
-```bash
-curl -X POST http://localhost:5001/api/pharmacy/patient-education \
-  -H "Content-Type: application/json" \
-  -d '{
-    "medicationName": "Metformin",
-    "condition": "Type 2 Diabetes"
-  }'
-```
-
-#### Check Drug Interactions
-
-```bash
-curl -X POST http://localhost:5001/api/pharmacy/check-interactions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "medications": ["Metformin", "Lisinopril"],
-    "supplements": ["Vitamin D"],
-    "conditions": ["Type 2 Diabetes", "Hypertension"]
-  }'
-```
-
-#### Generate Prescription Label
-
-```bash
-curl -X POST http://localhost:5001/api/pharmacy/prescription-label \
-  -H "Content-Type: application/json" \
-  -d '{
-    "medicationName": "Metformin",
-    "dosage": "500mg",
-    "frequency": "Twice daily",
-    "quantity": 60
-  }'
-```
-
-### Advertising Agency Assistant
-
-#### Generate Ad Copy
-
-```bash
-curl -X POST http://localhost:5002/api/advertising/ad-copy \
-  -H "Content-Type: application/json" \
-  -d '{
-    "productName": "EcoClean Laundry Detergent",
-    "productDescription": "Eco-friendly laundry detergent made from natural ingredients",
-    "targetAudience": "Environmentally conscious consumers aged 25-45",
-    "channel": "Social Media",
-    "tone": "Friendly and informative"
-  }'
-```
-
-#### Develop Campaign Strategy
-
-```bash
-curl -X POST http://localhost:5002/api/advertising/campaign-strategy \
-  -H "Content-Type: application/json" \
-  -d '{
-    "brandName": "EcoClean",
-    "productDescription": "Eco-friendly laundry detergent",
-    "targetAudience": "Environmentally conscious consumers",
-    "campaignObjective": "Increase brand awareness",
-    "budget": 50000
-  }'
-```
+## Complete API Reference
 
 ### Requirements Assistant
 
-#### Summarize Document
-
+#### Summarize Requirements
 ```bash
-curl -X POST http://localhost:5003/api/requirements/summarize \
+curl -X POST http://localhost:5001/api/requirements/summarize \
   -H "Content-Type: application/json" \
-  -d '{
-    "content": "The system must allow users to login securely using multi-factor authentication..."
-  }'
+  -H "X-API-Key: your-api-key" \
+  -d '{"content": "System requirements document text..."}'
 ```
 
 #### Generate User Stories
-
 ```bash
-curl -X POST http://localhost:5003/api/requirements/generate-user-stories \
+curl -X POST http://localhost:5001/api/requirements/generate-user-stories \
   -H "Content-Type: application/json" \
-  -d '{
-    "content": "Users need to login, view dashboard, update profile..."
-  }'
+  -H "X-API-Key: your-api-key" \
+  -d '{"content": "Users need to login and view dashboard..."}'
 ```
 
-### SDM Assistant ⭐ NEW
-
-#### Get Daily Activity Summary
-
+#### Answer Question (RAG)
 ```bash
-curl -X POST http://localhost:7006/api/sdm/daily-summary \
+curl -X POST http://localhost:5001/api/requirements/answer-question \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
   -d '{
-    "projectKey": "PROJ",
-    "date": "2024-01-15"
-  }'
-```
-
-#### Generate Standup Talking Points
-
-```bash
-curl -X POST http://localhost:7006/api/sdm/standup-talking-points \
-  -H "Content-Type: application/json" \
-  -d '{
-    "date": "2024-01-15T00:00:00Z",
-    "summary": "Daily activity summary...",
-    "ticketsAnalyzed": 12
-  }'
-```
-
-#### Analyze Team Velocity
-
-```bash
-curl -X POST http://localhost:7006/api/sdm/analyze-velocity \
-  -H "Content-Type: application/json" \
-  -d '{
-    "projectKey": "PROJ",
-    "sprintCount": 5
-  }'
-```
-
-#### Generate Sprint Plan
-
-```bash
-curl -X POST http://localhost:7006/api/sdm/sprint-plan \
-  -H "Content-Type: application/json" \
-  -d '{
-    "projectKey": "PROJ",
-    "sprintGoal": "Complete payment integration",
-    "teamCapacity": 40
-  }'
-```
-
-#### Identify Risks
-
-```bash
-curl -X POST http://localhost:7006/api/sdm/identify-risks \
-  -H "Content-Type: application/json" \
-  -d '{
-    "projectKey": "PROJ",
-    "sprintId": "123"
-  }'
-```
-
-#### Generate Status Report
-
-```bash
-curl -X POST http://localhost:7006/api/sdm/status-report \
-  -H "Content-Type: application/json" \
-  -d '{
-    "projectKey": "PROJ",
-    "startDate": "2024-01-08T00:00:00Z",
-    "endDate": "2024-01-15T00:00:00Z",
-    "includeMetrics": true
-  }'
-```
-
-### DevOps Assistant ⭐ NEW
-
-#### Analyze Logs
-
-```bash
-curl -X POST http://localhost:7007/api/devops/analyze-logs \
-  -H "Content-Type: application/json" \
-  -d '{
-    "logs": "Error logs content...",
-    "logType": "application",
-    "timeRangeHours": 1
-  }'
-```
-
-#### Generate Incident Report
-
-```bash
-curl -X POST http://localhost:7007/api/devops/incident-report \
-  -H "Content-Type: application/json" \
-  -d '{
-    "logAnalysis": { /* LogAnalysis object */ },
-    "severity": "High"
-  }'
-```
-
-#### Analyze CI/CD Pipeline
-
-```bash
-curl -X POST http://localhost:7007/api/devops/analyze-pipeline \
-  -H "Content-Type: application/json" \
-  -d '{
-    "pipelineLogs": "Pipeline execution logs...",
-    "pipelineType": "GitHub Actions"
-  }'
-```
-
-#### Optimize Pipeline
-
-```bash
-curl -X POST http://localhost:7007/api/devops/optimize-pipeline \
-  -H "Content-Type: application/json" \
-  -d '{
-    "pipelineAnalysis": { /* PipelineAnalysis object */ },
-    "targetMetrics": ["build_time", "deployment_time"]
-  }'
-```
-
-#### Review Infrastructure Code
-
-```bash
-curl -X POST http://localhost:7007/api/devops/review-infrastructure \
-  -H "Content-Type: application/json" \
-  -d '{
-    "code": "terraform { ... }",
-    "infrastructureType": "Terraform"
-  }'
-```
-
-#### Generate Deployment Script
-
-```bash
-curl -X POST http://localhost:7007/api/devops/deployment-script \
-  -H "Content-Type: application/json" \
-  -d '{
-    "applicationType": "ASP.NET Core",
-    "targetEnvironment": "Azure App Service",
-    "deploymentMethod": "CI/CD"
-  }'
-```
-
-#### Security Scan
-
-```bash
-curl -X POST http://localhost:7007/api/devops/security-scan \
-  -H "Content-Type: application/json" \
-  -d '{
-    "scanTarget": "infrastructure",
-    "configFiles": ["terraform.tf", "docker-compose.yml"]
-  }'
-```
-
-#### Analyze GitHub Actions Workflow
-
-```bash
-curl -X POST http://localhost:7007/api/devops/analyze-github-workflow \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_GITHUB_TOKEN" \
-  -d '{
-    "owner": "your-org",
-    "repo": "your-repo",
-    "workflowPath": ".github/workflows/ci.yml"
-  }'
-```
-
-#### Analyze PR for Deployment Readiness
-
-```bash
-curl -X POST http://localhost:7007/api/devops/analyze-pr-deployment \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_GITHUB_TOKEN" \
-  -d '{
-    "owner": "your-org",
-    "repo": "your-repo",
-    "prNumber": 123
-  }'
-```
-
-#### Optimize GitHub Actions Workflow
-
-```bash
-curl -X POST http://localhost:7007/api/devops/optimize-github-workflow \
-  -H "Content-Type: application/json" \
-  -d '{
-    "currentWorkflow": "name: CI\non: push\n...",
-    "pipelineAnalysis": { /* PipelineAnalysis object */ },
-    "targetMetrics": ["build_time", "deployment_time"]
+    "question": "What are the main features?",
+    "context": "System includes authentication, profiles, dashboard..."
   }'
 ```
 
 ### Retrospective Analyzer
 
-#### Extract Action Items
-
+#### Analyze Retrospective
 ```bash
-curl -X POST http://localhost:5004/api/retro/extract-action-items \
+curl -X POST http://localhost:5001/api/retro/analyze \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
   -d '{
     "comments": [
       "We need better documentation",
-      "Code reviews take too long",
-      "Deployment process is confusing"
+      "Deployments are taking too long",
+      "Great collaboration this sprint"
     ]
   }'
 ```
 
-#### Analyze Sentiment
-
+#### Analyze with Real-Time Updates (SignalR)
 ```bash
-curl -X POST http://localhost:5004/api/retro/analyze-sentiment \
+# Start analysis (triggers SignalR events)
+curl -X POST http://localhost:5001/api/retro/analyze-stream \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
   -d '{
-    "comments": [
-      "Great sprint! We accomplished a lot.",
-      "Frustrated with the slow CI pipeline.",
-      "Love the new team collaboration tools."
-    ]
+    "comments": ["We need better documentation"],
+    "roomId": "retro-room-123"
   }'
+
+# Connect to SignalR hub at: ws://localhost:5004/retroHub
 ```
 
 ### Meeting Analyzer
 
 #### Transcribe Audio
-
 ```bash
-curl -X POST http://localhost:5005/api/meeting/transcribe \
-  -F "audioFile=@meeting.mp3" \
+curl -X POST http://localhost:5001/api/meeting/transcribe \
+  -H "X-API-Key: your-api-key" \
+  -F "file=@meeting.mp3" \
   -F "language=en"
 ```
 
-#### Summarize Meeting
-
+#### Analyze Transcript
 ```bash
-curl -X POST http://localhost:5005/api/meeting/summarize \
+curl -X POST http://localhost:5001/api/meeting/analyze \
   -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{"transcript": "Meeting transcript text..."}'
+```
+
+### Pharmacy Assistant
+
+#### Generate Patient Education
+```bash
+curl -X POST http://localhost:5001/api/pharmacy/patient-education \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
   -d '{
-    "transcript": "John: We discussed the new feature requirements. Sarah: We agreed on a timeline..."
+    "medication": "Metformin",
+    "dosage": "500mg twice daily",
+    "patientAge": 45
   }'
 ```
 
----
-
-## Using with Postman
-
-1. Import the [Postman Collection](#postman-collection) below
-2. Set environment variables:
-   - `base_url`: `http://localhost:5000` (or your API URL)
-   - `openai_api_key`: Your OpenAI API key (for direct examples)
-
----
-
-## Using with JavaScript/Fetch
-
-```javascript
-// Generate book review
-const response = await fetch('http://localhost:5000/api/publishing/review', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    content: 'Chapter 1: The story begins...',
-    genre: 'Science Fiction'
-  })
-});
-
-const review = await response.json();
-console.log(review);
+#### Check Drug Interactions
+```bash
+curl -X POST http://localhost:5001/api/pharmacy/drug-interactions \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "medications": ["Metformin", "Aspirin"],
+    "patientAge": 45
+  }'
 ```
 
----
+### Publishing Assistant
 
-## Using with Python/Requests
-
-```python
-import requests
-
-# Generate patient education
-response = requests.post(
-    'http://localhost:5001/api/pharmacy/patient-education',
-    json={
-        'medicationName': 'Metformin',
-        'condition': 'Type 2 Diabetes'
-    }
-)
-
-education = response.json()
-print(education)
+#### Generate Book Review
+```bash
+curl -X POST http://localhost:5001/api/publishing/review \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "bookTitle": "The Future of AI",
+    "bookContent": "Book content text..."
+  }'
 ```
 
----
+#### Generate Marketing Blurb
+```bash
+curl -X POST http://localhost:5001/api/publishing/marketing-blurb \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "bookTitle": "The Future of AI",
+    "bookSummary": "Book summary..."
+  }'
+```
 
-## Notes
+### Advertising Assistant
 
-- Replace `YOUR_OPENAI_API_KEY` with your actual OpenAI API key
-- Replace `localhost:5000` with your actual API URL if different
-- For production, use HTTPS and proper authentication
-- Check Swagger UI at `http://localhost:5000/swagger` for interactive API documentation
+#### Generate Ad Copy
+```bash
+curl -X POST http://localhost:5001/api/advertising/ad-copy \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "product": "Smart Watch",
+    "targetAudience": "Tech enthusiasts aged 25-40",
+    "tone": "Modern and exciting"
+  }'
+```
+
+#### Develop Campaign Strategy
+```bash
+curl -X POST http://localhost:5001/api/advertising/campaign-strategy \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: your-api-key" \
+  -d '{
+    "product": "Smart Watch",
+    "budget": "$50,000",
+    "timeline": "3 months"
+  }'
+```
+
+## Testing New Features
+
+### Rate Limiting
+
+```bash
+# Make multiple rapid requests to test rate limiting
+for i in {1..10}; do
+  curl -s -X GET http://localhost:5001/api/metrics \
+    -H "X-API-Key: your-api-key" \
+    -w " Status: %{http_code}, Remaining: %{header}X-RateLimit-Remaining\n"
+done
+```
+
+**Check Response Headers:**
+- `X-RateLimit-Limit`: Maximum requests allowed
+- `X-RateLimit-Remaining`: Remaining requests in window
+- `Retry-After`: Seconds until refill (when limit exceeded)
+
+### Correlation IDs
+
+```bash
+# Send request with correlation ID
+CORRELATION_ID=$(uuidgen)
+curl -X GET http://localhost:5001/api/metrics \
+  -H "X-API-Key: your-api-key" \
+  -H "X-Correlation-ID: $CORRELATION_ID" \
+  -v 2>&1 | grep -i "correlation"
+```
+
+**Response Header:**
+- `X-Correlation-ID`: Correlation ID for request tracking
+
+### CORS Testing
+
+```bash
+# Test CORS preflight
+curl -X OPTIONS http://localhost:5001/api/requirements/summarize \
+  -H "Origin: http://localhost:3000" \
+  -H "Access-Control-Request-Method: POST" \
+  -v
+```
+
+### Response Compression
+
+```bash
+# Request with compression
+curl -X GET http://localhost:5001/api/metrics \
+  -H "X-API-Key: your-api-key" \
+  -H "Accept-Encoding: gzip" \
+  --compressed
+```
+
+## Environment Variables
+
+Set these environment variables before running examples:
+
+```bash
+export BASE_URL="http://localhost:5001"
+export API_KEY="your-api-key-here"
+export JWT_TOKEN=""  # Will be set after login
+```
+
+## Response Headers Reference
+
+### Standard Headers
+- `X-Correlation-ID`: Request correlation ID
+- `X-RateLimit-Limit`: Rate limit maximum
+- `X-RateLimit-Remaining`: Remaining requests
+- `Retry-After`: Seconds until refill (when rate limited)
+- `Content-Encoding`: Compression type (gzip, br)
+
+### Health Check Headers
+- `Content-Type`: `application/json` or `text/plain`
+
+### Streaming Headers
+- `Content-Type`: `text/event-stream`
+- `Cache-Control`: `no-cache`
+- `Connection`: `keep-alive`
+
+## Error Responses
+
+### 400 Bad Request
+```json
+{
+  "error": "Invalid input",
+  "details": "..."
+}
+```
+
+### 401 Unauthorized
+```json
+{
+  "error": "Invalid API key"
+}
+```
+
+### 429 Too Many Requests
+```json
+{
+  "error": "Rate limit exceeded"
+}
+```
+
+**Headers:**
+- `Retry-After`: Seconds to wait before retrying
+
+### 500 Internal Server Error
+```json
+{
+  "error": "Internal server error",
+  "correlationId": "abc-123"
+}
+```
+
+## Postman Collection
+
+The Postman collection includes:
+
+1. **Health Checks** - Basic and readiness checks
+2. **Authentication** - Login and JWT endpoints
+3. **Requirements Assistant** - All requirements endpoints
+4. **Streaming** - Server-Sent Events examples
+5. **Metrics** - Metrics tracking endpoints
+6. **Database** - Database query endpoints
+7. **Autonomous Development Agent** - Code analysis and workflow
+8. **Retrospective Analyzer** - Analysis endpoints
+9. **Meeting Analyzer** - Transcription and analysis
+10. **Pharmacy Assistant** - Patient education and interactions
+11. **Publishing Assistant** - Reviews and marketing
+12. **Advertising Assistant** - Ad copy and campaigns
+13. **Testing & Monitoring** - Rate limiting, CORS, correlation IDs
+
+### Postman Setup
+
+1. Import `postman-collection.json`
+2. Set collection variables:
+   - `base_url`: Your API base URL
+   - `api_key`: Your API key
+3. For JWT authentication:
+   - Run "Login" request first
+   - Token is automatically saved to `jwt_token` variable
+   - Subsequent requests use Bearer token authentication
+
+## Python Examples
+
+The `python-examples.py` script includes:
+
+- All API endpoints
+- Streaming support
+- Error handling
+- Rate limiting tests
+- Correlation ID tests
+- Pretty-printed responses
+
+### Running Python Examples
+
+```bash
+# Install dependencies
+pip install requests
+
+# Run all examples
+python python-examples.py
+
+# Or import and use individual functions
+python -c "from python_examples import *; summarize_requirements()"
+```
+
+## curl Script
+
+The `openai-platform-examples.sh` script includes:
+
+- All endpoints organized by category
+- Health checks
+- Authentication examples
+- Streaming examples
+- Metrics and database endpoints
+- Autonomous agent examples
+- Rate limiting and CORS tests
+
+### Running curl Script
+
+```bash
+# Make executable
+chmod +x openai-platform-examples.sh
+
+# Run all examples
+./openai-platform-examples.sh
+
+# Or set variables and run
+export BASE_URL="http://localhost:5001"
+export API_KEY="your-api-key"
+./openai-platform-examples.sh
+```
+
+## Direct OpenAI API Examples
+
+For testing OpenAI APIs directly (without the .NET wrapper), see:
+
+- **[Direct OpenAI Examples](openai-direct-examples.sh)** - curl examples for OpenAI API
+- **[Python Direct Examples](python-examples.py)** - Python examples for OpenAI API
+
+## Troubleshooting
+
+### Connection Refused
+- Ensure the API is running: `dotnet run --project src/RequirementsAssistant/RequirementsAssistant.Api`
+- Check the port matches your `BASE_URL`
+
+### 401 Unauthorized
+- Verify your API key is correct
+- Check `X-API-Key` header is set
+- For JWT endpoints, ensure token is valid
+
+### 429 Too Many Requests
+- Rate limiting is working! Wait for the window to reset
+- Check `Retry-After` header for wait time
+- Adjust rate limit configuration if needed
+
+### Streaming Not Working
+- Ensure `Accept: text/event-stream` header is set
+- Use `-N` flag with curl for no buffering
+- Check connection is not being closed prematurely
+
+### CORS Errors
+- Verify CORS configuration in `appsettings.json`
+- Check `Origin` header matches allowed origins
+- Ensure preflight (OPTIONS) requests are handled
+
+## Next Steps
+
+- Explore the [API Documentation](http://localhost:5001/swagger) when running locally
+- Check [Improvements Documentation](../../docs/improvements/) for feature details
+- Review [Middleware Guide](../../docs/improvements/middleware-guide.md) for advanced features
+- See [Streaming Examples](../../docs/improvements/streaming-examples.md) for real-time features
+
+## Resources
+
+- [OpenAI Platform Documentation](https://platform.openai.com/docs)
+- [Server-Sent Events (SSE)](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events)
+- [SignalR Documentation](https://learn.microsoft.com/en-us/aspnet/core/signalr/introduction)
+- [Postman Documentation](https://learning.postman.com/docs/)

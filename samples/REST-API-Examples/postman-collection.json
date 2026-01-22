@@ -1,355 +1,706 @@
 {
-  "info": {
-    "name": "OpenAI Platform Learning Portfolio - API Examples",
-    "description": "REST API examples for OpenAI Platform Learning Portfolio projects",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    {
-      "key": "base_url",
-      "value": "http://localhost:5000",
-      "type": "string"
-    },
-    {
-      "key": "openai_api_key",
-      "value": "YOUR_OPENAI_API_KEY",
-      "type": "string"
-    }
-  ],
-  "item": [
-    {
-      "name": "Direct OpenAI APIs",
-      "item": [
-        {
-          "name": "Chat Completion - Summarize",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{openai_api_key}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"model\": \"gpt-4-turbo-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an expert business analyst.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Summarize this requirements document: The system must allow users to login securely using multi-factor authentication.\"\n    }\n  ],\n  \"temperature\": 0.3,\n  \"max_tokens\": 500\n}"
-            },
-            "url": {
-              "raw": "https://api.openai.com/v1/chat/completions",
-              "protocol": "https",
-              "host": ["api", "openai", "com"],
-              "path": ["v1", "chat", "completions"]
-            }
-          }
-        },
-        {
-          "name": "Moderation API",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{openai_api_key}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"input\": \"This is a test message to check for inappropriate content.\"\n}"
-            },
-            "url": {
-              "raw": "https://api.openai.com/v1/moderations",
-              "protocol": "https",
-              "host": ["api", "openai", "com"],
-              "path": ["v1", "moderations"]
-            }
-          }
-        },
-        {
-          "name": "Embeddings",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Authorization",
-                "value": "Bearer {{openai_api_key}}"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": \"Patient education: Metformin is used to treat type 2 diabetes.\"\n}"
-            },
-            "url": {
-              "raw": "https://api.openai.com/v1/embeddings",
-              "protocol": "https",
-              "host": ["api", "openai", "com"],
-              "path": ["v1", "embeddings"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Publishing Assistant",
-      "item": [
-        {
-          "name": "Generate Book Review",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"content\": \"Chapter 1: The story begins in a small town...\",\n  \"genre\": \"Science Fiction\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/publishing/review",
-              "host": ["{{base_url}}"],
-              "path": ["api", "publishing", "review"]
-            }
-          }
-        },
-        {
-          "name": "Generate Summary",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"content\": \"Full manuscript content...\",\n  \"maxLength\": 250\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/publishing/summary",
-              "host": ["{{base_url}}"],
-              "path": ["api", "publishing", "summary"]
-            }
-          }
-        },
-        {
-          "name": "Generate Marketing Blurb",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"content\": \"Book content...\",\n  \"targetAudience\": \"Young adults aged 18-25\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/publishing/marketing-blurb",
-              "host": ["{{base_url}}"],
-              "path": ["api", "publishing", "marketing-blurb"]
-            }
-          }
-        },
-        {
-          "name": "Analyze Cover Image",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"imageUrl\": \"https://example.com/cover.jpg\",\n  \"genre\": \"Mystery\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/publishing/analyze-cover-image",
-              "host": ["{{base_url}}"],
-              "path": ["api", "publishing", "analyze-cover-image"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Pharmacy Assistant",
-      "item": [
-        {
-          "name": "Generate Patient Education",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"medicationName\": \"Metformin\",\n  \"condition\": \"Type 2 Diabetes\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/pharmacy/patient-education",
-              "host": ["{{base_url}}"],
-              "path": ["api", "pharmacy", "patient-education"]
-            }
-          }
-        },
-        {
-          "name": "Check Drug Interactions",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"medications\": [\"Metformin\", \"Lisinopril\"],\n  \"supplements\": [\"Vitamin D\"],\n  \"conditions\": [\"Type 2 Diabetes\", \"Hypertension\"]\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/pharmacy/check-interactions",
-              "host": ["{{base_url}}"],
-              "path": ["api", "pharmacy", "check-interactions"]
-            }
-          }
-        },
-        {
-          "name": "Generate Prescription Label",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"medicationName\": \"Metformin\",\n  \"dosage\": \"500mg\",\n  \"frequency\": \"Twice daily\",\n  \"quantity\": 60\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/pharmacy/prescription-label",
-              "host": ["{{base_url}}"],
-              "path": ["api", "pharmacy", "prescription-label"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Advertising Agency",
-      "item": [
-        {
-          "name": "Generate Ad Copy",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"productName\": \"EcoClean Laundry Detergent\",\n  \"productDescription\": \"Eco-friendly laundry detergent made from natural ingredients\",\n  \"targetAudience\": \"Environmentally conscious consumers aged 25-45\",\n  \"channel\": \"Social Media\",\n  \"tone\": \"Friendly and informative\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/advertising/ad-copy",
-              "host": ["{{base_url}}"],
-              "path": ["api", "advertising", "ad-copy"]
-            }
-          }
-        },
-        {
-          "name": "Develop Campaign Strategy",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"brandName\": \"EcoClean\",\n  \"productDescription\": \"Eco-friendly laundry detergent\",\n  \"targetAudience\": \"Environmentally conscious consumers\",\n  \"campaignObjective\": \"Increase brand awareness\",\n  \"budget\": 50000\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/advertising/campaign-strategy",
-              "host": ["{{base_url}}"],
-              "path": ["api", "advertising", "campaign-strategy"]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "Requirements Assistant",
-      "item": [
-        {
-          "name": "Summarize Document",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"content\": \"The system must allow users to login securely using multi-factor authentication...\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/requirements/summarize",
-              "host": ["{{base_url}}"],
-              "path": ["api", "requirements", "summarize"]
-            }
-          }
-        },
-        {
-          "name": "Generate User Stories",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"content\": \"Users need to login, view dashboard, update profile...\"\n}"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/requirements/generate-user-stories",
-              "host": ["{{base_url}}"],
-              "path": ["api", "requirements", "generate-user-stories"]
-            }
-          }
-        }
-      ]
-    }
-  ]
+	"info": {
+		"name": "OpenAI Platform Learning Portfolio",
+		"description": "Complete API collection for OpenAI Platform Learning Portfolio with all new features",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "openai-platform"
+	},
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api_key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "X-API-Key",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:5001",
+			"type": "string"
+		},
+		{
+			"key": "api_key",
+			"value": "your-api-key-here",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Checks",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					}
+				},
+				{
+					"name": "Readiness Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health/ready",
+							"host": ["{{base_url}}"],
+							"path": ["health", "ready"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login (Get JWT Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.collectionVariables.set('jwt_token', jsonData.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "Get Current User (JWT)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/auth/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "auth", "me"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Requirements Assistant",
+			"item": [
+				{
+					"name": "Summarize Requirements",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"The system shall allow users to login and manage their profiles. Users can update their email addresses and passwords.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/requirements/summarize",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requirements", "summarize"]
+						}
+					}
+				},
+				{
+					"name": "Generate User Stories",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"Users need to login and view their dashboard with personalized content.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/requirements/generate-user-stories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requirements", "generate-user-stories"]
+						}
+					}
+				},
+				{
+					"name": "Answer Question (RAG)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"question\": \"What are the main features?\",\n  \"context\": \"The system includes user authentication, profile management, and dashboard features.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/requirements/answer-question",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requirements", "answer-question"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Streaming",
+			"item": [
+				{
+					"name": "Stream Summarization",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "text/event-stream"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"content\": \"The system shall allow users to login and manage their profiles.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/streaming/summarize-stream",
+							"host": ["{{base_url}}"],
+							"path": ["api", "streaming", "summarize-stream"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Get All Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/metrics",
+							"host": ["{{base_url}}"],
+							"path": ["api", "metrics"]
+						}
+					}
+				},
+				{
+					"name": "Get Model Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/metrics/gpt-4-turbo-preview",
+							"host": ["{{base_url}}"],
+							"path": ["api", "metrics", "gpt-4-turbo-preview"]
+						}
+					}
+				},
+				{
+					"name": "Reset Metrics",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/metrics/reset",
+							"host": ["{{base_url}}"],
+							"path": ["api", "metrics", "reset"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Database",
+			"item": [
+				{
+					"name": "Get User Stories",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/database/user-stories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "database", "user-stories"]
+						}
+					}
+				},
+				{
+					"name": "Get User Story by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/database/user-stories/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "database", "user-stories", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "story-id-here"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Requirement Documents",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/database/requirement-documents",
+							"host": ["{{base_url}}"],
+							"path": ["api", "database", "requirement-documents"]
+						}
+					}
+				},
+				{
+					"name": "Get Requirement Document by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/database/requirement-documents/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "database", "requirement-documents", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "doc-id-here"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Autonomous Development Agent",
+			"item": [
+				{
+					"name": "Analyze Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"public class UserService {\\n    public User GetUser(int id) {\\n        return _users.First(u => u.Id == id);\\n    }\\n}\",\n  \"context\": \"User service for authentication\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/autonomousagent/analyze",
+							"host": ["{{base_url}}"],
+							"path": ["api", "autonomousagent", "analyze"]
+						}
+					}
+				},
+				{
+					"name": "Generate Improved Code",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"originalCode\": \"public class UserService {\\n    public User GetUser(int id) {\\n        return _users.First(u => u.Id == id);\\n    }\\n}\",\n  \"analysis\": {\n    \"needsImprovement\": true,\n    \"issues\": [\"Missing null checks\", \"No error handling\"],\n    \"suggestions\": [\"Add null checks\", \"Implement try-catch\"],\n    \"priority\": \"high\",\n    \"estimatedEffort\": 2.5\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/autonomousagent/improve",
+							"host": ["{{base_url}}"],
+							"path": ["api", "autonomousagent", "improve"]
+						}
+					}
+				},
+				{
+					"name": "Execute Autonomous Workflow",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"code\": \"public class UserService {\\n    public User GetUser(int id) {\\n        return _users.First(u => u.Id == id);\\n    }\\n}\",\n  \"context\": \"User service for authentication\",\n  \"repository\": \"org/repo\",\n  \"filePath\": \"src/Services/UserService.cs\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/autonomousagent/workflow",
+							"host": ["{{base_url}}"],
+							"path": ["api", "autonomousagent", "workflow"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Retrospective Analyzer",
+			"item": [
+				{
+					"name": "Analyze Retrospective",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comments\": [\n    \"We need better documentation\",\n    \"Deployments are taking too long\",\n    \"Great collaboration this sprint\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/retro/analyze",
+							"host": ["{{base_url}}"],
+							"path": ["api", "retro", "analyze"]
+						}
+					}
+				},
+				{
+					"name": "Analyze Retrospective (Streaming)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"comments\": [\n    \"We need better documentation\",\n    \"Deployments are taking too long\"\n  ],\n  \"roomId\": \"retro-room-123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/retro/analyze-stream",
+							"host": ["{{base_url}}"],
+							"path": ["api", "retro", "analyze-stream"]
+						},
+						"description": "Note: For real-time updates, connect to SignalR hub at ws://localhost:5004/retroHub"
+					}
+				}
+			]
+		},
+		{
+			"name": "Meeting Analyzer",
+			"item": [
+				{
+					"name": "Transcribe Meeting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "language",
+									"value": "en",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/meeting/transcribe",
+							"host": ["{{base_url}}"],
+							"path": ["api", "meeting", "transcribe"]
+						}
+					}
+				},
+				{
+					"name": "Analyze Transcript",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transcript\": \"Meeting transcript text here...\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/meeting/analyze",
+							"host": ["{{base_url}}"],
+							"path": ["api", "meeting", "analyze"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Pharmacy Assistant",
+			"item": [
+				{
+					"name": "Generate Patient Education",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"medication\": \"Metformin\",\n  \"dosage\": \"500mg twice daily\",\n  \"patientAge\": 45\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pharmacy/patient-education",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pharmacy", "patient-education"]
+						}
+					}
+				},
+				{
+					"name": "Check Drug Interactions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"medications\": [\"Metformin\", \"Aspirin\"],\n  \"patientAge\": 45\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/pharmacy/drug-interactions",
+							"host": ["{{base_url}}"],
+							"path": ["api", "pharmacy", "drug-interactions"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Publishing Assistant",
+			"item": [
+				{
+					"name": "Generate Book Review",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bookTitle\": \"The Future of AI\",\n  \"bookContent\": \"This book explores the potential of artificial intelligence...\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/publishing/review",
+							"host": ["{{base_url}}"],
+							"path": ["api", "publishing", "review"]
+						}
+					}
+				},
+				{
+					"name": "Generate Marketing Blurb",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"bookTitle\": \"The Future of AI\",\n  \"bookSummary\": \"A comprehensive guide to artificial intelligence...\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/publishing/marketing-blurb",
+							"host": ["{{base_url}}"],
+							"path": ["api", "publishing", "marketing-blurb"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Advertising Assistant",
+			"item": [
+				{
+					"name": "Generate Ad Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product\": \"Smart Watch\",\n  \"targetAudience\": \"Tech enthusiasts aged 25-40\",\n  \"tone\": \"Modern and exciting\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advertising/ad-copy",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advertising", "ad-copy"]
+						}
+					}
+				},
+				{
+					"name": "Develop Campaign Strategy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product\": \"Smart Watch\",\n  \"budget\": \"$50,000\",\n  \"timeline\": \"3 months\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/advertising/campaign-strategy",
+							"host": ["{{base_url}}"],
+							"path": ["api", "advertising", "campaign-strategy"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Testing & Monitoring",
+			"item": [
+				{
+					"name": "Test Rate Limiting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/metrics",
+							"host": ["{{base_url}}"],
+							"path": ["api", "metrics"]
+						},
+						"description": "Make multiple rapid requests to test rate limiting. Check X-RateLimit-Limit and X-RateLimit-Remaining headers."
+					}
+				},
+				{
+					"name": "Test Correlation ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Correlation-ID",
+								"value": "{{$guid}}",
+								"description": "Unique correlation ID for request tracking"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/metrics",
+							"host": ["{{base_url}}"],
+							"path": ["api", "metrics"]
+						},
+						"description": "Check response headers for X-Correlation-ID"
+					}
+				},
+				{
+					"name": "Test CORS",
+					"request": {
+						"method": "OPTIONS",
+						"header": [
+							{
+								"key": "Origin",
+								"value": "http://localhost:3000"
+							},
+							{
+								"key": "Access-Control-Request-Method",
+								"value": "POST"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/requirements/summarize",
+							"host": ["{{base_url}}"],
+							"path": ["api", "requirements", "summarize"]
+						},
+						"description": "Test CORS preflight request"
+					}
+				}
+			]
+		}
+	]
 }
