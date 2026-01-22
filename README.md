@@ -50,6 +50,7 @@ openAi-sandbox/
 - [Role Guides](docs/role-guides/) - Role-specific workflows
 - [Project Documentation](docs/project-docs/) - Detailed project docs
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
+- [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
 
 ## Contributing
 
