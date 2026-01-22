@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  requirements-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5001:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+      - OpenAI__BaseUrl=https://api.openai.com/v1
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  retro-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: dotnet RetroAnalyzer.Api.dll
+    ports:
+      - "5004:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+
+  meeting-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: dotnet MeetingAnalyzer.Api.dll
+    ports:
+      - "5005:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+
+  sdm-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: dotnet SDMAssistant.Api.dll
+    ports:
+      - "7006:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+      - Jira__BaseUrl=${JIRA_BASE_URL}
+      - Jira__Username=${JIRA_USERNAME}
+      - Jira__ApiToken=${JIRA_API_TOKEN}
+      - Confluence__BaseUrl=${CONFLUENCE_BASE_URL}
+      - Confluence__Username=${CONFLUENCE_USERNAME}
+      - Confluence__ApiToken=${CONFLUENCE_API_TOKEN}
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+
+  devops-assistant:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    command: dotnet DevOpsAssistant.Api.dll
+    ports:
+      - "7007:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+      - GitHub__Token=${GITHUB_TOKEN}
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+
+volumes:
+  logs:

@@ -119,6 +119,13 @@ public static class ServiceCollectionExtensions
             return new CachingService(cache, logger);
         });
 
+        // Register MetricsService (singleton to maintain metrics across requests)
+        services.AddSingleton<MetricsService>(serviceProvider =>
+        {
+            var logger = serviceProvider.GetRequiredService<ILogger<MetricsService>>();
+            return new MetricsService(logger);
+        });
+
         return services;
     }
 }
