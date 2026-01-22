@@ -407,10 +407,57 @@ if (prAnalysis.Analysis.Contains("breaking change"))
 }
 ```
 
+## Slack Integration
+
+### Incident Notifications
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// Analyze and report incident
+var logAnalysis = await devOpsService.AnalyzeLogsAsync(logs);
+var incidentReport = await devOpsService.GenerateIncidentReportAsync(logAnalysis, "High");
+
+// Send to Slack
+await slackIntegration.SendIncidentReportAsync(
+    title: incidentReport.Title,
+    severity: incidentReport.Severity,
+    summary: incidentReport.Details,
+    channel: "#incidents"
+);
+```
+
+### Deployment Notifications
+
+```csharp
+await slackIntegration.SendDeploymentNotificationAsync(
+    applicationName: "MyApp",
+    environment: "Production",
+    version: "1.2.3",
+    status: "Success",
+    channel: "#deployments"
+);
+```
+
+### Pipeline Status
+
+```csharp
+await slackIntegration.SendPipelineStatusAsync(
+    pipelineName: "CI/CD Pipeline",
+    status: "completed",
+    conclusion: "success",
+    runUrl: "https://github.com/org/repo/actions/runs/123456",
+    channel: "#ci-cd"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Resources
 
 - [DevOps Assistant Documentation](../project-docs/devops-assistant.md)
-- [GitHub Actions Workflow Examples](../../samples/GitHubExamples/GitHubActionsWorkflows.md) ⭐ NEW
+- [GitHub Actions Workflow Examples](../../samples/GitHubExamples/GitHubActionsWorkflows.md)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [GitHub API Documentation](https://docs.github.com/en/rest)
 - [Azure DevOps Documentation](https://docs.microsoft.com/azure/devops/)

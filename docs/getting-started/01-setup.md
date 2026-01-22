@@ -126,6 +126,32 @@ For automated code reviews:
 1. Add `OPENAI_API_KEY` to your GitHub repository secrets
 2. The workflow file is already configured at `.github/workflows/code-review.yml`
 
+### Slack Integration
+
+For notifications and updates:
+
+1. Create a Slack webhook:
+   - Go to [Slack Apps → Incoming Webhooks](https://api.slack.com/messaging/webhooks)
+   - Add to your workspace and choose a channel
+   - Copy the webhook URL
+
+2. Configure in `appsettings.json`:
+```json
+{
+  "Slack": {
+    "WebhookUrl": "https://hooks.slack.com/services/YOUR/WEBHOOK/URL",
+    "DefaultChannel": "#devops"
+  }
+}
+```
+
+3. Or set environment variable:
+```bash
+export Slack__WebhookUrl="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for detailed examples.
+
 ## Next Steps
 
 - Read [API Basics](02-api-basics.md) to understand how to make your first API call

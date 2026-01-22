@@ -290,8 +290,43 @@ var suggestions = await sdmService.SuggestResourceOptimizationsAsync(allocation)
 **Issue:** AI analysis seems inaccurate
 - **Solution:** Provide more context, refine prompts
 
+## Slack Integration
+
+### Daily Summary to Slack
+
+```csharp
+var slackIntegration = new SlackIntegration(httpClient, logger, slackWebhookUrl);
+
+// Get daily summary
+var summary = await sdmService.GetDailyActivitySummaryAsync("PROJ", DateTime.UtcNow.AddDays(-1));
+
+// Send to Slack
+await slackIntegration.SendDailySummaryAsync(
+    summary: summary.Summary,
+    metrics: new Dictionary<string, string>
+    {
+        { "Tickets Analyzed", summary.TicketsAnalyzed.ToString() }
+    },
+    channel: "#engineering-daily"
+);
+```
+
+### Standup Points to Slack
+
+```csharp
+var talkingPoints = await sdmService.GenerateStandupTalkingPointsAsync(summary);
+
+await slackIntegration.SendStandupPointsAsync(
+    talkingPoints: talkingPoints,
+    channel: "#standup"
+);
+```
+
+See [Slack Integration Guide](../integrations/slack-integration.md) for more examples.
+
 ## Resources
 
 - [Jira API Documentation](https://developer.atlassian.com/cloud/jira/platform/rest/v3/)
 - [Confluence API Documentation](https://developer.atlassian.com/cloud/confluence/rest/v2/)
+- [Slack Integration Guide](../integrations/slack-integration.md) ⭐ NEW
 - [SDM Service Documentation](../project-docs/sdm-assistant.md)

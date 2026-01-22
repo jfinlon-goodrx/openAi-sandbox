@@ -62,6 +62,7 @@ Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
 - [Project Documentation](docs/project-docs/) - Detailed project docs for all 11 projects
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
+- [Integrations](docs/integrations/) - Slack, GitHub Actions, Jira, Confluence integration guides
 
 ### New Guides
 
