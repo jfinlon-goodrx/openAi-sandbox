@@ -92,7 +92,7 @@ public class GitHubIntegration
     /// <summary>
     /// Gets pull request details
     /// </summary>
-    public async Task<PullRequest> GetPullRequestAsync(
+    public async Task<GitHubPullRequest> GetPullRequestAsync(
         string owner,
         string repo,
         int prNumber,
@@ -105,7 +105,7 @@ public class GitHubIntegration
             response.EnsureSuccessStatusCode();
 
             var content = await response.Content.ReadAsStringAsync(cancellationToken);
-            return JsonSerializer.Deserialize<PullRequest>(content, new JsonSerializerOptions
+            return JsonSerializer.Deserialize<GitHubPullRequest>(content, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             }) ?? throw new InvalidOperationException("Failed to deserialize pull request");
@@ -268,7 +268,7 @@ public class GitHubIntegration
     /// <summary>
     /// Creates a pull request
     /// </summary>
-    public async Task<PullRequest> CreatePullRequestAsync(
+    public async Task<GitHubPullRequest> CreatePullRequestAsync(
         string owner,
         string repo,
         string title,
@@ -295,7 +295,7 @@ public class GitHubIntegration
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-            return JsonSerializer.Deserialize<PullRequest>(responseContent, new JsonSerializerOptions
+            return JsonSerializer.Deserialize<GitHubPullRequest>(responseContent, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             }) ?? throw new InvalidOperationException("Failed to deserialize pull request");
