@@ -137,6 +137,7 @@ For automated code reviews:
   - [Product Manager Guide](../role-guides/pm-guide.md)
   - [Tester Guide](../role-guides/tester-guide.md)
   - [Software Development Manager Guide](../role-guides/sdm-guide.md) ⭐ NEW
+  - [DevOps Engineer Guide](../role-guides/devops-guide.md) ⭐ NEW
 
 ## Troubleshooting
 

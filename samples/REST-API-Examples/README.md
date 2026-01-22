@@ -358,6 +358,87 @@ curl -X POST http://localhost:7006/api/sdm/status-report \
   }'
 ```
 
+### DevOps Assistant ⭐ NEW
+
+#### Analyze Logs
+
+```bash
+curl -X POST http://localhost:7007/api/devops/analyze-logs \
+  -H "Content-Type: application/json" \
+  -d '{
+    "logs": "Error logs content...",
+    "logType": "application",
+    "timeRangeHours": 1
+  }'
+```
+
+#### Generate Incident Report
+
+```bash
+curl -X POST http://localhost:7007/api/devops/incident-report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "logAnalysis": { /* LogAnalysis object */ },
+    "severity": "High"
+  }'
+```
+
+#### Analyze CI/CD Pipeline
+
+```bash
+curl -X POST http://localhost:7007/api/devops/analyze-pipeline \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pipelineLogs": "Pipeline execution logs...",
+    "pipelineType": "GitHub Actions"
+  }'
+```
+
+#### Optimize Pipeline
+
+```bash
+curl -X POST http://localhost:7007/api/devops/optimize-pipeline \
+  -H "Content-Type: application/json" \
+  -d '{
+    "pipelineAnalysis": { /* PipelineAnalysis object */ },
+    "targetMetrics": ["build_time", "deployment_time"]
+  }'
+```
+
+#### Review Infrastructure Code
+
+```bash
+curl -X POST http://localhost:7007/api/devops/review-infrastructure \
+  -H "Content-Type: application/json" \
+  -d '{
+    "code": "terraform { ... }",
+    "infrastructureType": "Terraform"
+  }'
+```
+
+#### Generate Deployment Script
+
+```bash
+curl -X POST http://localhost:7007/api/devops/deployment-script \
+  -H "Content-Type: application/json" \
+  -d '{
+    "applicationType": "ASP.NET Core",
+    "targetEnvironment": "Azure App Service",
+    "deploymentMethod": "CI/CD"
+  }'
+```
+
+#### Security Scan
+
+```bash
+curl -X POST http://localhost:7007/api/devops/security-scan \
+  -H "Content-Type: application/json" \
+  -d '{
+    "scanTarget": "infrastructure",
+    "configFiles": ["terraform.tf", "docker-compose.yml"]
+  }'
+```
+
 ### Retrospective Analyzer
 
 #### Extract Action Items

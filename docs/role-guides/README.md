@@ -64,6 +64,21 @@ For Software Development Managers who use Jira and Confluence daily:
 - Enhanced Jira Integration
 - Enhanced Confluence Integration
 
+### [DevOps Engineer Guide](devops-guide.md) ⭐ NEW
+For DevOps Engineers who manage infrastructure and CI/CD:
+- Log analysis and incident response
+- CI/CD pipeline optimization
+- Infrastructure as Code review
+- Deployment automation
+- Security scanning
+- Container and Kubernetes analysis
+- Monitoring and alerting optimization
+
+**Key Projects:**
+- DevOps Assistant
+- GitHub Actions Integration
+- Azure DevOps Integration
+
 ## Quick Start
 
 1. Choose your role guide above

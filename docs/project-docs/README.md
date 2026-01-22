@@ -83,6 +83,18 @@ Software Development Manager workflows with Jira and Confluence integration.
 - Sprint health analysis
 - Enhanced Jira and Confluence integrations
 
+### [DevOps Assistant](devops-assistant.md) ⭐ NEW
+DevOps Engineer workflows for infrastructure and CI/CD management.
+- Log analysis and incident response
+- CI/CD pipeline optimization
+- Infrastructure as Code review (Terraform, ARM, CloudFormation)
+- Deployment script generation
+- Runbook generation
+- Metrics analysis
+- Alerting optimization
+- Security scanning
+- Docker and Kubernetes analysis
+
 ## Project Features Matrix
 
 | Project | OpenAI APIs Used | Integrations | Use Cases |
@@ -97,6 +109,7 @@ Software Development Manager workflows with Jira and Confluence integration.
 | Pharmacy Assistant | GPT-4 | - | Pharmacy |
 | Advertising Assistant | GPT-4 | - | Advertising |
 | SDM Assistant | GPT-4 | Jira, Confluence | SDM |
+| DevOps Assistant | GPT-4 | GitHub Actions, Azure DevOps | DevOps |
 
 ## Getting Started
 
@@ -130,6 +143,7 @@ Most projects expose REST APIs with Swagger documentation:
 - Pharmacy Assistant: `https://localhost:5001/swagger`
 - Advertising Assistant: `https://localhost:5002/swagger`
 - SDM Assistant: `https://localhost:7006/swagger`
+- DevOps Assistant: `https://localhost:7007/swagger`
 
 ## Examples
 
