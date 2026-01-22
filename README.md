@@ -4,7 +4,7 @@ A comprehensive portfolio of sample projects demonstrating OpenAI Platform capab
 
 ## Overview
 
-This repository contains **eleven production-ready projects** that showcase the full range of OpenAI Platform capabilities:
+This repository contains **twelve production-ready projects** that showcase the full range of OpenAI Platform capabilities:
 
 ### Software Development Projects
 
@@ -15,18 +15,19 @@ This repository contains **eleven production-ready projects** that showcase the 
 4. **Documentation Generator** - API documentation, README, and changelog generation from code
 
 **Team Collaboration & Management:**
-5. **Sprint Retrospective Analyzer** - Text analysis, sentiment tracking, action item extraction, and Jira integration
+5. **Sprint Retrospective Analyzer** ⭐ - Text analysis, sentiment tracking, action item extraction, Jira integration, and SignalR real-time updates
 6. **Meeting Transcript Analyzer** - Speech-to-text transcription (Whisper), meeting summaries, action item extraction, and follow-up emails
 7. **SDM Assistant** - Software Development Manager workflows: daily summaries, sprint planning, velocity analysis, risk identification, status reports with enhanced Jira and Confluence integrations
 8. **DevOps Assistant** - DevOps Engineer workflows: log analysis, incident response, CI/CD optimization, infrastructure review (Terraform/ARM/CloudFormation), security scanning, Docker/Kubernetes analysis with GitHub Actions integration
+9. **Autonomous Development Agent** ⭐ NEW - AI-powered autonomous code analysis, improvement generation, and automated PR creation
 
 ### Other Industry Examples
 
 These projects demonstrate how OpenAI Platform can be applied to different industries:
 
-9. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, and file conversion
-10. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
-11. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
+10. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, and file conversion
+11. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
+12. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
 
 ## Getting Started
 
@@ -112,11 +113,23 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 - [DevOps Guide](docs/role-guides/devops-guide.md) ⭐ - Log analysis, CI/CD optimization, infrastructure
 
 ### Project Documentation
-- [All Projects](docs/project-docs/) - Detailed documentation for all 11 projects
+- [All Projects](docs/project-docs/) - Detailed documentation for all 12 projects
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
 - [AI Agents & Services](docs/concepts/ai-agents-and-services.md) ⭐ NEW - Conceptual guide to autonomous AI agents
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
 - [Integration Guides](docs/integrations/) - Slack, GitHub Actions, Jira, Confluence setup and examples
+
+### Improvements & Deployment
+- [Improvements Overview](docs/improvements/README.md) - All production-ready improvements
+- [Middleware Guide](docs/improvements/middleware-guide.md) - Using common middleware
+- [Streaming Examples](docs/improvements/streaming-examples.md) - Real-time response streaming
+- [JWT Authentication](docs/improvements/jwt-authentication-guide.md) - JWT setup and usage
+- [Serilog Guide](docs/improvements/serilog-guide.md) - Structured logging
+- [Metrics Guide](docs/improvements/metrics-guide.md) - API usage tracking
+- [Autonomous Agent Guide](docs/improvements/autonomous-agent-guide.md) - AI-powered development
+- [SignalR Guide](docs/improvements/signalr-guide.md) - Real-time communication
+- [Docker Guide](docs/deployment/docker-guide.md) - Containerization and deployment
+- [Database Setup](docs/deployment/database-setup.md) - Entity Framework Core configuration
 
 ## Quick Start Examples
 
@@ -152,10 +165,11 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 | Test Case Generator | GPT-4 | Slack | Code analysis, test generation, edge cases |
 | Code Review Assistant | GPT-4 | GitHub Actions, Slack | Security scanning, performance, style |
 | Documentation Generator | GPT-4 | Slack | API docs, README, changelogs |
-| Retro Analyzer | GPT-4, Embeddings | Jira, Slack | Sentiment analysis, action items, themes |
+| Retro Analyzer | GPT-4, Embeddings | Jira, Slack, SignalR | Sentiment analysis, action items, themes, real-time updates |
 | Meeting Analyzer | Whisper, GPT-4 | Slack | Transcription, summaries, action items |
 | SDM Assistant | GPT-4 | Jira, Confluence, Slack | Daily summaries, sprint planning, velocity |
 | DevOps Assistant | GPT-4 | GitHub Actions, Slack | Log analysis, CI/CD optimization, security |
+| Autonomous Dev Agent | GPT-4 | GitHub, Slack | Code analysis, improvements, automated PRs |
 
 ### Other Industry Examples
 
@@ -186,23 +200,25 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 
 ```
 openAi-sandbox/
-├── src/                          # Source code for all 11 projects
+├── src/                          # Source code for all 12 projects
 │   ├── RequirementsAssistant/   # Requirements processing
 │   ├── TestCaseGenerator/       # Test case generation
 │   ├── CodeReviewAssistant/    # Code review automation
 │   ├── DocumentationGenerator/  # Documentation generation
-│   ├── RetroAnalyzer/           # Retrospective analysis
+│   ├── RetroAnalyzer/           # Retrospective analysis (with SignalR)
 │   ├── MeetingAnalyzer/         # Meeting transcription & analysis
 │   ├── SDMAssistant/            # SDM workflows
 │   ├── DevOpsAssistant/         # DevOps workflows
+│   ├── AutonomousDevelopmentAgent/ # Autonomous code analysis & PR creation
 │   ├── PublishingAssistant/     # Publishing workflows (industry example)
 │   ├── PharmacyAssistant/       # Pharmacy operations (industry example)
 │   └── AdvertisingAgency/       # Advertising workflows (industry example)
 ├── shared/                       # Shared libraries
 │   ├── OpenAIShared/            # OpenAI client wrapper
 │   ├── Integrations/            # Slack, GitHub integrations
-│   ├── Common/                  # Common utilities
-│   └── Models/                  # Shared data models
+│   ├── Common/                  # Common utilities & middleware
+│   ├── Models/                  # Shared data models
+│   └── Data/                    # Entity Framework Core database context
 ├── docs/                         # Comprehensive documentation
 │   ├── getting-started/         # Setup and basics
 │   ├── role-guides/             # Role-specific workflows
@@ -310,6 +326,16 @@ See [Improvements Documentation](docs/improvements/) for details, examples, and 
 ## Contributing
 
 This is a learning portfolio. Feel free to explore, modify, and extend the projects to suit your needs.
+
+### Code Standards
+
+This project follows comprehensive coding standards defined in [`.cursorrules`](.cursorrules). Key principles:
+- **Shared libraries first** - Never duplicate code
+- **Service registration pattern** for dependency injection
+- **Thin controllers** - Delegate to services
+- **Comprehensive testing** - Unit and integration tests
+- **Structured logging** with Serilog
+- **Security best practices** - Authentication, authorization, input validation
 
 ### Code Standards
 
