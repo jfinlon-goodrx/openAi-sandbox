@@ -39,6 +39,15 @@ openAi-sandbox/
 
 ## Quick Start
 
+### Option 1: Use REST API Examples (No Development Environment Required)
+
+Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
+
+- **[REST API Examples](samples/REST-API-Examples/README.md)** - curl, Python, and Postman examples
+- **[Direct OpenAI API Examples](samples/REST-API-Examples/openai-direct-examples.sh)** - Call OpenAI directly
+
+### Option 2: Build and Run Projects
+
 1. Clone the repository
 2. Set up your OpenAI API key (see [Setup Guide](docs/getting-started/01-setup.md))
 3. Build the solution: `dotnet build`
