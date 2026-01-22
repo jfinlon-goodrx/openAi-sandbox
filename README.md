@@ -57,10 +57,17 @@ Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
 ## Documentation
 
 - [Getting Started](docs/getting-started/) - Setup and basics
-- [Role Guides](docs/role-guides/) - Role-specific workflows
-- [Project Documentation](docs/project-docs/) - Detailed project docs
+- [Role Guides](docs/role-guides/) - Role-specific workflows (Developer, BA, PM, Tester, **SDM**)
+- [Project Documentation](docs/project-docs/) - Detailed project docs for all 10 projects
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
+
+### New: SDM Guide
+
+For Software Development Managers using Jira and Confluence daily:
+- **[SDM Guide](docs/role-guides/sdm-guide.md)** - Complete guide for SDM workflows
+- **[SDM Assistant](docs/project-docs/sdm-assistant.md)** - Project documentation
+- Daily standup preparation, sprint planning, risk identification, and automated status reports
 
 ## Contributing
 

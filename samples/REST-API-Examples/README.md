@@ -286,6 +286,78 @@ curl -X POST http://localhost:5003/api/requirements/generate-user-stories \
   }'
 ```
 
+### SDM Assistant ⭐ NEW
+
+#### Get Daily Activity Summary
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/daily-summary \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectKey": "PROJ",
+    "date": "2024-01-15"
+  }'
+```
+
+#### Generate Standup Talking Points
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/standup-talking-points \
+  -H "Content-Type: application/json" \
+  -d '{
+    "date": "2024-01-15T00:00:00Z",
+    "summary": "Daily activity summary...",
+    "ticketsAnalyzed": 12
+  }'
+```
+
+#### Analyze Team Velocity
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/analyze-velocity \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectKey": "PROJ",
+    "sprintCount": 5
+  }'
+```
+
+#### Generate Sprint Plan
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/sprint-plan \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectKey": "PROJ",
+    "sprintGoal": "Complete payment integration",
+    "teamCapacity": 40
+  }'
+```
+
+#### Identify Risks
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/identify-risks \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectKey": "PROJ",
+    "sprintId": "123"
+  }'
+```
+
+#### Generate Status Report
+
+```bash
+curl -X POST http://localhost:7006/api/sdm/status-report \
+  -H "Content-Type: application/json" \
+  -d '{
+    "projectKey": "PROJ",
+    "startDate": "2024-01-08T00:00:00Z",
+    "endDate": "2024-01-15T00:00:00Z",
+    "includeMetrics": true
+  }'
+```
+
 ### Retrospective Analyzer
 
 #### Extract Action Items

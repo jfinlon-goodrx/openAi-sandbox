@@ -101,7 +101,7 @@ If you want to use Confluence integration for Requirements Assistant:
 
 ### Jira Integration
 
-For Retro Analyzer to create Jira tickets:
+For Retro Analyzer and SDM Assistant to create Jira tickets:
 
 1. Get your Jira API token from [Atlassian Account Settings](https://id.atlassian.com/manage-profile/security/api-tokens)
 2. Configure in `appsettings.json`:
@@ -116,6 +116,8 @@ For Retro Analyzer to create Jira tickets:
   }
 }
 ```
+
+**Note:** SDM Assistant requires Jira integration for daily summaries, sprint planning, and risk identification. See [SDM Guide](../role-guides/sdm-guide.md) for detailed setup.
 
 ### GitHub Actions
 
