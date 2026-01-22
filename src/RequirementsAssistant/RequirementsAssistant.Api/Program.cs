@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using OpenAIShared;
 using RequirementsAssistant.Core;
+using Shared.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,13 @@ builder.Services.AddSwaggerGen(c =>
 
 // Configure OpenAI
 builder.Services.AddOpenAIServices(builder.Configuration);
+
+// Add health checks
+builder.Services.AddOpenAIHealthChecks();
+
+// Add JWT authentication (optional - can use API key instead)
+// builder.Services.AddJwtAuthentication(builder.Configuration);
+// builder.Services.AddScoped<JwtTokenService>();
 
 // Register application services
 builder.Services.AddScoped<RequirementsService>(sp =>
@@ -50,6 +58,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add correlation IDs and logging
+app.UseCorrelationId();
+app.UseRequestResponseLogging();
+
+// Add health checks
+app.MapHealthChecks("/health");
+
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
