@@ -1,0 +1,355 @@
+{
+  "info": {
+    "name": "OpenAI Platform Learning Portfolio - API Examples",
+    "description": "REST API examples for OpenAI Platform Learning Portfolio projects",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "openai_api_key",
+      "value": "YOUR_OPENAI_API_KEY",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Direct OpenAI APIs",
+      "item": [
+        {
+          "name": "Chat Completion - Summarize",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{openai_api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"gpt-4-turbo-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an expert business analyst.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Summarize this requirements document: The system must allow users to login securely using multi-factor authentication.\"\n    }\n  ],\n  \"temperature\": 0.3,\n  \"max_tokens\": 500\n}"
+            },
+            "url": {
+              "raw": "https://api.openai.com/v1/chat/completions",
+              "protocol": "https",
+              "host": ["api", "openai", "com"],
+              "path": ["v1", "chat", "completions"]
+            }
+          }
+        },
+        {
+          "name": "Moderation API",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{openai_api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"input\": \"This is a test message to check for inappropriate content.\"\n}"
+            },
+            "url": {
+              "raw": "https://api.openai.com/v1/moderations",
+              "protocol": "https",
+              "host": ["api", "openai", "com"],
+              "path": ["v1", "moderations"]
+            }
+          }
+        },
+        {
+          "name": "Embeddings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{openai_api_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": \"Patient education: Metformin is used to treat type 2 diabetes.\"\n}"
+            },
+            "url": {
+              "raw": "https://api.openai.com/v1/embeddings",
+              "protocol": "https",
+              "host": ["api", "openai", "com"],
+              "path": ["v1", "embeddings"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Publishing Assistant",
+      "item": [
+        {
+          "name": "Generate Book Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Chapter 1: The story begins in a small town...\",\n  \"genre\": \"Science Fiction\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/publishing/review",
+              "host": ["{{base_url}}"],
+              "path": ["api", "publishing", "review"]
+            }
+          }
+        },
+        {
+          "name": "Generate Summary",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Full manuscript content...\",\n  \"maxLength\": 250\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/publishing/summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "publishing", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Generate Marketing Blurb",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Book content...\",\n  \"targetAudience\": \"Young adults aged 18-25\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/publishing/marketing-blurb",
+              "host": ["{{base_url}}"],
+              "path": ["api", "publishing", "marketing-blurb"]
+            }
+          }
+        },
+        {
+          "name": "Analyze Cover Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"imageUrl\": \"https://example.com/cover.jpg\",\n  \"genre\": \"Mystery\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/publishing/analyze-cover-image",
+              "host": ["{{base_url}}"],
+              "path": ["api", "publishing", "analyze-cover-image"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pharmacy Assistant",
+      "item": [
+        {
+          "name": "Generate Patient Education",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicationName\": \"Metformin\",\n  \"condition\": \"Type 2 Diabetes\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pharmacy/patient-education",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pharmacy", "patient-education"]
+            }
+          }
+        },
+        {
+          "name": "Check Drug Interactions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medications\": [\"Metformin\", \"Lisinopril\"],\n  \"supplements\": [\"Vitamin D\"],\n  \"conditions\": [\"Type 2 Diabetes\", \"Hypertension\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pharmacy/check-interactions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pharmacy", "check-interactions"]
+            }
+          }
+        },
+        {
+          "name": "Generate Prescription Label",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"medicationName\": \"Metformin\",\n  \"dosage\": \"500mg\",\n  \"frequency\": \"Twice daily\",\n  \"quantity\": 60\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/pharmacy/prescription-label",
+              "host": ["{{base_url}}"],
+              "path": ["api", "pharmacy", "prescription-label"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Advertising Agency",
+      "item": [
+        {
+          "name": "Generate Ad Copy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productName\": \"EcoClean Laundry Detergent\",\n  \"productDescription\": \"Eco-friendly laundry detergent made from natural ingredients\",\n  \"targetAudience\": \"Environmentally conscious consumers aged 25-45\",\n  \"channel\": \"Social Media\",\n  \"tone\": \"Friendly and informative\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/advertising/ad-copy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "advertising", "ad-copy"]
+            }
+          }
+        },
+        {
+          "name": "Develop Campaign Strategy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"brandName\": \"EcoClean\",\n  \"productDescription\": \"Eco-friendly laundry detergent\",\n  \"targetAudience\": \"Environmentally conscious consumers\",\n  \"campaignObjective\": \"Increase brand awareness\",\n  \"budget\": 50000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/advertising/campaign-strategy",
+              "host": ["{{base_url}}"],
+              "path": ["api", "advertising", "campaign-strategy"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requirements Assistant",
+      "item": [
+        {
+          "name": "Summarize Document",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"The system must allow users to login securely using multi-factor authentication...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/requirements/summarize",
+              "host": ["{{base_url}}"],
+              "path": ["api", "requirements", "summarize"]
+            }
+          }
+        },
+        {
+          "name": "Generate User Stories",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Users need to login, view dashboard, update profile...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/requirements/generate-user-stories",
+              "host": ["{{base_url}}"],
+              "path": ["api", "requirements", "generate-user-stories"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
