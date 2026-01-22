@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using OpenAIShared;
+using RequirementsAssistant.Core;
 
 namespace SDMAssistant.Core;
 
