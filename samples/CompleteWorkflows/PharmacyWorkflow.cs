@@ -1,6 +1,5 @@
 using PharmacyAssistant.Core;
 using OpenAIShared;
-using OpenAIShared;
 
 namespace Samples.CompleteWorkflows;
 
