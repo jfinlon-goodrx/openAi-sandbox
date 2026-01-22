@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAIShared;
 using PublishingAssistant.Core;
+using PublishingAssistant.Core;
 
 namespace PublishingAssistant.Api.Controllers;
 
@@ -181,6 +182,36 @@ public class PublishingController : ControllerBase
             return StatusCode(500, new { error = "Failed to generate editorial notes", message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Analyzes cover image using Vision API
+    /// </summary>
+    [HttpPost("analyze-cover-image")]
+    public async Task<ActionResult<CoverImageAnalysis>> AnalyzeCoverImage([FromBody] AnalyzeCoverRequest request)
+    {
+        try
+        {
+            var visionService = HttpContext.RequestServices.GetRequiredService<VisionService>();
+            var coverAnalyzer = new CoverImageAnalyzer(visionService, 
+                HttpContext.RequestServices.GetRequiredService<ILogger<CoverImageAnalyzer>>());
+            
+            var analysis = await coverAnalyzer.AnalyzeCoverImageAsync(
+                request.ImageUrl,
+                request.Genre);
+            return Ok(analysis);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error analyzing cover image");
+            return StatusCode(500, new { error = "Failed to analyze cover image", message = ex.Message });
+        }
+    }
+}
+
+public class AnalyzeCoverRequest
+{
+    public string ImageUrl { get; set; } = string.Empty;
+    public string? Genre { get; set; }
 }
 
 public class ReviewRequest

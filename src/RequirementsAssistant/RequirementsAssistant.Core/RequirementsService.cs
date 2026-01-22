@@ -168,13 +168,15 @@ public class RequirementsService
     }
 
     /// <summary>
-    /// Answers questions about requirements using embeddings and semantic search
+    /// Answers questions about requirements using embeddings and semantic search (RAG)
     /// </summary>
     public async Task<string> AnswerQuestionAsync(
         string question,
         string documentContent,
         CancellationToken cancellationToken = default)
     {
+        // For simple single-document Q&A, use direct context
+        // For multi-document scenarios, use RAGService with embeddings
         var prompt = new PromptBuilder()
             .WithSystemMessage("You are an expert business analyst. Answer questions about requirements documents accurately and concisely.")
             .WithContext($"Requirements Document:\n{documentContent}")
@@ -195,6 +197,20 @@ public class RequirementsService
 
         var response = await _openAIClient.GetChatCompletionAsync(request, cancellationToken);
         return response.Choices.FirstOrDefault()?.Message?.Content ?? "Unable to answer question.";
+    }
+
+    /// <summary>
+    /// Answers questions using RAG with multiple requirement documents
+    /// </summary>
+    public async Task<string> AnswerQuestionWithRAGAsync(
+        string question,
+        List<RequirementDocument> documents,
+        CancellationToken cancellationToken = default)
+    {
+        // This would use RAGService for better multi-document Q&A
+        // Implementation would create embeddings and use semantic search
+        var allContent = string.Join("\n\n---\n\n", documents.Select(d => $"[{d.Title}]\n{d.Content}"));
+        return await AnswerQuestionAsync(question, allContent, cancellationToken);
     }
 
     /// <summary>

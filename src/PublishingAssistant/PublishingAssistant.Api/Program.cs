@@ -1,5 +1,7 @@
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using OpenAIShared;
+using OpenAIShared.Configuration;
 using PublishingAssistant.Core;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,24 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddOpenAIServices(builder.Configuration);
+
+// Add Vision Service
+builder.Services.AddHttpClient<VisionService>((serviceProvider, client) =>
+{
+    var config = serviceProvider.GetRequiredService<IOptions<OpenAIConfiguration>>().Value;
+    client.BaseAddress = new Uri(config.BaseUrl);
+    client.DefaultRequestHeaders.Authorization =
+        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", config.ApiKey);
+});
+builder.Services.AddScoped<VisionService>(sp =>
+{
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    var httpClient = httpClientFactory.CreateClient(nameof(VisionService));
+    var config = sp.GetRequiredService<IOptions<OpenAIConfiguration>>();
+    var logger = sp.GetRequiredService<ILogger<VisionService>>();
+    return new VisionService(httpClient, config, logger);
+});
+
 builder.Services.AddScoped<PublishingService>(sp =>
 {
     var openAIClient = sp.GetRequiredService<OpenAIClient>();

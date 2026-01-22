@@ -311,6 +311,7 @@ public class ChatCompletionRequest
     public bool? Stream { get; set; }
     public List<FunctionDefinition>? Functions { get; set; }
     public string? FunctionCall { get; set; }
+    public object? ResponseFormat { get; set; } // For JSON mode: { type = "json_object" }
 }
 
 public class ChatCompletionResponse
