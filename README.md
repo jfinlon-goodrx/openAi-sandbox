@@ -112,6 +112,7 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 ### Project Documentation
 - [All Projects](docs/project-docs/) - Detailed documentation for all 11 projects
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
+- [AI Agents & Services](docs/concepts/ai-agents-and-services.md) ⭐ NEW - Conceptual guide to autonomous AI agents
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
 - [Integration Guides](docs/integrations/) - Slack, GitHub Actions, Jira, Confluence setup and examples
 
