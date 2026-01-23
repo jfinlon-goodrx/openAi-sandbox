@@ -1,8 +1,20 @@
 # Advertising Agency Assistant
 
+**For:** Advertising professionals who want to automate creative workflows and campaign development.
+
+**What you'll learn:** How to use AI for ad copy generation, campaign strategy, audience analysis, brand voice development, creative briefs, A/B test hypotheses, and ad creative analysis with Vision API.
+
 ## Overview
 
 The Advertising Agency Assistant helps advertising agencies automate ad copy generation, campaign strategy development, target audience analysis, brand voice development, creative brief creation, and A/B test hypothesis generation.
+
+**Why use AI for advertising workflows?**
+- **Creativity:** Generate multiple ad copy variations quickly
+- **Strategy:** Develop comprehensive campaign strategies with AI insights
+- **Brand consistency:** Maintain consistent brand voice across all content
+- **Visual analysis:** Use Vision API to analyze ad creatives for effectiveness
+- **A/B testing:** Generate test hypotheses and analyze results
+- **Efficiency:** Speed up the creative development process
 
 ## Features
 

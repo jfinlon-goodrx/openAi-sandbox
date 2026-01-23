@@ -1,8 +1,19 @@
 # Requirements Processing Assistant
 
+**For:** Business Analysts and Product Managers who need to process requirements documents and generate user stories.
+
+**What you'll learn:** How to use AI to summarize requirements, generate user stories with acceptance criteria, perform gap analysis, and answer questions about requirements documents.
+
 ## Overview
 
 The Requirements Processing Assistant helps Business Analysts and Product Managers process requirement documents, generate user stories, and answer questions about requirements.
+
+**Why use AI for requirements processing?**
+- **Speed:** Process large requirement documents quickly
+- **Consistency:** Generate standardized user stories with consistent format
+- **Completeness:** AI can identify gaps and missing requirements
+- **Q&A:** Quickly answer questions about requirements without re-reading entire documents
+- **Integration:** Pull requirements directly from Confluence for seamless workflow
 
 ## Features
 

@@ -1,8 +1,19 @@
 # Documentation Generator
 
+**For:** Developers who want to automate documentation generation and keep documentation up-to-date.
+
+**What you'll learn:** How to use AI to generate API documentation, README files, and changelogs from code and comments automatically.
+
 ## Overview
 
 The Documentation Generator helps Developers automatically generate API documentation, README files, and changelogs from code and comments.
+
+**Why use AI for documentation?**
+- **Time savings:** Generate documentation automatically instead of writing manually
+- **Consistency:** Standardized documentation format across all projects
+- **Up-to-date:** Regenerate documentation when code changes
+- **Completeness:** AI can identify what needs to be documented
+- **Quality:** Well-structured, clear documentation that's easy to understand
 
 ## Features
 

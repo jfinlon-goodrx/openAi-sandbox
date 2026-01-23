@@ -1,5 +1,20 @@
 # Error Handling Best Practices
 
+**For:** Developers building production applications with OpenAI Platform.
+
+**What you'll learn:** How to handle API errors gracefully, implement retry logic, use circuit breakers, provide fallback mechanisms, and ensure your application remains stable when external services have issues.
+
+## Overview
+
+Robust error handling is essential for production applications. This guide covers best practices for handling errors from OpenAI Platform APIs and ensuring your application remains stable and user-friendly.
+
+**Why proper error handling matters:**
+- **User experience:** Users get helpful error messages instead of crashes
+- **Reliability:** Applications continue working even when external services have issues
+- **Cost control:** Prevent runaway costs from retry loops
+- **Debugging:** Better error messages help identify and fix issues quickly
+- **Resilience:** Applications can recover from temporary failures automatically
+
 ## Common Error Types
 
 ### 1. API Errors

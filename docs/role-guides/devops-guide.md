@@ -1,8 +1,19 @@
 # DevOps Engineer Guide
 
+**For:** DevOps Engineers who manage infrastructure, CI/CD pipelines, and want to use AI for automation and optimization.
+
+**What you'll learn:** How to use AI for log analysis, incident response, CI/CD optimization, infrastructure as code review, deployment automation, security scanning, and monitoring optimization.
+
 ## Overview
 
 This guide helps DevOps Engineers leverage AI to automate infrastructure management, optimize CI/CD pipelines, analyze logs, improve security, and streamline deployment processes.
+
+**Why use AI for DevOps tasks?**
+- **Faster incident response:** AI can quickly analyze logs and identify root causes
+- **Better optimization:** AI can suggest improvements to pipelines and infrastructure
+- **Automated documentation:** Generate runbooks and deployment guides automatically
+- **Security insights:** AI can identify security issues in infrastructure code
+- **Cost optimization:** AI can analyze usage patterns and suggest cost-saving measures
 
 ## Daily Workflows
 

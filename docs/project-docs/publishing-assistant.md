@@ -1,8 +1,20 @@
 # Publishing Assistant
 
+**For:** Publishing professionals who want to automate manuscript review, marketing copy generation, and publishing workflows.
+
+**What you'll learn:** How to use AI for comprehensive manuscript reviews, summary generation, marketing blurbs, cover image generation (DALL-E), Vision API analysis, file conversion, and PDF manuscript review with intelligent chunking.
+
 ## Overview
 
 The Publishing Assistant helps publishing companies automate various workflows including manuscript reviews, summary generation, marketing copy creation, cover image descriptions, and file format conversions.
+
+**Why use AI for publishing workflows?**
+- **Comprehensive reviews:** AI can analyze entire manuscripts for plot, character, style, and structure
+- **Cost efficiency:** Intelligent chunking and RAG reduce token usage by 80-88%
+- **Consistency:** Standardized review formats and marketing copy
+- **Speed:** Generate reviews, summaries, and marketing materials quickly
+- **Visual content:** Generate cover images and analyze them with Vision API
+- **Format conversion:** Convert manuscripts between formats automatically
 
 ## Features
 

@@ -1,8 +1,18 @@
 # Software Development Manager Guide
 
+**For:** Software Development Managers who use Jira and Confluence daily and want to leverage AI for team management and decision-making.
+
+**What you'll learn:** How to use AI for daily standup preparation, sprint planning, velocity analysis, risk identification, status reports, and team performance analysis.
+
 ## Overview
 
 This guide helps Software Development Managers leverage AI to streamline daily workflows with Jira and Confluence, improve team productivity, and make data-driven decisions.
+
+**Why use AI for SDM tasks?**
+- **Time savings:** Automate routine analysis and reporting tasks
+- **Better insights:** AI can identify patterns and trends in team data that might be missed
+- **Consistency:** Generate standardized reports and summaries
+- **Data-driven decisions:** Use AI to analyze metrics and provide recommendations
 
 ## Daily Workflows
 

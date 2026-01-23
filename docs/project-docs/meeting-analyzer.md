@@ -1,8 +1,20 @@
 # Meeting Transcript Analyzer
 
+**For:** Product Managers, Business Analysts, and Scrum Masters who want to automate meeting processing and documentation.
+
+**What you'll learn:** How to use AI to transcribe meetings (Whisper API), generate summaries, extract action items, and create follow-up emails automatically.
+
 ## Overview
 
 The Meeting Transcript Analyzer helps Product Managers, Business Analysts, and Scrum Masters transcribe meetings, generate summaries, extract action items, and create follow-up emails.
+
+**Why use AI for meeting analysis?**
+- **Time savings:** No need to take detailed notes during meetings
+- **Accuracy:** AI transcription is highly accurate (Whisper API)
+- **Action items:** Never miss an action item - AI extracts them automatically
+- **Follow-up:** Generate professional follow-up emails automatically
+- **Searchability:** Search through meeting transcripts and summaries
+- **Consistency:** Standardized meeting summaries and action item formats
 
 ## Features
 

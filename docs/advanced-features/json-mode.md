@@ -1,5 +1,20 @@
 # JSON Mode
 
+**For:** Developers who need structured, parseable output from AI models.
+
+**What you'll learn:** How to use JSON Mode to ensure AI responses are valid JSON, making them easy to parse and integrate into applications.
+
+## Overview
+
+JSON Mode forces AI models to return responses in valid JSON format, making it easier to parse and use programmatically.
+
+**Why use JSON Mode?**
+- **Reliability:** Guaranteed valid JSON output, reducing parsing errors
+- **Integration:** Easy to integrate AI responses into applications
+- **Structure:** Consistent data structure for predictable processing
+- **Efficiency:** No need to parse and validate JSON manually
+- **Type safety:** Easier to map to strongly-typed objects
+
 ## Overview
 
 JSON Mode ensures the model responds with valid JSON, useful for structured data extraction.

@@ -1,8 +1,20 @@
 # Pharmacy Assistant
 
+**For:** Pharmacy professionals who want to automate patient education and medication management workflows.
+
+**What you'll learn:** How to use AI for patient education materials, drug interaction checking, prescription label generation, adherence planning, side effect analysis, and patient Q&A with RAG.
+
 ## Overview
 
 The Pharmacy Assistant helps pharmacies automate patient education, drug interaction checking, prescription label generation, medication adherence planning, and side effect analysis.
+
+**Why use AI for pharmacy workflows?**
+- **Patient safety:** Comprehensive drug interaction checking
+- **Education:** Generate clear, understandable patient education materials
+- **Compliance:** Ensure prescription labels meet regulatory requirements
+- **Efficiency:** Automate routine tasks to focus on patient care
+- **Q&A:** Use RAG to answer patient questions from drug information databases
+- **Content safety:** Use Moderation API to ensure patient-facing content is appropriate
 
 ## Features
 

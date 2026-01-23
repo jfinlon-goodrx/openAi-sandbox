@@ -1,4 +1,19 @@
-# Database Setup Guide
+# Database Setup
+
+**For:** Developers who want to persist data from AI-powered applications.
+
+**What you'll learn:** How to set up Entity Framework Core with SQL Server, SQLite, or in-memory databases for storing user stories, action items, test cases, and other application data.
+
+## Overview
+
+This guide covers setting up database integration using Entity Framework Core to persist data from AI-powered applications.
+
+**Why use a database?**
+- **Persistence:** Store AI-generated content for later retrieval
+- **History:** Track changes and maintain audit trails
+- **Relationships:** Model relationships between entities (user stories, test cases, etc.)
+- **Querying:** Efficiently query and filter stored data
+- **Integration:** Connect AI workflows with existing data systems Guide
 
 Complete guide to setting up Entity Framework Core with SQL Server or In-Memory database.
 

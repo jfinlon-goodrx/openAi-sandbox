@@ -1,8 +1,19 @@
 # RAG (Retrieval-Augmented Generation) Patterns
 
+**For:** Developers and technical professionals who want to build Q&A systems over large document collections.
+
+**What you'll learn:** How to use RAG to enable Q&A over large documents, create embeddings, perform semantic search, and reduce token usage by 80-88% compared to sending entire documents.
+
 ## Overview
 
-RAG combines embeddings for semantic search with GPT for generation, enabling Q&A over large document collections.
+RAG (Retrieval-Augmented Generation) combines embeddings for semantic search with GPT for generation, enabling Q&A over large document collections.
+
+**Why use RAG?**
+- **Cost efficiency:** Only send relevant document sections to AI, reducing token usage by 80-88%
+- **Accuracy:** Find the most relevant information before generating answers
+- **Scalability:** Handle document collections too large to send in a single request
+- **Context:** Provide AI with the most relevant context for better answers
+- **Real-world applications:** Perfect for document Q&A, knowledge bases, and search systems
 
 ## Architecture
 

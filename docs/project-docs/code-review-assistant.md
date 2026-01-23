@@ -1,8 +1,19 @@
 # Intelligent Code Review Assistant
 
+**For:** Developers who want to automate code reviews and improve code quality.
+
+**What you'll learn:** How to use AI to review code for security vulnerabilities, performance issues, code style violations, and bugs, with GitHub Actions integration for automated reviews.
+
 ## Overview
 
 The Code Review Assistant helps Developers automatically review code for security vulnerabilities, performance issues, code style violations, and potential bugs. It integrates with GitHub Actions for automated reviews in CI/CD pipelines.
+
+**Why use AI for code review?**
+- **Consistency:** AI reviews every line consistently, reducing human error
+- **Speed:** Review code much faster than manual review
+- **Security:** AI can identify security vulnerabilities that might be missed
+- **Learning:** Get explanations for why certain patterns are problematic
+- **Automation:** Integrate into CI/CD pipelines for automatic reviews on every PR
 
 ## Features
 

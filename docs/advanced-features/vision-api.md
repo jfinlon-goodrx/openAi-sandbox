@@ -1,5 +1,9 @@
 # Vision API (GPT-4 Vision)
 
+**For:** Developers and professionals who need to analyze images and extract information from visual content.
+
+**What you'll learn:** How to use GPT-4 Vision to analyze images, answer questions about visual content, extract text from images, and evaluate visual design elements.
+
 ## Overview
 
 GPT-4 Vision allows you to analyze images and answer questions about them. This is useful for:
@@ -7,6 +11,14 @@ GPT-4 Vision allows you to analyze images and answer questions about them. This 
 - Prescription label verification (Pharmacy)
 - Ad creative analysis (Advertising)
 - Document image analysis
+
+**Why use Vision API?**
+- **Visual understanding:** AI can understand and describe images in detail
+- **Text extraction:** Extract text from images (OCR-like functionality)
+- **Design analysis:** Evaluate visual design elements, composition, and appeal
+- **Accessibility:** Generate descriptions for accessibility purposes
+- **Quality control:** Verify visual content meets requirements
+- **Automation:** Automate visual content review processes
 
 ## Setup
 

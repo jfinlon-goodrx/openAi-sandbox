@@ -1,5 +1,20 @@
 # Batch Processing
 
+**For:** Developers processing large volumes of data who want to reduce costs.
+
+**What you'll learn:** How to use OpenAI's Batch Processing API to process large volumes of requests asynchronously with 50% cost reduction compared to standard API calls.
+
+## Overview
+
+Batch Processing allows you to submit large volumes of requests to OpenAI for asynchronous processing at 50% of the cost of standard API calls.
+
+**Why use batch processing?**
+- **Cost savings:** 50% reduction in API costs for high-volume operations
+- **Efficiency:** Process thousands of requests without rate limit concerns
+- **Asynchronous:** Submit requests and check results later
+- **Scalability:** Handle large-scale data processing operations
+- **Budget-friendly:** Ideal for non-urgent processing tasks
+
 ## Overview
 
 The Batch API allows you to process multiple requests asynchronously at a lower cost (50% discount).

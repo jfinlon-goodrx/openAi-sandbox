@@ -1,8 +1,20 @@
 # Sprint Retrospective Analyzer
 
+**For:** Scrum Masters and Product Managers who want to analyze retrospectives and extract actionable insights.
+
+**What you'll learn:** How to use AI to analyze retrospective comments, extract action items, identify themes, track sentiment, and create Jira tickets automatically.
+
 ## Overview
 
 The Sprint Retrospective Analyzer helps Scrum Masters and Product Managers analyze retrospective comments, extract action items, identify themes, and track team sentiment.
+
+**Why use AI for retrospective analysis?**
+- **Pattern recognition:** AI can identify recurring themes across multiple retrospectives
+- **Sentiment tracking:** Monitor team morale over time
+- **Action items:** Automatically extract and prioritize action items
+- **Time savings:** Analyze large volumes of comments quickly
+- **Integration:** Automatically create Jira tickets from action items
+- **Real-time:** Use SignalR for live analysis during retrospectives
 
 ## Features
 

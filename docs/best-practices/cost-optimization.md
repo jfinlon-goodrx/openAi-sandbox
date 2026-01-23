@@ -1,5 +1,20 @@
 # Cost Optimization
 
+**For:** All users of OpenAI Platform who want to minimize costs while maintaining quality.
+
+**What you'll learn:** How to optimize costs through model selection, token management, caching, batch processing, and monitoring usage to stay within budget.
+
+## Overview
+
+OpenAI Platform usage is charged per token. This guide shows you how to optimize costs while maintaining the quality of your AI-powered applications.
+
+**Why optimize costs?**
+- **Budget management:** Stay within allocated budgets
+- **Scalability:** Make AI applications cost-effective at scale
+- **Efficiency:** Get the same results for less cost
+- **ROI:** Maximize return on investment in AI capabilities
+- **Sustainability:** Enable long-term use of AI in your organization
+
 ## Understanding Costs
 
 ### Model Pricing (as of 2024)

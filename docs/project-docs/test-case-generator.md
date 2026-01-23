@@ -1,8 +1,19 @@
 # Automated Test Case Generator
 
+**For:** Testers and Developers who want to automate test case generation and improve test coverage.
+
+**What you'll learn:** How to use AI to generate test cases from code, convert user stories to test cases, identify edge cases, and create comprehensive test scenarios.
+
 ## Overview
 
 The Test Case Generator helps Testers and Developers automatically generate test cases from code or user stories, identify edge cases, and create comprehensive test coverage.
+
+**Why use AI for test case generation?**
+- **Coverage:** AI can identify test scenarios you might miss
+- **Edge cases:** Automatically identify boundary conditions and edge cases
+- **Speed:** Generate test cases much faster than manual creation
+- **Consistency:** Standardized test case format across the team
+- **Documentation:** Generate test documentation automatically
 
 ## Features
 

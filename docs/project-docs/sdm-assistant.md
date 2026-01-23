@@ -1,8 +1,20 @@
 # SDM Assistant
 
+**For:** Software Development Managers who use Jira and Confluence daily and want to automate management workflows.
+
+**What you'll learn:** How to use AI for daily activity summaries, standup preparation, sprint planning, velocity analysis, risk identification, status reports, and sprint health analysis with Jira and Confluence integration.
+
 ## Overview
 
 The SDM Assistant helps Software Development Managers streamline daily workflows with Jira and Confluence, automate status reports, identify risks, and make data-driven decisions.
+
+**Why use AI for SDM workflows?**
+- **Time savings:** Automate routine reporting and analysis tasks
+- **Data insights:** AI can identify patterns and trends in team metrics
+- **Risk identification:** Proactively identify project risks before they become issues
+- **Consistency:** Standardized status reports and summaries
+- **Integration:** Seamless integration with Jira and Confluence for complete workflow
+- **Decision support:** Data-driven recommendations for team management
 
 ## Features
 

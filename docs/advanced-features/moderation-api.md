@@ -1,5 +1,20 @@
 # Moderation API
 
+**For:** Developers building applications that accept user-generated content.
+
+**What you'll learn:** How to use OpenAI's Moderation API to check content for safety, filter inappropriate content, and ensure compliance with content policies.
+
+## Overview
+
+The Moderation API helps you identify potentially harmful or inappropriate content before it's displayed to users or stored in your system.
+
+**Why use the Moderation API?**
+- **Safety:** Protect users from harmful or inappropriate content
+- **Compliance:** Ensure content meets platform policies and regulations
+- **Automation:** Automatically filter content without manual review
+- **Trust:** Build user trust by maintaining safe content standards
+- **Legal protection:** Reduce liability from inappropriate content
+
 ## Overview
 
 The Moderation API checks content against OpenAI's usage policies to ensure safety and compliance.
