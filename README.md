@@ -104,6 +104,8 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 
 **📚 [Complete Documentation Index](docs/README.md)** - Start here for comprehensive navigation
 
+**🎓 [Educational Guide](docs/EDUCATIONAL-GUIDE.md)** ⭐ NEW - Learning pathways, teaching recommendations, and assessment suggestions
+
 ### Getting Started
 - [Setup Guide](docs/getting-started/01-setup.md) - Complete environment setup with step-by-step instructions
 - [API Basics](docs/getting-started/02-api-basics.md) - Understanding models, tokens, costs, and making your first API call
