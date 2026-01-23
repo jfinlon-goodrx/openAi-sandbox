@@ -185,13 +185,99 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"question\": \"What are the main features?\",\n  \"context\": \"The system includes user authentication, profile management, and dashboard features.\"\n}"
+							"raw": "{\n  \"question\": \"What are the main features?\",\n  \"documentContent\": \"The system includes user authentication, profile management, and dashboard features.\"\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/requirements/answer-question",
 							"host": ["{{base_url}}"],
 							"path": ["api", "requirements", "answer-question"]
 						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RAG & Embeddings",
+			"item": [
+				{
+					"name": "Create Embedding (Direct OpenAI)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{openai_api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": \"Patient education: Metformin is used to treat type 2 diabetes by helping control blood sugar levels.\"\n}"
+						},
+						"url": {
+							"raw": "https://api.openai.com/v1/embeddings",
+							"protocol": "https",
+							"host": ["api", "openai", "com"],
+							"path": ["v1", "embeddings"]
+						},
+						"description": "Create an embedding for a single text"
+					}
+				},
+				{
+					"name": "Create Embeddings Batch (Direct OpenAI)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{openai_api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model\": \"text-embedding-ada-002\",\n  \"input\": [\n    \"The system must allow users to login securely using multi-factor authentication.\",\n    \"Users can update their profile information including email and password.\",\n    \"The dashboard displays personalized content based on user preferences.\"\n  ]\n}"
+						},
+						"url": {
+							"raw": "https://api.openai.com/v1/embeddings",
+							"protocol": "https",
+							"host": ["api", "openai", "com"],
+							"path": ["v1", "embeddings"]
+						},
+						"description": "Create embeddings for multiple texts in a single request"
+					}
+				},
+				{
+					"name": "RAG Query with Context (Direct OpenAI)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{openai_api_key}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"model\": \"gpt-4-turbo-preview\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a helpful assistant that answers questions based on provided context. If the answer is not in the context, say so.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Context:\\n[Security Requirements]\\nSecurity Requirements: The system must implement multi-factor authentication, encrypt sensitive data at rest and in transit, and maintain audit logs for all user actions.\\n\\nQuestion: What are the security requirements?\"\n    }\n  ],\n  \"temperature\": 0.3,\n  \"max_tokens\": 500\n}"
+						},
+						"url": {
+							"raw": "https://api.openai.com/v1/chat/completions",
+							"protocol": "https",
+							"host": ["api", "openai", "com"],
+							"path": ["v1", "chat", "completions"]
+						},
+						"description": "Example of RAG query: Find similar documents using embeddings, then use GPT with context"
 					}
 				}
 			]

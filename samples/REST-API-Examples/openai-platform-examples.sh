@@ -63,8 +63,12 @@ curl -X POST "${BASE_URL}/api/requirements/answer-question" \
   -H "X-API-Key: ${API_KEY}" \
   -d '{
     "question": "What are the main features?",
-    "context": "The system includes user authentication, profile management, and dashboard features."
+    "documentContent": "The system includes user authentication, profile management, and dashboard features."
   }' | jq '.'
+
+echo -e "\n${YELLOW}Note: For comprehensive RAG examples with embeddings, see:${NC}"
+echo "  - rag-embeddings-examples.sh (curl examples)"
+echo "  - rag-embeddings-examples.py (Python examples)"
 
 # ============================================================================
 # STREAMING ENDPOINTS
