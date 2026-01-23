@@ -1,8 +1,12 @@
 # Metrics and Monitoring Guide
 
-Complete guide to metrics collection and monitoring.
+**For:** Developers and teams who need to track API usage, costs, and performance metrics.
+
+**What you'll learn:** How to use MetricsService to track API calls, token usage, costs, response times, and model statistics for monitoring and optimization.
 
 ## Overview
+
+Complete guide to metrics collection and monitoring.
 
 The MetricsService tracks OpenAI API usage including:
 - Total API calls per model
@@ -10,6 +14,13 @@ The MetricsService tracks OpenAI API usage including:
 - Cost tracking
 - Response times
 - Model usage statistics
+
+**Why track metrics?**
+- **Cost control:** Monitor API costs and stay within budget
+- **Performance:** Track response times and identify bottlenecks
+- **Usage patterns:** Understand how AI is being used
+- **Optimization:** Identify opportunities to reduce costs
+- **Reporting:** Generate usage reports for stakeholders
 
 ## Setup
 

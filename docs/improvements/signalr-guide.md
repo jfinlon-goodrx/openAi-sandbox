@@ -1,14 +1,25 @@
 # SignalR Real-Time Communication Guide
 
-Complete guide to implementing real-time features with SignalR.
+**For:** Developers building interactive applications that need real-time updates and bidirectional communication.
+
+**What you'll learn:** How to implement SignalR for real-time communication, send live updates during AI operations, and create interactive user experiences.
 
 ## Overview
+
+Complete guide to implementing real-time features with SignalR.
 
 SignalR enables real-time bidirectional communication between server and clients, perfect for:
 - Live updates during long-running operations
 - Collaborative editing
 - Real-time notifications
 - Progress tracking
+
+**Why use SignalR?**
+- **Real-time updates:** Push updates to clients immediately
+- **User experience:** Show progress and status in real-time
+- **Interactivity:** Enable bidirectional communication
+- **Engagement:** Keep users informed during long operations
+- **Modern UX:** Expected feature in modern web applications
 
 ## Setup
 

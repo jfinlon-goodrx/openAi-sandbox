@@ -1,10 +1,21 @@
 # JWT Authentication Guide
 
-Complete guide to implementing JWT authentication in OpenAI Platform projects.
+**For:** Developers building secure APIs that require user authentication.
+
+**What you'll learn:** How to implement JWT authentication, generate tokens, validate tokens, and secure API endpoints.
 
 ## Overview
 
+Complete guide to implementing JWT authentication in OpenAI Platform projects.
+
 JWT (JSON Web Tokens) provides a stateless authentication mechanism that's ideal for APIs and microservices.
+
+**Why use JWT?**
+- **Stateless:** No need to store sessions on the server
+- **Scalable:** Works across multiple servers and microservices
+- **Secure:** Tokens can be signed and encrypted
+- **Standard:** Industry-standard authentication mechanism
+- **Flexible:** Can include custom claims and user information
 
 ## Setup
 

@@ -1,13 +1,23 @@
 # Streaming Response Examples
 
-Examples demonstrating streaming responses for better user experience.
+**For:** Developers building user-facing applications who want to improve perceived performance and user experience.
+
+**What you'll learn:** How to implement Server-Sent Events (SSE) for streaming AI responses, providing real-time updates to users as content is generated.
 
 ## Overview
+
+Examples demonstrating streaming responses for better user experience.
 
 Streaming allows responses to be sent incrementally as they're generated, providing:
 - **Faster perceived response time** - Users see results immediately
 - **Better UX** - Progressive display of content
 - **Real-time feedback** - Especially useful for long operations
+
+**Why use streaming?**
+- **User experience:** Users see results immediately instead of waiting for complete response
+- **Perceived performance:** Faster response times improve user satisfaction
+- **Real-time updates:** Perfect for long-running operations like document analysis
+- **Engagement:** Progressive display keeps users engaged
 
 ## Implementation
 

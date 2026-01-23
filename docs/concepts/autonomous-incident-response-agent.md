@@ -1,5 +1,9 @@
 # Autonomous Incident Response Agent: A Practical Example
 
+**For:** DevOps Engineers and technical professionals interested in autonomous AI systems for incident response.
+
+**What you'll learn:** A practical example of an autonomous AI agent that analyzes incidents, makes decisions, and executes actions across multiple services (DevOps, GitHub, Slack) automatically.
+
 ## Overview
 
 This document demonstrates a **practical, convincing example** of what's possible with AI agents: an **Autonomous Incident Response Agent** that handles incidents from detection to resolution without human intervention.

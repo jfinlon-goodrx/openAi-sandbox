@@ -1,6 +1,19 @@
 # Middleware Guide
 
+**For:** Developers building production APIs who need middleware for logging, authentication, rate limiting, and more.
+
+**What you'll learn:** How to use correlation IDs, request/response logging, CORS, compression, rate limiting, API key authentication, and health checks in your applications.
+
+## Overview
+
 Complete guide to using the new middleware and features.
+
+**Why use middleware?**
+- **Observability:** Track requests across services with correlation IDs
+- **Security:** Implement authentication and rate limiting
+- **Performance:** Compress responses and optimize requests
+- **Debugging:** Log requests and responses for troubleshooting
+- **Reliability:** Health checks ensure services are running correctly
 
 ## Available Middleware
 

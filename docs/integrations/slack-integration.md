@@ -1,8 +1,19 @@
 # Slack Integration Guide
 
+**For:** Teams who want to send notifications, updates, and reports to Slack channels.
+
+**What you'll learn:** How to integrate Slack webhooks to send notifications, daily summaries, incident reports, deployment updates, PR notifications, and pipeline status updates.
+
 ## Overview
 
 Slack integration enables automated notifications and updates from all OpenAI Platform projects. Send daily summaries, incident reports, deployment notifications, and more directly to Slack channels.
+
+**Why integrate with Slack?**
+- **Team visibility:** Keep everyone informed about AI-powered workflows
+- **Real-time updates:** Immediate notifications for important events
+- **Centralized communication:** All updates in one place (Slack)
+- **Formatting:** Rich message formatting with blocks and attachments
+- **Workflow integration:** Seamlessly integrate AI workflows into team communication
 
 ## Setup
 

@@ -1,10 +1,21 @@
 # Serilog Structured Logging Guide
 
-Complete guide to implementing structured logging with Serilog.
+**For:** Developers who need production-ready logging with structured data and easy querying.
+
+**What you'll learn:** How to implement structured logging with Serilog, configure log sinks, format logs as JSON, and query logs effectively.
 
 ## Overview
 
+Complete guide to implementing structured logging with Serilog.
+
 Serilog provides structured logging with JSON output, making logs easier to query and analyze.
+
+**Why use structured logging?**
+- **Queryability:** Search and filter logs by specific fields
+- **Analysis:** Easy to analyze log data programmatically
+- **Debugging:** Rich context in logs helps identify issues quickly
+- **Monitoring:** Integrate with log aggregation tools (ELK, Splunk, etc.)
+- **Production-ready:** Industry-standard logging solution
 
 ## Setup
 
