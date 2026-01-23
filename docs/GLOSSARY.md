@@ -474,61 +474,88 @@ An API call where you send messages (like a conversation) and receive a text res
 ### DALL-E
 OpenAI's image generation model. Can create images from text descriptions.
 
+### Assistants API
+OpenAI's API for creating persistent AI assistants with memory, tools, and file handling capabilities. Allows creating assistants that can remember context across conversations.
+
 ### Function Calling
-A feature that allows AI models to request structured data or trigger specific functions, making it easier to integrate AI into applications.
+A feature that allows AI models to request structured data or trigger specific functions, making it easier to integrate AI into applications. The model can decide when to call functions based on the conversation context.
+
+**Example:** An AI assistant could call a `getWeather` function when asked "What's the weather today?" instead of trying to generate weather data.
 
 ### JSON Mode
-A feature that forces AI models to return responses in valid JSON format, making it easier to parse and use programmatically.
+A feature that forces AI models to return responses in valid JSON format, making it easier to parse and use programmatically. Ensures responses are always valid JSON, reducing parsing errors.
 
-### Moderation API
-An OpenAI service that checks content for safety, identifying potentially harmful or inappropriate content.
-
-### Rate Limit
-A restriction on how many API requests you can make in a certain time period. Prevents abuse and ensures fair usage.
-
-### Streaming
-Receiving responses in real-time as they're generated, rather than waiting for the complete response. Provides better user experience for long responses.
-
-### Vision API
-OpenAI's image analysis capability. Can describe images, extract text, and answer questions about visual content.
-
-### Whisper
-OpenAI's speech-to-text model. Converts audio recordings into text transcripts.
-
-### Assistants API
-OpenAI's API for creating persistent AI assistants with memory, tools, and file handling capabilities.
-
-### Function Calling
-A feature that allows AI models to request structured data or trigger specific functions, making it easier to integrate AI into applications.
-
-### System Message
-A special message in a conversation that sets the AI's behavior, role, or instructions. Helps guide the AI's responses.
-
-### User Message
-A message from the user in a conversation with an AI model.
-
-### Assistant Message
-A message from the AI model in a conversation.
-
-### Temperature Parameter
-Controls the randomness/creativity of AI responses. Lower values (0-0.3) = more focused, higher values (0.7-1.0) = more creative.
+**Example:** Instead of getting "The user is John, age 30", you get `{"name": "John", "age": 30}`.
 
 ### Max Tokens
-The maximum number of tokens the AI should generate in its response. Prevents runaway costs and ensures responses fit within limits.
+The maximum number of tokens the AI should generate in its response. Prevents runaway costs and ensures responses fit within limits. Important for cost control.
+
+**Example:** Setting `max_tokens: 100` limits responses to approximately 75 words.
+
+### Moderation API
+An OpenAI service that checks content for safety, identifying potentially harmful or inappropriate content. Used before displaying user-generated content or AI responses.
+
+**Example:** Checking if a user's comment contains hate speech before posting it.
+
+### Rate Limit
+A restriction on how many API requests you can make in a certain time period. Prevents abuse and ensures fair usage. Different tiers have different limits.
+
+**Example:** Tier 1 might allow 500 requests per minute, while Tier 2 allows 5,000.
+
+### Streaming
+Receiving responses in real-time as they're generated, rather than waiting for the complete response. Provides better user experience for long responses. Uses Server-Sent Events (SSE).
+
+**Example:** Instead of waiting 10 seconds for a complete response, users see text appearing word-by-word as it's generated.
+
+### System Message
+A special message in a conversation that sets the AI's behavior, role, or instructions. Helps guide the AI's responses. Not visible to end users, only used to configure the AI.
+
+**Example:** "You are a helpful assistant that explains technical concepts in simple terms."
+
+### User Message
+A message from the user in a conversation with an AI model. The input that triggers an AI response.
+
+### Assistant Message
+A message from the AI model in a conversation. The output/response from the AI.
+
+### Temperature Parameter
+Controls the randomness/creativity of AI responses. Lower values (0-0.3) = more focused and deterministic, higher values (0.7-1.0) = more creative and varied.
+
+**Example:** 
+- Temperature 0.2: "The sky is blue." (consistent, factual)
+- Temperature 0.9: "The sky paints itself in shades of cerulean and azure." (creative, varied)
+
+### Vision API
+OpenAI's image analysis capability. Can describe images, extract text, and answer questions about visual content. Uses GPT-4 Vision model.
+
+**Example:** Analyzing a book cover image to evaluate its visual appeal and marketability.
+
+### Whisper
+OpenAI's speech-to-text model. Converts audio recordings into text transcripts. Supports multiple languages and can handle various audio formats.
+
+**Example:** Converting a meeting recording (MP3) into a text transcript for analysis.
 
 ## Architecture & Design Patterns
 
 ### Circuit Breaker
-A pattern that prevents cascading failures by stopping requests to a failing service temporarily, giving it time to recover.
+A pattern that prevents cascading failures by stopping requests to a failing service temporarily, giving it time to recover. Like an electrical circuit breaker that trips when overloaded.
+
+**Example:** If an API fails 5 times in a row, the circuit breaker "opens" and stops sending requests for 30 seconds, then tries again.
 
 ### Controller
-A class in ASP.NET Core that handles HTTP requests and returns responses. Controllers define API endpoints.
+A class in ASP.NET Core that handles HTTP requests and returns responses. Controllers define API endpoints. Part of the MVC (Model-View-Controller) pattern.
+
+**Example:** A `RequirementsController` might have methods like `Summarize()` and `GenerateUserStories()` that handle different API endpoints.
 
 ### DTO (Data Transfer Object)
-A simple object used to transfer data between layers of an application. Contains only data, no business logic.
+A simple object used to transfer data between layers of an application. Contains only data, no business logic. Used to transfer data between API and business logic layers.
+
+**Example:** A `UserDto` might contain `{ "id": 1, "name": "John", "email": "john@example.com" }` without any methods or business rules.
 
 ### Exponential Backoff
-A retry strategy where the wait time between retries increases exponentially (1s, 2s, 4s, 8s, etc.). Prevents overwhelming failing services.
+A retry strategy where the wait time between retries increases exponentially (1s, 2s, 4s, 8s, etc.). Prevents overwhelming failing services. More sophisticated than fixed delays.
+
+**Example:** Retry after 1 second, then 2 seconds, then 4 seconds, then 8 seconds, up to a maximum delay.
 
 ### Factory Pattern
 A design pattern that creates objects without specifying the exact class. Provides a way to create objects based on conditions.
@@ -553,49 +580,74 @@ Five design principles for object-oriented programming:
 ## Technical Concepts
 
 ### Authentication
-The process of verifying who you are. API keys and JWT tokens are forms of authentication.
+The process of verifying who you are. API keys and JWT tokens are forms of authentication. Answers "Who are you?"
+
+**Example:** Providing an API key to prove you're authorized to use the service.
 
 ### Authorization
-The process of determining what you're allowed to do after you've been authenticated.
+The process of determining what you're allowed to do after you've been authenticated. Answers "What can you do?"
+
+**Example:** After authenticating, checking if a user has permission to delete a resource.
 
 ### Caching
-Storing frequently accessed data in memory for faster retrieval. Reduces API calls and improves performance.
+Storing frequently accessed data in memory for faster retrieval. Reduces API calls and improves performance. Can be in-memory or distributed.
+
+**Example:** Caching user profile data so it doesn't need to be fetched from the database on every request.
 
 ### Chunking
-Breaking large documents into smaller pieces for processing. Used in RAG to handle large documents efficiently.
+Breaking large documents into smaller pieces for processing. Used in RAG to handle large documents efficiently. Important for token optimization.
 
-### Circuit Breaker
-A pattern that prevents cascading failures by stopping requests to a failing service temporarily, giving it time to recover.
+**Example:** Splitting a 100-page document into 50 chunks of 2 pages each for processing.
 
 ### Correlation ID
-A unique identifier attached to requests that allows tracking a request across multiple services and systems. Essential for debugging distributed systems.
+A unique identifier attached to requests that allows tracking a request across multiple services and systems. Essential for debugging distributed systems. Appears in all logs related to that request.
+
+**Example:** A request ID like `abc-123-xyz` that appears in API logs, database logs, and error messages for the same request.
 
 ### CORS (Cross-Origin Resource Sharing)
-A security feature that allows web applications running on one domain to access resources from another domain. Required for web apps to call APIs.
+A security feature that allows web applications running on one domain to access resources from another domain. Required for web apps to call APIs. Configured on the server side.
+
+**Example:** Allowing `https://myapp.com` to call `https://api.example.com` by configuring CORS headers.
 
 ### Health Check
-An endpoint that reports whether a service is running and healthy. Used by monitoring systems and load balancers.
+An endpoint that reports whether a service is running and healthy. Used by monitoring systems and load balancers. Returns simple status information.
+
+**Example:** `GET /health` returns `{ "status": "healthy", "timestamp": "2024-01-01T12:00:00Z" }`.
 
 ### Logging
-Recording events and information about application behavior. Helps with debugging and monitoring.
+Recording events and information about application behavior. Helps with debugging and monitoring. Can be structured or unstructured.
+
+**Example:** Logging when an API request is received, processed, and completed, along with any errors.
 
 ### Metrics
-Quantitative measurements about system performance, such as request counts, response times, and error rates.
+Quantitative measurements about system performance, such as request counts, response times, and error rates. Used for monitoring and alerting.
+
+**Example:** Tracking "requests per second", "average response time", and "error rate percentage".
 
 ### Rate Limiting
-Controlling how many requests can be made in a time period to prevent overload and ensure fair usage.
+Controlling how many requests can be made in a time period to prevent overload and ensure fair usage. Can be per-user, per-IP, or global.
+
+**Example:** Limiting each API key to 100 requests per minute.
 
 ### Retry Logic
-Automatically retrying failed requests with exponential backoff (waiting longer between each retry). Handles temporary failures gracefully.
+Automatically retrying failed requests with exponential backoff (waiting longer between each retry). Handles temporary failures gracefully. Should have a maximum retry count.
+
+**Example:** If an API call fails, retry after 1 second, then 2 seconds, then 4 seconds, up to 3 attempts total.
 
 ### Semantic Search
-Searching for information based on meaning rather than exact word matches. Uses embeddings to find conceptually similar content.
+Searching for information based on meaning rather than exact word matches. Uses embeddings to find conceptually similar content. More powerful than keyword search.
+
+**Example:** Searching for "canine" will also find documents about "dogs" and "puppies" because they have similar meanings.
 
 ### Structured Logging
-Logging in a format (like JSON) that makes it easy for machines to parse and analyze. Better than plain text logs.
+Logging in a format (like JSON) that makes it easy for machines to parse and analyze. Better than plain text logs. Enables better searching and filtering.
+
+**Example:** `{"timestamp": "2024-01-01T12:00:00Z", "level": "Error", "message": "API call failed", "userId": 123}` instead of "Error: API call failed for user 123".
 
 ### Token Bucket
-An algorithm for rate limiting that allows bursts of requests up to a limit, then enforces a steady rate.
+An algorithm for rate limiting that allows bursts of requests up to a limit, then enforces a steady rate. More flexible than fixed rate limiting.
+
+**Example:** Allowing 10 requests immediately, then 1 request per second after that, up to a maximum of 100 requests per minute.
 
 ### Aggregation
 Combining multiple data points into summary statistics (like averages, sums, counts).
@@ -624,114 +676,120 @@ The ability to understand what's happening inside a system by examining its outp
 ### Performance Monitoring
 Tracking how well an application performs, including response times, throughput, and resource usage.
 
-### Structured Logging
-Logging in a format (like JSON) that makes it easy for machines to parse and analyze. Better than plain text logs.
-
 ### Telemetry
-Data collected about system behavior, including logs, metrics, and traces. Used for monitoring and debugging.
+Data collected about system behavior, including logs, metrics, and traces. Used for monitoring and debugging. The umbrella term for all observability data.
 
 ## Workflow Terms
 
 ### CI/CD (Continuous Integration/Continuous Deployment)
 Automated processes that test code changes and deploy them to production environments.
 
-### Sprint
-A time-boxed period (usually 2-4 weeks) in agile development where a team works on a set of features.
-
-### User Story
-A description of a feature from the user's perspective, typically in the format: "As a [user type], I want [goal], so that [benefit]."
-
-### Velocity
-A measure of how much work a team completes in a sprint, used for planning future sprints.
-
 ### Acceptance Criteria
-Conditions that must be met for a user story or feature to be considered complete. Defines "done."
+Conditions that must be met for a user story or feature to be considered complete. Defines "done." Usually written as a bulleted list.
+
+**Example:** For a login feature: "User can enter email and password", "System validates credentials", "User is redirected to dashboard on success".
 
 ### Backlog
-A prioritized list of work items (user stories, bugs, tasks) that need to be completed.
+A prioritized list of work items (user stories, bugs, tasks) that need to be completed. The product backlog contains all work, while the sprint backlog contains work for the current sprint.
+
+**Example:** A backlog might contain 50 user stories, prioritized by business value.
 
 ### Burndown Chart
-A graph showing remaining work over time. Used to track sprint progress.
+A graph showing remaining work over time. Used to track sprint progress. Shows if the team is on track to complete sprint goals.
+
+**Example:** A line chart showing work remaining decreasing from 40 story points to 0 over 2 weeks.
 
 ### Epic
-A large body of work that can be broken down into smaller user stories. Spans multiple sprints.
+A large body of work that can be broken down into smaller user stories. Spans multiple sprints. Too large to complete in a single sprint.
+
+**Example:** "User Authentication System" is an epic that contains user stories like "Login", "Password Reset", "Two-Factor Authentication".
 
 ### Kanban
-A workflow management method that visualizes work on a board with columns (To Do, In Progress, Done).
+A workflow management method that visualizes work on a board with columns (To Do, In Progress, Done). Focuses on continuous flow rather than sprints.
+
+**Example:** A board with columns: "Backlog", "To Do", "In Progress", "Code Review", "Testing", "Done".
 
 ### Retrospective
-A meeting at the end of a sprint where the team reflects on what went well and what could be improved.
+A meeting at the end of a sprint where the team reflects on what went well and what could be improved. Also called "retro". Focuses on process improvement.
+
+**Example:** Team discusses: "What went well?", "What could be improved?", "Action items for next sprint".
 
 ### Scrum
-An agile framework for managing work, typically in 2-4 week sprints with daily standups and retrospectives.
+An agile framework for managing work, typically in 2-4 week sprints with daily standups and retrospectives. Includes specific roles (Product Owner, Scrum Master, Development Team) and ceremonies.
+
+**Example:** A team using Scrum has 2-week sprints, daily 15-minute standups, sprint planning, and retrospectives.
 
 ### Sprint
-A time-boxed period (usually 2-4 weeks) in agile development where a team works on a set of features.
+A time-boxed period (usually 2-4 weeks) in agile development where a team works on a set of features. The work is planned at sprint planning and reviewed at sprint review.
+
+**Example:** A 2-week sprint where the team commits to completing 5 user stories.
 
 ### Sprint Planning
-A meeting at the start of a sprint where the team plans what work will be completed.
+A meeting at the start of a sprint where the team plans what work will be completed. Team selects items from the backlog and commits to completing them.
+
+**Example:** Team reviews backlog, estimates effort, and selects user stories for the next 2-week sprint.
 
 ### Standup
-A short daily meeting (usually 15 minutes) where team members share what they did, what they're doing, and any blockers.
+A short daily meeting (usually 15 minutes) where team members share what they did, what they're doing, and any blockers. Also called "daily scrum". Should be brief and focused.
+
+**Example:** Each team member answers: "What did I do yesterday?", "What will I do today?", "Are there any blockers?"
 
 ### User Story
-A description of a feature from the user's perspective, typically in the format: "As a [user type], I want [goal], so that [benefit]."
+A description of a feature from the user's perspective, typically in the format: "As a [user type], I want [goal], so that [benefit]." Focuses on user value rather than technical implementation.
+
+**Example:** "As a business analyst, I want to generate user stories from requirements documents, so that I can save time and ensure consistency."
+
+### Velocity
+A measure of how much work a team completes in a sprint, used for planning future sprints. Usually measured in story points or hours.
+
+**Example:** If a team completes 20 story points per sprint on average, they can plan future sprints assuming similar capacity.
 
 ## Cost & Performance Terms
 
 ### Cost per Token
-The price charged by OpenAI for processing tokens. Different models have different costs.
+The price charged by OpenAI for processing tokens. Different models have different costs. Input and output tokens may have different prices.
+
+**Example:** GPT-4 Turbo costs ~$10 per 1M input tokens and ~$30 per 1M output tokens.
 
 ### Latency
-The time it takes for a request to complete. Lower latency means faster responses.
+The time it takes for a request to complete. Lower latency means faster responses. Measured from request sent to response received.
 
-### Throughput
-The number of requests a system can handle per unit of time. Higher throughput means more capacity.
-
-### Token Budget
-A limit on token usage to control costs. Important for managing API expenses.
-
-### Cost per Token
-The price charged by OpenAI for processing tokens. Different models have different costs.
-
-### Latency
-The time it takes for a request to complete. Lower latency means faster responses.
+**Example:** An API call that takes 500ms has lower latency than one that takes 2 seconds.
 
 ### P50/P95/P99 Latency
-Percentile measurements of latency:
-- **P50 (Median)**: 50% of requests complete faster than this
-- **P95**: 95% of requests complete faster than this
-- **P99**: 99% of requests complete faster than this
+Percentile measurements of latency that show the distribution of response times:
+- **P50 (Median)**: 50% of requests complete faster than this - the typical response time
+- **P95**: 95% of requests complete faster than this - most requests are faster
+- **P99**: 99% of requests complete faster than this - almost all requests are faster
+
+**Example:** If P95 latency is 1 second, 95% of requests complete in under 1 second, but 5% take longer.
 
 ### Throughput
-The number of requests a system can handle per unit of time. Higher throughput means more capacity.
+The number of requests a system can handle per unit of time. Higher throughput means more capacity. Usually measured in requests per second (RPS) or queries per second (QPS).
+
+**Example:** A system with 1000 RPS throughput can handle 1000 requests every second.
+
+### Token Budget
+A limit on token usage to control costs. Important for managing API expenses. Can be daily, monthly, or per-request.
+
+**Example:** Setting a daily token budget of 1M tokens to prevent unexpected costs.
 
 ### Token Usage
-The number of tokens consumed by API calls. Determines costs and rate limits.
+The number of tokens consumed by API calls. Determines costs and rate limits. Includes both input (prompt) and output (completion) tokens.
+
+**Example:** A request with 100 input tokens and 50 output tokens uses 150 total tokens.
 
 ### Token Optimization
-Techniques to reduce token usage, such as chunking documents, using RAG, or choosing smaller models.
+Techniques to reduce token usage, such as chunking documents, using RAG, or choosing smaller models. Can reduce costs by 80-88% in some cases.
+
+**Example:** Instead of sending a 10,000-token document, use RAG to send only the 500 most relevant tokens.
 
 ## Common Acronyms
 
+**Note:** Some acronyms have multiple meanings depending on context. Check the specific term definition for details.
+
 - **API**: Application Programming Interface
-- **BA**: Business Analyst
-- **CI/CD**: Continuous Integration/Continuous Deployment
-- **CLI**: Command Line Interface
-- **CORS**: Cross-Origin Resource Sharing
-- **GPT**: Generative Pre-trained Transformer
-- **HTTP**: Hypertext Transfer Protocol
-- **JSON**: JavaScript Object Notation
-- **JWT**: JSON Web Token
-- **PM**: Product Manager
-- **RAG**: Retrieval-Augmented Generation
-- **REST**: Representational State Transfer
-- **SDK**: Software Development Kit
-- **SDM**: Software Development Manager
-- **SSE**: Server-Sent Events
-- **UI**: User Interface
-- **API**: Application Programming Interface
-- **ASP.NET**: Active Server Pages .NET
+- **ASP.NET**: Active Server Pages .NET (pronounced "A-S-P dot net")
 - **BA**: Business Analyst
 - **CI/CD**: Continuous Integration/Continuous Deployment
 - **CLI**: Command Line Interface
@@ -741,10 +799,10 @@ Techniques to reduce token usage, such as chunking documents, using RAG, or choo
 - **EF Core**: Entity Framework Core
 - **GPT**: Generative Pre-trained Transformer
 - **HTTP**: Hypertext Transfer Protocol
-- **HTTPS**: HTTP Secure
+- **HTTPS**: HTTP Secure (HTTP over SSL/TLS)
 - **IDE**: Integrated Development Environment
-- **JSON**: JavaScript Object Notation
-- **JWT**: JSON Web Token
+- **JSON**: JavaScript Object Notation (pronounced "jay-son")
+- **JWT**: JSON Web Token (pronounced "jot")
 - **LLM**: Large Language Model
 - **OOP**: Object-Oriented Programming
 - **ORM**: Object-Relational Mapping
@@ -754,11 +812,11 @@ Techniques to reduce token usage, such as chunking documents, using RAG, or choo
 - **REST**: Representational State Transfer
 - **SDK**: Software Development Kit
 - **SDM**: Software Development Manager
-- **SQL**: Structured Query Language
+- **SQL**: Structured Query Language (pronounced "sequel" or "S-Q-L")
 - **SSE**: Server-Sent Events
 - **UI**: User Interface
 - **URL**: Uniform Resource Locator
-- **YAML**: YAML Ain't Markup Language
+- **YAML**: YAML Ain't Markup Language (pronounced "yamel")
 
 ## Understanding the Project Structure
 
@@ -794,29 +852,78 @@ A project containing reusable code that multiple other projects can reference. T
 
 ## How to Use This Glossary
 
-- **New to AI?** Start with [AI & Machine Learning Terms](#ai--machine-learning-terms)
+### By Experience Level
+
+- **New to AI?** Start with [AI & Machine Learning Terms](#ai--machine-learning-terms) and [OpenAI Platform Terms](#openai-platform-terms)
 - **New to development?** Read [Development Terms](#development-terms) and [.NET & C# Terms](#net--c-terms)
-- **Building APIs?** Check [Web & API Terms](#web--api-terms)
+- **Building APIs?** Check [Web & API Terms](#web--api-terms) and [Architecture & Design Patterns](#architecture--design-patterns)
 - **Working with databases?** See [Database Terms](#database-terms)
 - **Setting up integrations?** Check [Integration Terms](#integration-terms)
 - **Understanding costs?** See [Cost & Performance Terms](#cost--performance-terms)
 - **Working with workflows?** Review [Workflow Terms](#workflow-terms)
 - **Learning architecture?** See [Architecture & Design Patterns](#architecture--design-patterns)
 
+### By Task
+
+- **Setting up your environment?** → Development Terms, .NET & C# Terms
+- **Making API calls?** → Web & API Terms, OpenAI Platform Terms
+- **Understanding costs?** → Cost & Performance Terms, Token-related terms
+- **Debugging issues?** → Technical Concepts, Testing Terms
+- **Deploying applications?** → DevOps & Infrastructure Terms
+
 ## Tips for Using This Glossary
 
-1. **Use Ctrl+F (or Cmd+F on Mac)** to search for specific terms
-2. **Check related terms** - Many terms reference each other
-3. **Start broad, then narrow** - Read the category overview, then specific terms
-4. **Context matters** - Some terms have different meanings in different contexts (e.g., "model" in AI vs. MVC)
+1. **Use Ctrl+F (or Cmd+F on Mac)** to search for specific terms quickly
+2. **Check related terms** - Many terms reference each other (e.g., Token → Token Usage → Token Optimization)
+3. **Start broad, then narrow** - Read the category overview, then dive into specific terms
+4. **Context matters** - Some terms have different meanings in different contexts:
+   - **Model**: AI model vs. MVC model vs. data model
+   - **Service**: Web service vs. dependency injection service
+   - **Token**: Authentication token vs. AI processing token
+5. **Look for examples** - Many terms include examples to clarify concepts
+6. **Check acronyms** - The [Common Acronyms](#common-acronyms) section includes pronunciation guides
+
+## Common Term Relationships
+
+- **Token** → Token Usage → Token Budget → Token Optimization → Cost per Token
+- **API** → API Endpoint → REST API → API Gateway → API Key
+- **Authentication** → Authorization → JWT → Token → API Key
+- **RAG** → Embedding → Vector Database → Semantic Search → Chunking
+- **Middleware** → Request → Response → Controller → Endpoint
+- **Dependency Injection** → Service → Service Lifetime → Singleton/Scoped/Transient
 
 ## Contributing to This Glossary
 
 If you encounter a term not listed here that appears in the documentation:
-1. Check if it's defined in the specific documentation file
-2. Consider adding it to this glossary if it's commonly used
-3. Use clear, accessible language suitable for non-developers
+
+1. **Check first** - It might be defined in the specific documentation file
+2. **Consider adding** - If it's commonly used across multiple documents
+3. **Use clear language** - Write definitions suitable for technical professionals who may not be developers
+4. **Add examples** - Include practical examples when helpful
+5. **Cross-reference** - Link to related terms when relevant
+
+## Quick Reference: Most Common Terms
+
+If you're just getting started, these are the most important terms to understand:
+
+**AI & OpenAI:**
+- [API](#api-application-programming-interface)
+- [Token](#token)
+- [Prompt](#prompt)
+- [Model](#model)
+- [RAG](#rag-retrieval-augmented-generation)
+
+**Development:**
+- [.NET](#net)
+- [API Endpoint](#endpoint)
+- [JSON](#json-javascript-object-notation)
+- [Dependency Injection](#dependency-injection-di)
+
+**Workflow:**
+- [User Story](#user-story)
+- [Sprint](#sprint)
+- [CI/CD](#cicd-continuous-integrationcontinuous-deployment)
 
 ---
 
-**Last Updated:** This glossary is continuously updated as new terms are introduced in the documentation.
+**Last Updated:** This glossary is continuously updated as new terms are introduced in the documentation. Currently contains 200+ terms across 15 categories.
