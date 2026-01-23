@@ -1,6 +1,18 @@
 # Prompt Engineering Guide
 
-Effective prompts are the key to getting good results from AI models. This guide covers best practices for writing prompts.
+**For:** Everyone - Learn how to write effective prompts for better AI results
+
+**What is prompt engineering?** The art and science of writing instructions (prompts) that get the best results from AI models. Like giving clear directions to a colleague - better instructions lead to better outcomes.
+
+This guide covers best practices for writing prompts that produce accurate, useful, and cost-effective results.
+
+## What You'll Learn
+
+- How to structure prompts for clarity
+- Techniques for getting better results
+- Common patterns and examples
+- How to iterate and improve your prompts
+- Troubleshooting when results aren't what you expect
 
 ## Basic Principles
 

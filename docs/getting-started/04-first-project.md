@@ -1,6 +1,21 @@
 # Your First Project
 
-Let's build a simple console application that uses OpenAI to summarize text. This will demonstrate the core concepts.
+**For:** Developers - Build your first AI-powered application step-by-step
+
+**What you'll build:** A simple console application that uses OpenAI to summarize text. This demonstrates core concepts and gives you a working example to build upon.
+
+**Time required:** 15-30 minutes
+
+**Prerequisites:**
+- .NET 8.0 SDK installed (see [Setup Guide](01-setup.md))
+- OpenAI API key configured (see [Setup Guide](01-setup.md))
+- Basic familiarity with command line/terminal
+
+**What you'll learn:**
+- How to set up a .NET project
+- How to use the OpenAI client library
+- How to make API calls and handle responses
+- How to structure a simple AI application
 
 ## Project Setup
 

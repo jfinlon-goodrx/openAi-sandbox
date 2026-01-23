@@ -98,11 +98,14 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 
 ## Documentation
 
+**📚 [Complete Documentation Index](docs/README.md)** - Start here for comprehensive navigation
+
 ### Getting Started
-- [Setup Guide](docs/getting-started/01-setup.md) - Environment setup, API keys, integrations
-- [API Basics](docs/getting-started/02-api-basics.md) - Understanding models, tokens, costs
-- [Prompt Engineering](docs/getting-started/03-prompt-engineering.md) - Writing effective prompts
-- [First Project](docs/getting-started/04-first-project.md) - Build your first AI-powered app
+- [Setup Guide](docs/getting-started/01-setup.md) - Complete environment setup with step-by-step instructions
+- [API Basics](docs/getting-started/02-api-basics.md) - Understanding models, tokens, costs, and making your first API call
+- [Prompt Engineering](docs/getting-started/03-prompt-engineering.md) - Writing effective prompts for better results
+- [First Project](docs/getting-started/04-first-project.md) - Build your first AI-powered application
+- [Glossary](docs/GLOSSARY.md) ⭐ NEW - Technical terms explained for non-developers
 
 ### Role-Specific Guides
 - [Developer Guide](docs/role-guides/developer-guide.md) - Code review, testing, documentation
@@ -352,11 +355,14 @@ See [Improvements Documentation](docs/improvements/) for complete details, examp
 
 ## Documentation
 
+**📚 [Complete Documentation Index](docs/README.md)** - Comprehensive navigation guide
+
 ### Getting Started
-- [Setup Guide](docs/getting-started/01-setup.md) - Environment setup and API key configuration
-- [API Basics](docs/getting-started/02-api-basics.md) - First API call, models, tokens, costs
-- [Prompt Engineering](docs/getting-started/03-prompt-engineering.md) - Writing effective prompts
-- [First Project](docs/getting-started/04-first-project.md) - Building your first AI-powered app
+- [Setup Guide](docs/getting-started/01-setup.md) - Complete environment setup with step-by-step instructions
+- [API Basics](docs/getting-started/02-api-basics.md) - Understanding models, tokens, costs, and making your first API call
+- [Prompt Engineering](docs/getting-started/03-prompt-engineering.md) - Writing effective prompts for better results
+- [First Project](docs/getting-started/04-first-project.md) - Build your first AI-powered application
+- [Glossary](docs/GLOSSARY.md) ⭐ NEW - Technical terms explained for non-developers
 
 ### Role-Specific Guides
 - [Developer Guide](docs/role-guides/developer-guide.md) - Code review, testing, documentation
@@ -404,22 +410,15 @@ This is a learning portfolio. Feel free to explore, modify, and extend the proje
 ### Code Standards
 
 This project follows comprehensive coding standards defined in [`.cursorrules`](.cursorrules). Key principles:
-- **Shared libraries first** - Never duplicate code
-- **Service registration pattern** for dependency injection
-- **Thin controllers** - Delegate to services
-- **Comprehensive testing** - Unit and integration tests
-- **Structured logging** with Serilog
-- **Security best practices** - Authentication, authorization, input validation
 
-### Code Standards
+- **Shared libraries first** - Never duplicate code across projects
+- **Service registration pattern** - Use dependency injection for all services
+- **Thin controllers** - Controllers delegate to services, keeping business logic separate
+- **Comprehensive testing** - Unit tests for logic, integration tests for APIs
+- **Structured logging** - Use Serilog for consistent, searchable logs
+- **Security best practices** - Authentication, authorization, input validation, secure API key storage
 
-This project follows comprehensive coding standards defined in [`.cursorrules`](.cursorrules). Key principles:
-- Shared libraries first - never duplicate code
-- Service registration pattern for DI
-- Thin controllers - delegate to services
-- Comprehensive testing
-- Structured logging
-- Security best practices
+See [`.cursorrules`](.cursorrules) for complete coding standards and best practices.
 
 ## License
 
