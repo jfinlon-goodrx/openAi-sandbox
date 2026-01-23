@@ -25,7 +25,9 @@ Before you begin, ensure you have the following installed:
   - *Do I need it?* Only if you're modifying code. You can use REST APIs with curl, Python, or Postman instead.
 - **OpenAI API Key** (Enterprise subscription recommended)
   - *What is this?* A secret key that allows you to use OpenAI's services
-  - *How do I get it?* Sign up at [platform.openai.com](https://platform.openai.com) and create an API key
+  - *How do I get it?* 
+    - **GoodRx employees:** Submit a ServiceNow request and wait for Okta tile assignment. See [AI Approved Systems](https://goodrx-dev.atlassian.net/wiki/spaces/GRXHUB/pages/5507252322/AI+Approved+Systems) in Confluence. **Do NOT create an account before the tile is assigned.**
+    - **Other organizations:** Sign up at [platform.openai.com](https://platform.openai.com) and create an API key
 - **Git** (for version control)
   - *What is this?* A tool for tracking changes to files
   - *Do I need it?* Only if you want to clone the repository. You can download it as a ZIP file instead.
@@ -82,6 +84,43 @@ dotnet build
 **What is an API key?** A secret password that identifies you to OpenAI's servers and allows you to use their services. Keep it secure and never share it publicly.
 
 **Why do I need it?** All the projects in this portfolio use OpenAI's AI models, which require authentication.
+
+### Getting Your API Key
+
+#### For GoodRx Employees
+
+**⚠️ CRITICAL:** Follow this process to avoid billing entity assignment issues:
+
+1. **Submit a ServiceNow request** for OpenAI Platform access
+   - Request access through your organization's ServiceNow portal
+   - Specify that you need access for the OpenAI Platform Learning Portfolio
+
+2. **Wait for Okta tile assignment**
+   - Do NOT create an OpenAI account before the tile appears in your Okta panel
+   - Creating an account prematurely can confuse billing entity assignment
+   - May require a re-invite process if done incorrectly
+
+3. **Access OpenAI through Okta**
+   - Once the tile is available in Okta, click it to access OpenAI Platform
+   - You'll be automatically logged into the organization's OpenAI account
+
+4. **Create your API key**
+   - Navigate to [API Keys](https://platform.openai.com/api-keys) in the OpenAI dashboard
+   - Click "Create new secret key"
+   - Give it a descriptive name (e.g., "Learning Portfolio - [Your Name]")
+   - Copy the key immediately (you'll only see it once!)
+
+**Reference Documentation:**
+- [AI Approved Systems - OpenAI Request](https://goodrx-dev.atlassian.net/wiki/spaces/GRXHUB/pages/5507252322/AI+Approved+Systems) - Complete GoodRx-specific instructions
+
+#### For Other Organizations / Personal Use
+
+1. Go to [platform.openai.com](https://platform.openai.com)
+2. Sign up or log in
+3. Navigate to [API Keys](https://platform.openai.com/api-keys)
+4. Click "Create new secret key"
+5. Give it a name (e.g., "Learning Portfolio")
+6. Copy the key immediately (you'll only see it once!)
 
 ### Option 1: Environment Variables (Recommended for Production)
 

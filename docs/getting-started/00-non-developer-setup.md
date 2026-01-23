@@ -15,6 +15,22 @@ This guide shows you the simplest way to get started and run examples using REST
 
 ## Step 1: Get Your OpenAI API Key
 
+### For GoodRx Employees
+
+**⚠️ IMPORTANT:** If you're a GoodRx employee, follow this process to avoid billing issues:
+
+1. **Submit a ServiceNow request** to get OpenAI Platform access
+2. **Wait for the tile to be added to your Okta panel** - Do NOT create an OpenAI account before this step
+3. **Access OpenAI through Okta** once the tile is available
+4. **Navigate to API Keys** in the OpenAI Platform dashboard
+5. **Create your API key** from within the organization's account
+
+**Why this matters:** Creating an OpenAI account before the Okta tile is assigned can confuse the billing entity assignment and may require a re-invite process.
+
+**Reference:** See [AI Approved Systems - OpenAI Request](https://goodrx-dev.atlassian.net/wiki/spaces/GRXHUB/pages/5507252322/AI+Approved+Systems) in Confluence for complete instructions.
+
+### For Other Organizations / Personal Use
+
 1. Go to [platform.openai.com](https://platform.openai.com)
 2. Sign up or log in
 3. Navigate to [API Keys](https://platform.openai.com/api-keys)
@@ -321,12 +337,14 @@ See the [Full Setup Guide](01-setup.md) for developers who want to build .NET ap
 - GPT-3.5 Turbo: ~$0.0005 per 1K input tokens (very cheap)
 - GPT-4 Turbo: ~$0.01 per 1K input tokens (more expensive but better quality)
 - Check [OpenAI Pricing](https://openai.com/pricing) for current rates
+- **GoodRx employees:** Billing is handled through the organization's account. Check with your manager or IT for usage policies.
 
 ### "Is my API key secure?"
 - **Never commit API keys to version control** (Git repositories)
 - **Use environment variables** when possible
 - **Rotate keys** if you suspect they've been compromised
 - **Use different keys** for development vs. production
+- **GoodRx employees:** Follow your organization's security policies. Never share API keys outside of approved channels.
 
 ### "What if I get rate limit errors?"
 - You're making requests too quickly

@@ -50,6 +50,8 @@ openAi-sandbox/
 
 - .NET 8.0 SDK or later
 - OpenAI API key (Enterprise subscription)
+  - **GoodRx employees:** Submit ServiceNow request and access through Okta. See [AI Approved Systems](https://goodrx-dev.atlassian.net/wiki/spaces/GRXHUB/pages/5507252322/AI+Approved+Systems) for details. **Do NOT create an account before Okta tile assignment.**
+  - **Other organizations:** Sign up at [platform.openai.com](https://platform.openai.com)
 - Visual Studio 2022, VS Code, or Rider
 
 ## Quick Start
