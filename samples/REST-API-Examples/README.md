@@ -213,7 +213,130 @@ curl -X POST http://localhost:5001/api/requirements/answer-question \
   -H "X-API-Key: your-api-key" \
   -d '{
     "question": "What are the main features?",
-    "context": "System includes authentication, profiles, dashboard..."
+    "documentContent": "System includes authentication, profiles, dashboard..."
+  }'
+```
+
+### RAG & Vector Embeddings
+
+For comprehensive RAG and embedding examples, see:
+- **[RAG & Embeddings Examples (curl)](rag-embeddings-examples.sh)** - Complete curl examples
+- **[RAG & Embeddings Examples (Python)](rag-embeddings-examples.py)** - Complete Python examples
+
+#### Create Embeddings (Direct OpenAI API)
+
+```bash
+# Single text embedding
+curl -X POST https://api.openai.com/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "text-embedding-ada-002",
+    "input": "Patient education: Metformin is used to treat type 2 diabetes."
+  }'
+
+# Batch embeddings (multiple texts)
+curl -X POST https://api.openai.com/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "text-embedding-ada-002",
+    "input": [
+      "The system must allow users to login securely.",
+      "Users can update their profile information.",
+      "The dashboard displays personalized content."
+    ]
+  }'
+```
+
+#### Complete RAG Workflow
+
+**Step 1: Create Document Embeddings**
+```bash
+# Create embeddings for your knowledge base documents
+curl -X POST https://api.openai.com/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "text-embedding-ada-002",
+    "input": [
+      "Document 1 content...",
+      "Document 2 content...",
+      "Document 3 content..."
+    ]
+  }'
+```
+
+**Step 2: Store Embeddings** (In production, use a vector database like Pinecone, Weaviate, or Qdrant)
+
+**Step 3: Create Query Embedding**
+```bash
+curl -X POST https://api.openai.com/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "text-embedding-ada-002",
+    "input": "What are the security requirements?"
+  }'
+```
+
+**Step 4: Find Similar Documents** (Calculate cosine similarity between query and document embeddings)
+
+**Step 5: Generate Answer with Context**
+```bash
+curl -X POST https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "gpt-4-turbo-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant that answers questions based on provided context."
+      },
+      {
+        "role": "user",
+        "content": "Context:\n[Document 1]\nSecurity requirements: multi-factor authentication, encryption...\n\nQuestion: What are the security requirements?"
+      }
+    ],
+    "temperature": 0.3,
+    "max_tokens": 500
+  }'
+```
+
+#### Pharmacy RAG Example
+
+```bash
+# Create embeddings for drug information
+curl -X POST https://api.openai.com/v1/embeddings \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "text-embedding-ada-002",
+    "input": [
+      "Metformin: Used to treat type 2 diabetes. Common side effects include nausea, diarrhea.",
+      "Lisinopril: Used to treat high blood pressure. Common side effects include dizziness, cough."
+    ]
+  }'
+
+# Query about drug interactions using RAG
+curl -X POST https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_OPENAI_API_KEY" \
+  -d '{
+    "model": "gpt-4-turbo-preview",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a pharmacist assistant. Answer questions about medications based on provided context."
+      },
+      {
+        "role": "user",
+        "content": "Context:\n[Metformin Info]\nMetformin: Used to treat type 2 diabetes...\n\n[Lisinopril Info]\nLisinopril: Used to treat high blood pressure...\n\nQuestion: Can Metformin be taken with Lisinopril?"
+      }
+    ],
+    "temperature": 0.3,
+    "max_tokens": 500
   }'
 ```
 
