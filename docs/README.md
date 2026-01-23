@@ -9,29 +9,30 @@ Complete documentation for the OpenAI Platform Learning Portfolio. This index he
 **For:** Everyone - New users, non-developers, and those new to OpenAI Platform
 
 1. **[Quick Start for Non-Developers](getting-started/00-non-developer-setup.md)** ⭐ NEW - Minimalist setup to run examples without coding or development tools
-2. **[Setup Guide for Developers](getting-started/01-setup.md)** - Complete .NET development environment setup, API key configuration, and tool installation
-   - Prerequisites and system requirements
-   - OpenAI API key setup (multiple methods)
-   - Integration setup (Jira, Confluence, GitHub, Slack)
-   - Verification and testing
+   - **Learn:** How to get an API key, set up curl/Python/Postman, and make your first API call
+   - **Time:** 15-30 minutes
+   - **Outcome:** You'll be able to run examples and test OpenAI APIs
 
-2. **[API Basics](getting-started/02-api-basics.md)** - Understanding OpenAI Platform fundamentals
+2. **[Setup Guide for Developers](getting-started/01-setup.md)** - Complete .NET development environment setup
+   - **Learn:** How to set up .NET SDK, configure API keys, and set up integrations
+   - **Time:** 30-60 minutes
+   - **Outcome:** You'll have a working development environment ready to build applications
+
+3. **[API Basics](getting-started/02-api-basics.md)** - Understanding OpenAI Platform fundamentals
    - What are AI models and how they work
    - Understanding tokens and costs
    - Making your first API call
    - Model selection guide
 
-3. **[Prompt Engineering](getting-started/03-prompt-engineering.md)** - Writing effective prompts for better results
-   - Prompt structure and best practices
-   - Common patterns and examples
-   - Iterative improvement techniques
-   - Troubleshooting tips
+4. **[Prompt Engineering](getting-started/03-prompt-engineering.md)** - Writing effective prompts for better results
+   - **Learn:** How to structure prompts, use examples, and iterate for better results
+   - **Time:** 30-45 minutes
+   - **Outcome:** You'll be able to write effective prompts that get the results you want
 
-4. **[First Project](getting-started/04-first-project.md)** - Build your first AI-powered application
-   - Step-by-step tutorial
-   - Complete working example
-   - Testing and validation
-   - Next steps
+5. **[First Project](getting-started/04-first-project.md)** - Build your first AI-powered application
+   - **Learn:** How to build a complete .NET application using OpenAI APIs
+   - **Time:** 15-30 minutes
+   - **Outcome:** You'll have a working application you can extend and modify
 
 ### 👥 Role-Specific Guides
 
