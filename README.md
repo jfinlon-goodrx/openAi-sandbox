@@ -31,7 +31,9 @@ These projects demonstrate how OpenAI Platform can be applied to different indus
 
 ## Getting Started
 
-See the [Getting Started Guide](docs/getting-started/01-setup.md) for setup instructions.
+**Not a developer?** Start with [Quick Start for Non-Developers](docs/getting-started/00-non-developer-setup.md) - Run examples using REST APIs (curl, Python, or Postman) without any development environment!
+
+**Developers:** See the [Full Setup Guide](docs/getting-started/01-setup.md) for .NET development environment setup.
 
 ## Project Structure
 
@@ -52,9 +54,11 @@ openAi-sandbox/
 
 ## Quick Start
 
-### Option 1: Use REST API Examples (No Development Environment Required)
+### Option 1: Use REST API Examples (No Development Environment Required) ⭐ RECOMMENDED FOR NON-DEVELOPERS
 
 Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
+
+**New to this?** Start with [Quick Start for Non-Developers](docs/getting-started/00-non-developer-setup.md) for step-by-step setup instructions.
 
 - **[REST API Examples](samples/REST-API-Examples/README.md)** - curl, Python, and Postman examples
 - **[Direct OpenAI API Examples](samples/REST-API-Examples/openai-direct-examples.sh)** - Call OpenAI directly

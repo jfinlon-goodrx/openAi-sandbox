@@ -1,8 +1,10 @@
 # Getting Started - Setup Guide
 
-**For:** Everyone - New users, non-developers, and those new to OpenAI Platform
+**For:** Developers who want to build and run .NET applications
 
-This guide will walk you through setting up your environment to use the OpenAI Platform Learning Portfolio. Even if you're not a developer, you can follow these steps to get started.
+**Not a developer?** See [Quick Start for Non-Developers](00-non-developer-setup.md) - Use REST APIs without any development environment!
+
+This guide will walk you through setting up a full development environment to build and run the .NET projects in this portfolio.
 
 ## What You'll Learn
 

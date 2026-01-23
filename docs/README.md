@@ -8,7 +8,8 @@ Complete documentation for the OpenAI Platform Learning Portfolio. This index he
 
 **For:** Everyone - New users, non-developers, and those new to OpenAI Platform
 
-1. **[Setup Guide](getting-started/01-setup.md)** - Complete environment setup, API key configuration, and tool installation
+1. **[Quick Start for Non-Developers](getting-started/00-non-developer-setup.md)** ⭐ NEW - Minimalist setup to run examples without coding or development tools
+2. **[Setup Guide for Developers](getting-started/01-setup.md)** - Complete .NET development environment setup, API key configuration, and tool installation
    - Prerequisites and system requirements
    - OpenAI API key setup (multiple methods)
    - Integration setup (Jira, Confluence, GitHub, Slack)
