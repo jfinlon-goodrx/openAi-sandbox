@@ -55,9 +55,61 @@ OpenAI provides several models, each optimized for different tasks:
 
 ## Making Your First API Call
 
-### Using the Shared Client
+There are multiple ways to interact with OpenAI APIs. Choose the method that works best for you:
 
-The `OpenAIShared` library provides a wrapper around OpenAI APIs:
+### Option 1: Using REST APIs (No Code Required)
+
+**Best for:** Non-developers, quick testing, or when you don't want to write code.
+
+You can call OpenAI APIs directly using curl, Python, or Postman. See [REST API Examples](../../samples/REST-API-Examples/README.md) for complete examples.
+
+**Simple curl example:**
+```bash
+curl https://api.openai.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4-turbo-preview",
+    "messages": [
+      {"role": "user", "content": "Hello, how are you?"}
+    ]
+  }'
+```
+
+**What this does:** Sends a request to OpenAI's API and receives a text response.
+
+**Python example:**
+```python
+import requests
+import json
+
+headers = {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+}
+
+data = {
+    'model': 'gpt-4-turbo-preview',
+    'messages': [
+        {'role': 'user', 'content': 'Hello, how are you?'}
+    ]
+}
+
+response = requests.post(
+    'https://api.openai.com/v1/chat/completions',
+    headers=headers,
+    json=data
+)
+
+result = response.json()
+print(result['choices'][0]['message']['content'])
+```
+
+### Option 2: Using the Shared Client (C# Code)
+
+**Best for:** Developers building .NET applications.
+
+The `OpenAIShared` library provides a wrapper around OpenAI APIs that handles retries, error handling, and logging automatically:
 
 ```csharp
 using OpenAIShared;

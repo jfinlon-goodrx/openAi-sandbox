@@ -77,7 +77,7 @@ dotnet build
 
 **Expected output:** "Build succeeded" message. If you see errors, check the Troubleshooting section below.
 
-## Step 3: Configure OpenAI API Key
+## Step 4: Configure OpenAI API Key
 
 **What is an API key?** A secret password that identifies you to OpenAI's servers and allows you to use their services. Keep it secure and never share it publicly.
 
@@ -170,7 +170,7 @@ You should see your API key listed (it will be partially hidden for security).
 - If you've already committed it with a key, rotate your API key immediately in the OpenAI dashboard
 - Prefer User Secrets (Option 2) or Environment Variables (Option 1) instead
 
-## Step 4: Verify Installation
+## Step 5: Verify Installation
 
 **What does verification do?** Confirms that everything is set up correctly and the application can start.
 
@@ -209,7 +209,7 @@ https://localhost:7001/swagger
 - Try `http://localhost:5001/swagger` (HTTP instead of HTTPS)
 - Check for firewall or security software blocking the connection
 
-## Step 5: Configure Integrations (Optional)
+## Step 6: Configure Integrations (Optional)
 
 **What are integrations?** Connections to other tools you already use (like Jira, Confluence, Slack, GitHub). These are optional - you can use the projects without them, but they add powerful automation capabilities.
 

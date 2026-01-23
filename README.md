@@ -182,8 +182,6 @@ curl -X POST "http://localhost:5001/api/publishing/review-pdf?genre=Science Fict
 
 See [Publishing Examples](samples/PublishingExamples/README.md) for complete documentation.
 
-### Option 1: REST API (No Development Environment Required)
-
 Try the APIs immediately using curl, Python, or Postman:
 
 - **[REST API Examples](samples/REST-API-Examples/README.md)** - Complete curl, Python, and Postman examples

@@ -1,5 +1,9 @@
 # Tester Guide
 
+**For:** QA Engineers and Testers who want to use AI for test case generation and test planning.
+
+**What you'll learn:** How to use AI to generate test cases from user stories, create test scenarios, analyze test coverage, and generate test documentation.
+
 This guide helps Testers leverage OpenAI Platform capabilities for test case generation and quality assurance.
 
 ## Use Cases for Testers

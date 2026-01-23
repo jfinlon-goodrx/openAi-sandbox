@@ -1,5 +1,9 @@
 # Product Manager Guide
 
+**For:** Product Managers who want to use AI for retrospectives, meeting analysis, and project planning.
+
+**What you'll learn:** How to use AI to analyze sprint retrospectives, process meeting transcripts, extract action items, and generate status reports.
+
 This guide helps Product Managers leverage OpenAI Platform capabilities for product planning and team management.
 
 ## Use Cases for Product Managers

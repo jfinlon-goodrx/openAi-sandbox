@@ -1,5 +1,9 @@
 # Developer Guide
 
+**For:** Software developers who want to integrate OpenAI Platform capabilities into their development workflow.
+
+**What you'll learn:** How to use AI for code review, test generation, documentation, and improving code quality.
+
 This guide helps developers leverage OpenAI Platform capabilities in their daily workflow.
 
 ## Use Cases for Developers

@@ -145,10 +145,15 @@ See [Integration Guides Index](integrations/README.md) for complete setup instru
 
 ### I want to...
 
-**...get started quickly:**
-1. Read [Setup Guide](getting-started/01-setup.md)
+**...get started quickly (no coding required):**
+1. Read [Quick Start for Non-Developers](getting-started/00-non-developer-setup.md)
 2. Try [REST API Examples](../samples/REST-API-Examples/README.md) (no dev environment needed)
-3. Follow [First Project](getting-started/04-first-project.md)
+3. Learn [API Basics](getting-started/02-api-basics.md) to understand how APIs work
+
+**...get started as a developer:**
+1. Read [Setup Guide for Developers](getting-started/01-setup.md)
+2. Follow [First Project](getting-started/04-first-project.md) to build your first app
+3. Explore [Role Guides](role-guides/) for your specific role
 
 **...understand a specific project:**
 1. Check [Project Documentation Index](project-docs/README.md)

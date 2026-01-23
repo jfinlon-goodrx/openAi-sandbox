@@ -1,5 +1,9 @@
 # Business Analyst Guide
 
+**For:** Business Analysts who want to use AI to process requirements, generate user stories, and analyze documentation.
+
+**What you'll learn:** How to use AI for document processing, user story generation, gap analysis, and Confluence integration.
+
 This guide helps Business Analysts leverage OpenAI Platform capabilities for requirements analysis and documentation.
 
 ## Use Cases for Business Analysts

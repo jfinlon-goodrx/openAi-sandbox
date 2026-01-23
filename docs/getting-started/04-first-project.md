@@ -216,14 +216,25 @@ foreach (var length in lengths)
 }
 ```
 
+## What You've Learned
+
+After completing this project, you now understand:
+- ✅ How to set up a .NET project with OpenAI integration
+- ✅ How to configure and use the OpenAI client library
+- ✅ How to structure prompts for AI interactions
+- ✅ How to handle API responses and errors
+- ✅ How to track token usage and estimate costs
+- ✅ Basic patterns for building AI-powered applications
+
 ## Next Steps
 
 Now that you've built your first project:
 
-1. Explore the [sample projects](../samples/) for more examples
-2. Check out [Role-Specific Guides](../role-guides/) for your workflow
-3. Read [Best Practices](../best-practices/) before building production applications
-4. Review the [Project Documentation](../project-docs/) for detailed examples
+1. **Explore more:** Check out the [sample projects](../samples/) for more examples
+2. **Find your role:** Review [Role-Specific Guides](../role-guides/) for workflows specific to your role
+3. **Learn best practices:** Read [Best Practices](../best-practices/) before building production applications
+4. **Dive deeper:** Review the [Project Documentation](../project-docs/) for detailed examples and advanced features
+5. **Build something:** Apply what you've learned to solve a real problem in your work
 
 ## Common Issues
 

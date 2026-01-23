@@ -376,6 +376,16 @@ pip3 install requests
    - [OpenAI Platform Docs](https://platform.openai.com/docs)
    - [OpenAI API Reference](https://platform.openai.com/docs/api-reference)
 
+## What You've Learned
+
+After completing this setup, you now have:
+- ✅ An OpenAI API key configured securely
+- ✅ A working tool (curl, Python, or Postman) for making API calls
+- ✅ The ability to test your setup and verify it works
+- ✅ Knowledge of how to run your first example
+
+**No coding experience required!** Just follow the examples and adapt them for your needs.
+
 ## Summary
 
 You now have everything you need to:
@@ -383,8 +393,6 @@ You now have everything you need to:
 - ✅ Run example scripts
 - ✅ Test different models and capabilities
 - ✅ Learn how OpenAI Platform works
-
-**No coding experience required!** Just follow the examples and adapt them for your needs.
 
 **Ready to explore?** Start with [REST API Examples](../../samples/REST-API-Examples/README.md) →
 
