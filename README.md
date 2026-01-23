@@ -25,7 +25,7 @@ This repository contains **twelve production-ready projects** that showcase the 
 
 These projects demonstrate how OpenAI Platform can be applied to different industries:
 
-10. **Publishing Assistant** - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, and file conversion
+10. **Publishing Assistant** ⭐ NEW FEATURES - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, file conversion, and **PDF manuscript review with intelligent chunking and RAG** (80-88% token reduction)
 11. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
 12. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
 
@@ -79,10 +79,11 @@ This portfolio demonstrates the full range of OpenAI Platform features:
 
 ### Advanced Features
 - **Vision API** - Image analysis for cover images, prescription labels, and ad creatives
-- **RAG Patterns** - Document Q&A with semantic search
+- **RAG Patterns** ⭐ - Document Q&A with semantic search, vector embeddings, and intelligent chunking
 - **Batch Processing** - Cost-effective high-volume processing (50% cost reduction)
 - **JSON Mode** - Structured output generation
 - **Function Calling** - Structured data extraction
+- **Vector Embeddings** ⭐ NEW - Create embeddings for semantic search, document similarity, and RAG workflows
 
 ## Integrations
 
@@ -133,11 +134,53 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 
 ## Quick Start Examples
 
+### ⭐ NEW: RAG & Vector Embeddings
+
+Try these comprehensive examples for creating embeddings and using RAG:
+
+```bash
+# Run curl examples
+export OPENAI_API_KEY="your-openai-api-key"
+bash samples/REST-API-Examples/rag-embeddings-examples.sh
+
+# Run Python examples
+pip install requests
+python samples/REST-API-Examples/rag-embeddings-examples.py
+```
+
+**What's included:**
+- Creating embeddings (single and batch)
+- Complete RAG workflow (document embeddings → query → similarity search → answer)
+- Requirements document Q&A
+- Pharmacy drug information search
+- Publishing manuscript chapter search
+- Cosine similarity calculations
+
+### ⭐ NEW: PDF Manuscript Review
+
+Upload a PDF manuscript for comprehensive review by a senior publishing agent:
+
+```bash
+curl -X POST "http://localhost:5001/api/publishing/review-pdf?genre=Science Fiction" \
+  -H "X-API-Key: your-api-key" \
+  -F "pdfFile=@manuscript.pdf"
+```
+
+**Features:**
+- Intelligent chunking (preserves chapter boundaries)
+- RAG-based analysis (plot, character, style, structure)
+- Local PDF storage
+- **80-88% token reduction** vs. full document analysis
+- Detailed issues and suggestions with locations
+
+See [Publishing Examples](samples/PublishingExamples/README.md) for complete documentation.
+
 ### Option 1: REST API (No Development Environment Required)
 
 Try the APIs immediately using curl, Python, or Postman:
 
 - **[REST API Examples](samples/REST-API-Examples/README.md)** - Complete curl, Python, and Postman examples
+- **[RAG & Embeddings Examples](samples/REST-API-Examples/rag-embeddings-examples.sh)** ⭐ NEW - Comprehensive RAG and vector embeddings examples
 - **[Direct OpenAI API Examples](samples/REST-API-Examples/openai-direct-examples.sh)** - Call OpenAI directly
 - **[Postman Collection](samples/REST-API-Examples/postman-collection.json)** - Import ready-to-use collection
 
@@ -175,7 +218,7 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 
 | Project | OpenAI APIs | Integrations | Key Features |
 |---------|-------------|--------------|--------------|
-| Publishing Assistant | GPT-4, DALL-E, Vision | - | Reviews, summaries, cover images, file conversion |
+| Publishing Assistant | GPT-4, DALL-E, Vision, RAG, Embeddings | - | Reviews, summaries, cover images, file conversion, **PDF review with chunking** ⭐ |
 | Pharmacy Assistant | GPT-4, RAG, Moderation | - | Patient education, interactions, prescriptions |
 | Advertising Assistant | GPT-4, Vision | - | Ad copy, campaigns, creative analysis |
 
@@ -187,14 +230,26 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 
 ### Advanced Examples
 - **[Vision API Examples](samples/AdvancedExamples/VisionAPI.md)** - Image analysis and understanding
-- **[RAG Examples](samples/AdvancedExamples/RAGExamples.md)** - Retrieval-Augmented Generation patterns
+- **[RAG Examples](samples/AdvancedExamples/RAGExamples.md)** ⭐ - Retrieval-Augmented Generation patterns
+- **[RAG & Embeddings Examples](samples/REST-API-Examples/rag-embeddings-examples.sh)** ⭐ NEW - Complete RAG workflows with curl and Python
+- **[RAG & Embeddings Examples (Python)](samples/REST-API-Examples/rag-embeddings-examples.py)** ⭐ NEW - Python implementation with cosine similarity
 - **[Moderation Examples](samples/AdvancedExamples/ModerationExamples.md)** - Content safety checking
 - **[Batch Processing Examples](samples/AdvancedExamples/BatchProcessingExamples.md)** - High-volume processing
 - **[JSON Mode Examples](samples/AdvancedExamples/JSONModeExamples.md)** - Structured output generation
+- **[Publishing Examples](samples/PublishingExamples/README.md)** ⭐ NEW - PDF manuscript review, intelligent chunking, token optimization
 
 ### Integration Examples
 - **[Slack Examples](samples/SlackExamples/)** - Notification workflows and templates
 - **[GitHub Actions Examples](samples/GitHubExamples/)** - CI/CD automation workflows
+
+### Publishing-Specific Examples ⭐ NEW
+- **[PDF Manuscript Review](samples/PublishingExamples/README.md)** - Upload PDF for comprehensive senior agent review
+  - Intelligent chunking (preserves chapter/paragraph boundaries)
+  - RAG-based analysis (plot, character, style, structure)
+  - Local PDF storage for reference
+  - **80-88% token reduction** vs. full document analysis
+  - Detailed issues and suggestions with locations
+  - Prioritized recommendations
 
 ## Project Structure
 
@@ -228,8 +283,11 @@ openAi-sandbox/
 │   └── best-practices/          # Security, cost optimization
 ├── samples/                      # Examples and templates
 │   ├── REST-API-Examples/       # curl, Python, Postman examples
+│   │   ├── rag-embeddings-examples.sh ⭐ NEW - RAG & embeddings curl examples
+│   │   └── rag-embeddings-examples.py ⭐ NEW - RAG & embeddings Python examples
 │   ├── AdvancedExamples/        # Advanced feature examples
 │   ├── CompleteWorkflows/       # End-to-end workflows
+│   ├── PublishingExamples/      ⭐ NEW - PDF review examples
 │   ├── SlackExamples/           # Slack integration examples
 │   └── GitHubExamples/          # GitHub Actions workflows
 └── tests/                        # Test projects
@@ -297,7 +355,8 @@ See [Improvements Documentation](docs/improvements/) for details, examples, and 
 
 ### Advanced Features
 - [Vision API](docs/advanced-features/vision-api.md) - Image analysis and understanding
-- [RAG Patterns](docs/advanced-features/rag-patterns.md) - Retrieval-Augmented Generation
+- [RAG Patterns](docs/advanced-features/rag-patterns.md) ⭐ - Retrieval-Augmented Generation with embeddings
+- [RAG & Embeddings Examples](samples/REST-API-Examples/README.md#rag--vector-embeddings) ⭐ NEW - Complete RAG workflow examples
 - [Batch Processing](docs/advanced-features/batch-processing.md) - Cost-effective bulk operations
 - [Moderation API](docs/advanced-features/moderation-api.md) - Content safety and filtering
 - [JSON Mode](docs/advanced-features/json-mode.md) - Structured output generation
@@ -322,6 +381,8 @@ See [Improvements Documentation](docs/improvements/) for details, examples, and 
 - [Slack Integration](docs/integrations/slack-integration.md) - Slack notifications and workflows
 - [GitHub Examples](samples/GitHubExamples/) - GitHub Actions and API examples
 - [REST API Examples](samples/REST-API-Examples/) - Direct API calls without .NET
+  - [RAG & Embeddings Examples](samples/REST-API-Examples/rag-embeddings-examples.sh) ⭐ NEW - Complete RAG workflows
+  - [PDF Review Examples](samples/PublishingExamples/README.md) ⭐ NEW - PDF manuscript review
 
 ## Contributing
 
