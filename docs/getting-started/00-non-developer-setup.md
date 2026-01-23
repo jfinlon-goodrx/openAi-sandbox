@@ -282,11 +282,11 @@ Now that you're set up, try the complete examples:
 
 ### Complete Example Collections
 
-1. **[REST API Examples](../../samples/REST-API-Examples/README.md)** - Comprehensive guide with:
-   - curl examples for all endpoints
+1. **[REST API Examples](../../samples/REST-API-Examples/README.md)** - Comprehensive examples for all endpoints:
+   - curl examples for all API endpoints
    - Python examples with complete functions
    - Postman collection (import ready)
-   - Step-by-step instructions
+   - Health checks, authentication, streaming, metrics, database, and more
 
 2. **[RAG & Embeddings Examples](../../samples/REST-API-Examples/rag-embeddings-examples.sh)** - Advanced examples:
    - Creating embeddings

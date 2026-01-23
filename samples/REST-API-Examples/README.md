@@ -2,12 +2,24 @@
 
 Complete examples for testing OpenAI Platform Learning Portfolio APIs without needing a .NET development environment. Updated with all new features including streaming, authentication, metrics, database, and autonomous agent endpoints.
 
+## Prerequisites
+
+**New to REST APIs?** See [Quick Start for Non-Developers](../../docs/getting-started/00-non-developer-setup.md) for complete setup instructions including:
+- How to get an OpenAI API key
+- How to set up curl, Python, or Postman
+- How to configure your environment
+- How to test your setup
+
+**Already set up?** Continue below to run the examples.
+
 ## Quick Start
+
+Once you have your API key and tool of choice configured (see [setup guide](../../docs/getting-started/00-non-developer-setup.md)):
 
 ### Option 1: curl (Bash)
 
 ```bash
-# Set your API key
+# Set your API key (if not already set)
 export API_KEY="your-api-key-here"
 export BASE_URL="http://localhost:5001"
 
@@ -18,10 +30,10 @@ bash openai-platform-examples.sh
 ### Option 2: Python
 
 ```bash
-# Install dependencies
+# Install dependencies (if not already installed)
 pip install requests
 
-# Set environment variables
+# Set environment variables (if not already set)
 export API_KEY="your-api-key-here"
 export BASE_URL="http://localhost:5001"
 
@@ -36,6 +48,8 @@ python python-examples.py
    - `base_url`: `http://localhost:5001`
    - `api_key`: Your API key
 3. Run requests from the collection
+
+**Need help setting up?** See [Quick Start for Non-Developers](../../docs/getting-started/00-non-developer-setup.md)
 
 ## New Features Examples
 
