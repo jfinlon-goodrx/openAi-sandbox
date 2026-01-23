@@ -208,6 +208,7 @@ All documentation follows these principles:
 ## 📚 Additional Resources
 
 - **[Main README](../README.md)** - Project overview and quick start
+- **[Educational Guide](EDUCATIONAL-GUIDE.md)** ⭐ NEW - Learning pathways, teaching recommendations, and assessment suggestions
 - **[REST API Examples](../samples/REST-API-Examples/README.md)** - Try APIs without development environment
 - **[Code Examples](../samples/)** - Complete workflow examples
 - **[GitHub Repository](https://github.com/jfinlon-goodrx/openAi-sandbox)** - Source code and issues

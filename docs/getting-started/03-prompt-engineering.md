@@ -208,6 +208,16 @@ foreach (var testCase in testCases)
 }
 ```
 
+## What You've Learned
+
+After reading this guide, you should understand:
+- ✅ How to structure prompts for clarity and specificity
+- ✅ When and how to use examples (few-shot learning)
+- ✅ How to use the PromptBuilder class effectively
+- ✅ Common prompt patterns for different use cases
+- ✅ How to iterate and improve your prompts
+- ✅ How to troubleshoot when results aren't what you expect
+
 ## Resources
 
 - [OpenAI Prompt Engineering Guide](https://platform.openai.com/docs/guides/prompt-engineering)
@@ -215,6 +225,8 @@ foreach (var testCase in testCases)
 
 ## Next Steps
 
-- Build your [First Project](04-first-project.md)
-- Check out [Role-Specific Guides](../role-guides/) for examples
-- Review [Best Practices](../best-practices/) for production use
+- **Practice:** Try writing prompts for your specific use case
+- **Learn more:** Read [API Basics](02-api-basics.md) to understand models and parameters
+- **Build:** Follow [First Project](04-first-project.md) to apply what you've learned
+- **Explore:** Check out [Role-Specific Guides](../role-guides/) for role-specific prompt examples
+- **Production:** Review [Best Practices](../best-practices/) before building production applications
