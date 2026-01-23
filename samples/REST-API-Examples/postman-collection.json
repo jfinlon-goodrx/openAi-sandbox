@@ -679,6 +679,81 @@
 							"path": ["api", "publishing", "marketing-blurb"]
 						}
 					}
+				},
+				{
+					"name": "Upload PDF for Senior Agent Review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "pdfFile",
+									"type": "file",
+									"src": [],
+									"description": "PDF manuscript file"
+								},
+								{
+									"key": "genre",
+									"value": "Science Fiction",
+									"type": "text",
+									"description": "Optional genre"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/publishing/review-pdf?genre=Science Fiction",
+							"host": ["{{base_url}}"],
+							"path": ["api", "publishing", "review-pdf"],
+							"query": [
+								{
+									"key": "genre",
+									"value": "Science Fiction",
+									"description": "Optional genre"
+								}
+							]
+						},
+						"description": "Upload PDF manuscript for comprehensive review by senior publishing agent. Uses intelligent chunking and RAG to minimize token usage."
+					}
+				},
+				{
+					"name": "Get PDF Metadata",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/publishing/pdf/:documentId/metadata",
+							"host": ["{{base_url}}"],
+							"path": ["api", "publishing", "pdf", ":documentId", "metadata"],
+							"variable": [
+								{
+									"key": "documentId",
+									"value": "document-id-here"
+								}
+							]
+						},
+						"description": "Get metadata for a stored PDF"
+					}
+				},
+				{
+					"name": "Delete Stored PDF",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/publishing/pdf/:documentId",
+							"host": ["{{base_url}}"],
+							"path": ["api", "publishing", "pdf", ":documentId"],
+							"variable": [
+								{
+									"key": "documentId",
+									"value": "document-id-here"
+								}
+							]
+						},
+						"description": "Delete a stored PDF from local storage"
+					}
 				}
 			]
 		},

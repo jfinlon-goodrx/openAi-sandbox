@@ -250,6 +250,39 @@ def generate_book_review():
     response = make_request("POST", "/api/publishing/review", data=data)
     print_response("Book Review", response)
 
+def review_pdf_manuscript():
+    """Upload PDF for senior agent review"""
+    print_section("PDF Manuscript Review")
+    print("Note: This requires a PDF file. Replace 'manuscript.pdf' with your actual file path.")
+    
+    try:
+        with open("manuscript.pdf", "rb") as pdf_file:
+            files = {"pdfFile": ("manuscript.pdf", pdf_file, "application/pdf")}
+            params = {"genre": "Science Fiction"}
+            
+            url = f"{BASE_URL}/api/publishing/review-pdf"
+            headers = {"X-API-Key": API_KEY}
+            
+            response = requests.post(
+                url,
+                files=files,
+                params=params,
+                headers=headers
+            )
+            response.raise_for_status()
+            
+            result = response.json()
+            print_response("Senior Agent Review", result)
+            print(f"\nDocument ID: {result.get('documentId')}")
+            print(f"Chunks: {result.get('chunkCount')}")
+            print(f"Estimated Tokens: {result.get('estimatedTokensUsed')}")
+    except FileNotFoundError:
+        print("Error: manuscript.pdf not found. Please provide a PDF file.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        if hasattr(e, 'response') and e.response is not None:
+            print(f"Response: {e.response.text}")
+
 # ============================================================================
 # ADVERTISING ASSISTANT
 # ============================================================================
@@ -340,6 +373,7 @@ def main():
         # Industry examples
         generate_patient_education()
         generate_book_review()
+        review_pdf_manuscript()  # PDF review example
         generate_ad_copy()
         
         # Testing features

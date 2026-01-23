@@ -205,6 +205,119 @@ public class PublishingController : ControllerBase
             return StatusCode(500, new { error = "Failed to analyze cover image", message = ex.Message });
         }
     }
+
+    /// <summary>
+    /// Uploads PDF for comprehensive review by senior publishing agent
+    /// Uses intelligent chunking and RAG to minimize token usage
+    /// </summary>
+    [HttpPost("review-pdf")]
+    [RequestSizeLimit(50_000_000)] // 50MB limit
+    public async Task<ActionResult<SeniorAgentReview>> ReviewPDF(
+        IFormFile pdfFile,
+        [FromQuery] string? genre = null,
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (pdfFile == null || pdfFile.Length == 0)
+            {
+                return BadRequest(new { error = "PDF file is required" });
+            }
+
+            if (!pdfFile.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            {
+                return BadRequest(new { error = "File must be a PDF" });
+            }
+
+            // Process PDF
+            var pdfService = HttpContext.RequestServices.GetRequiredService<PDFProcessingService>();
+            var pdfResult = await pdfService.ProcessPDFAsync(
+                pdfFile.OpenReadStream(),
+                pdfFile.FileName,
+                cancellationToken);
+
+            _logger.LogInformation(
+                "PDF processed: {DocumentId}, {PageCount} pages, {WordCount} words",
+                pdfResult.DocumentId,
+                pdfResult.PageCount,
+                pdfResult.WordCount);
+
+            // Perform senior agent review
+            var seniorAgent = HttpContext.RequestServices.GetRequiredService<SeniorPublishingAgentService>();
+            var review = await seniorAgent.ReviewManuscriptAsync(
+                pdfResult.ExtractedText,
+                pdfResult.DocumentId,
+                genre,
+                cancellationToken);
+
+            _logger.LogInformation(
+                "Senior agent review completed: {DocumentId}, {ChunkCount} chunks, ~{Tokens} tokens",
+                review.DocumentId,
+                review.ChunkCount,
+                review.EstimatedTokensUsed);
+
+            return Ok(review);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error reviewing PDF");
+            return StatusCode(500, new { error = "Failed to review PDF", message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Gets stored PDF metadata
+    /// </summary>
+    [HttpGet("pdf/{documentId}/metadata")]
+    public ActionResult<PDFMetadata> GetPDFMetadata(string documentId)
+    {
+        try
+        {
+            var pdfService = HttpContext.RequestServices.GetRequiredService<PDFProcessingService>();
+            var isStored = pdfService.IsPDFStored(documentId);
+
+            if (!isStored)
+            {
+                return NotFound(new { error = "PDF not found" });
+            }
+
+            var filePath = pdfService.GetStoredPDFPath(documentId);
+            var fileInfo = new FileInfo(filePath);
+
+            return Ok(new PDFMetadata
+            {
+                DocumentId = documentId,
+                FilePath = filePath,
+                FileSize = fileInfo.Length,
+                LastModified = fileInfo.LastWriteTimeUtc,
+                IsStored = true
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting PDF metadata");
+            return StatusCode(500, new { error = "Failed to get PDF metadata", message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Deletes stored PDF
+    /// </summary>
+    [HttpDelete("pdf/{documentId}")]
+    public IActionResult DeleteStoredPDF(string documentId)
+    {
+        try
+        {
+            var pdfService = HttpContext.RequestServices.GetRequiredService<PDFProcessingService>();
+            pdfService.DeleteStoredPDF(documentId);
+            return Ok(new { message = "PDF deleted successfully" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting PDF");
+            return StatusCode(500, new { error = "Failed to delete PDF", message = ex.Message });
+        }
+    }
 }
 
 public class AnalyzeCoverRequest
@@ -255,4 +368,13 @@ public class GenerateCoverRequest
     public string? Genre { get; set; }
     public string? Size { get; set; }
     public string? Quality { get; set; }
+}
+
+public class PDFMetadata
+{
+    public string DocumentId { get; set; } = string.Empty;
+    public string FilePath { get; set; } = string.Empty;
+    public long FileSize { get; set; }
+    public DateTime LastModified { get; set; }
+    public bool IsStored { get; set; }
 }

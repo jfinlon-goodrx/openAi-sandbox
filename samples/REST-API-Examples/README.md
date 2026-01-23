@@ -437,6 +437,81 @@ curl -X POST http://localhost:5001/api/publishing/marketing-blurb \
   }'
 ```
 
+#### Upload PDF for Senior Agent Review ⭐ NEW
+
+**Comprehensive PDF manuscript review with intelligent chunking and RAG:**
+
+```bash
+# Upload PDF for review
+curl -X POST "http://localhost:5001/api/publishing/review-pdf?genre=Science Fiction" \
+  -H "X-API-Key: your-api-key" \
+  -F "pdfFile=@manuscript.pdf"
+```
+
+**Features:**
+- **Intelligent Chunking**: Preserves chapter and paragraph boundaries
+- **Local Storage**: PDFs are stored locally for reference (minimizes re-processing)
+- **RAG-Based Analysis**: Uses embeddings to find relevant sections
+- **Token Optimization**: Only sends relevant chunks to GPT, not entire document
+- **Comprehensive Review**: Analyzes plot, characters, writing style, structure, and provides detailed recommendations
+
+**Response includes:**
+- Overall summary
+- Plot analysis
+- Character analysis
+- Writing style analysis
+- Structure analysis
+- Specific issues and suggestions (with locations)
+- Prioritized recommendations
+- Token usage estimate
+
+**Get PDF Metadata:**
+```bash
+curl -X GET "http://localhost:5001/api/publishing/pdf/{documentId}/metadata" \
+  -H "X-API-Key: your-api-key"
+```
+
+**Delete Stored PDF:**
+```bash
+curl -X DELETE "http://localhost:5001/api/publishing/pdf/{documentId}" \
+  -H "X-API-Key: your-api-key"
+```
+
+**Python Example:**
+```python
+import requests
+
+with open("manuscript.pdf", "rb") as pdf_file:
+    files = {"pdfFile": ("manuscript.pdf", pdf_file, "application/pdf")}
+    params = {"genre": "Science Fiction"}
+    
+    response = requests.post(
+        "http://localhost:5001/api/publishing/review-pdf",
+        files=files,
+        params=params,
+        headers={"X-API-Key": "your-api-key"}
+    )
+    
+    review = response.json()
+    print(f"Document ID: {review['documentId']}")
+    print(f"Chunks: {review['chunkCount']}")
+    print(f"Estimated Tokens: {review['estimatedTokensUsed']}")
+    print(f"\nOverall Summary:\n{review['overallSummary']}")
+    print(f"\nRecommendations:\n{review['recommendations']}")
+```
+
+**Token Optimization Strategy:**
+1. **Chunking**: Document is split into ~2000 character chunks (preserving boundaries)
+2. **Embeddings**: Each chunk is embedded once and stored
+3. **RAG Queries**: Only top-K relevant chunks are retrieved for each analysis aspect
+4. **Local Storage**: PDFs stored locally to avoid re-extraction
+5. **Selective Analysis**: Different aspects analyzed separately using RAG
+6. **Summary First**: High-level summary uses only first few chunks
+
+**Estimated Token Savings:**
+- Full document (100K words): ~125,000 tokens
+- With chunking + RAG: ~15,000-25,000 tokens (80-88% reduction)
+
 ### Advertising Assistant
 
 #### Generate Ad Copy

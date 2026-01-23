@@ -186,6 +186,19 @@ curl -X POST "${BASE_URL}/api/publishing/review" \
     "bookContent": "This book explores the potential of artificial intelligence..."
   }' | jq '.'
 
+echo -e "\n${GREEN}17. Upload PDF for Senior Agent Review${NC}"
+echo "Uploading PDF manuscript for comprehensive review..."
+curl -X POST "${BASE_URL}/api/publishing/review-pdf?genre=Science Fiction" \
+  -H "X-API-Key: ${API_KEY}" \
+  -F "pdfFile=@manuscript.pdf" \
+  | jq '.'
+
+echo -e "\n${YELLOW}Note: PDF review uses intelligent chunking and RAG to minimize token usage${NC}"
+echo "  - Document is chunked intelligently (preserving chapter/paragraph boundaries)"
+echo "  - Chunks are stored locally for reference"
+echo "  - RAG is used to analyze specific aspects"
+echo "  - Only relevant chunks are sent to GPT for analysis"
+
 # ============================================================================
 # ADVERTISING ASSISTANT
 # ============================================================================

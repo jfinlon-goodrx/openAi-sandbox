@@ -39,6 +39,32 @@ builder.Services.AddScoped<PublishingService>(sp =>
     var model = builder.Configuration["OpenAI:DefaultModel"] ?? "gpt-4-turbo-preview";
     return new PublishingService(openAIClient, logger, model);
 });
+
+// PDF Processing Service
+builder.Services.AddSingleton<PDFProcessingService>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<PDFProcessingService>>();
+    var storagePath = builder.Configuration["Publishing:StoragePath"];
+    return new PDFProcessingService(logger, storagePath);
+});
+
+// Document Chunking Service
+builder.Services.AddScoped<DocumentChunkingService>(sp =>
+{
+    var logger = sp.GetRequiredService<ILogger<DocumentChunkingService>>();
+    return new DocumentChunkingService(logger);
+});
+
+// Senior Publishing Agent Service
+builder.Services.AddScoped<SeniorPublishingAgentService>(sp =>
+{
+    var openAIClient = sp.GetRequiredService<OpenAIClient>();
+    var ragService = sp.GetRequiredService<RAGService>();
+    var chunkingService = sp.GetRequiredService<DocumentChunkingService>();
+    var logger = sp.GetRequiredService<ILogger<SeniorPublishingAgentService>>();
+    var model = builder.Configuration["OpenAI:DefaultModel"] ?? "gpt-4-turbo-preview";
+    return new SeniorPublishingAgentService(openAIClient, ragService, chunkingService, logger, model);
+});
 builder.Services.AddScoped<CoverImageGenerator>(sp =>
 {
     var openAIClient = sp.GetRequiredService<OpenAIClient>();
