@@ -29,11 +29,32 @@ public class OpenAIClient : IDisposable
         _config = config.Value;
         _logger = logger;
 
-        // Configure HTTP client
-        _httpClient.BaseAddress = new Uri(_config.BaseUrl);
+        // Configure HTTP client - ensure BaseAddress ends with / for proper path combination
+        var baseUrl = _config.BaseUrl.TrimEnd('/');
+        var expectedBaseUrl = new Uri(baseUrl + "/");
+        if (_httpClient.BaseAddress == null || _httpClient.BaseAddress != expectedBaseUrl)
+        {
+            _httpClient.BaseAddress = expectedBaseUrl;
+        }
+        
+        // Set authorization header (override if already set to ensure correct key)
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _config.ApiKey);
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "OpenAI-DotNet-Client/1.0");
+        
+        // Add User-Agent if not already present
+        if (!_httpClient.DefaultRequestHeaders.Contains("User-Agent"))
+        {
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "OpenAI-DotNet-Client/1.0");
+        }
+        
+        // Set timeout
         _httpClient.Timeout = TimeSpan.FromSeconds(_config.TimeoutSeconds);
+        
+        // Log configuration for debugging
+        if (_config.EnableLogging)
+        {
+            _logger.LogInformation("OpenAI Client configured. BaseAddress: {BaseAddress}, Timeout: {Timeout}s", 
+                _httpClient.BaseAddress, _config.TimeoutSeconds);
+        }
 
         // Configure retry policy with exponential backoff
         _retryPolicy = HttpPolicyExtensions
@@ -144,21 +165,23 @@ public class OpenAIClient : IDisposable
                 if (data == "[DONE]")
                     yield break;
 
+                StreamResponse? streamResponse = null;
                 try
                 {
-                    var streamResponse = JsonSerializer.Deserialize<StreamResponse>(data, new JsonSerializerOptions
+                    streamResponse = JsonSerializer.Deserialize<StreamResponse>(data, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     });
-
-                    if (streamResponse?.Choices?[0]?.Delta?.Content != null)
-                    {
-                        yield return streamResponse.Choices[0].Delta.Content;
-                    }
                 }
                 catch (JsonException ex)
                 {
                     _logger.LogWarning(ex, "Failed to parse streaming response line: {Line}", line);
+                    continue;
+                }
+
+                if (streamResponse?.Choices?[0]?.Delta?.Content != null)
+                {
+                    yield return streamResponse.Choices[0].Delta.Content;
                 }
             }
         }
@@ -267,7 +290,14 @@ public class OpenAIClient : IDisposable
 
         var response = await _retryPolicy.ExecuteAsync(async () =>
         {
-            var httpResponse = await _httpClient.PostAsync("/images/generations", content, cancellationToken);
+            // Use relative path (without leading /) since BaseAddress ends with /
+            var endpoint = "images/generations";
+            if (_config.EnableLogging)
+            {
+                var fullUrl = new Uri(_httpClient.BaseAddress!, endpoint).ToString();
+                _logger.LogInformation("Making request to: {FullUrl}", fullUrl);
+            }
+            var httpResponse = await _httpClient.PostAsync(endpoint, content, cancellationToken);
             httpResponse.EnsureSuccessStatusCode();
             return httpResponse;
         });

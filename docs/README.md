@@ -131,6 +131,7 @@ See [Integration Guides Index](integrations/README.md) for complete setup instru
 
 **Best Practices:**
 - [Security](best-practices/security.md) - API key management, input validation, data privacy
+- [Security Guide (README-SECURITY.md)](../README-SECURITY.md) ⭐ NEW - Complete guide for secure API key management using `.env` files
 - [Cost Optimization](best-practices/cost-optimization.md) - Token management, caching, model selection
 - [Error Handling](best-practices/error-handling.md) - Retry logic, circuit breakers, graceful degradation
 

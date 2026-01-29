@@ -27,10 +27,27 @@ public class VisionService
         _config = config.Value;
         _logger = logger;
 
-        _httpClient.BaseAddress = new Uri(_config.BaseUrl);
+        // Configure HTTP client - ensure BaseAddress ends with / for proper path combination
+        var baseUrl = _config.BaseUrl.TrimEnd('/');
+        var expectedBaseUrl = new Uri(baseUrl + "/");
+        if (_httpClient.BaseAddress == null || _httpClient.BaseAddress != expectedBaseUrl)
+        {
+            _httpClient.BaseAddress = expectedBaseUrl;
+        }
+        
+        // Set authorization header (override if already set to ensure correct key)
         _httpClient.DefaultRequestHeaders.Authorization = 
             new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _config.ApiKey);
+        
+        // Set timeout
         _httpClient.Timeout = TimeSpan.FromSeconds(_config.TimeoutSeconds);
+        
+        // Log configuration for debugging
+        if (_config.EnableLogging)
+        {
+            _logger.LogInformation("Vision Service configured. BaseAddress: {BaseAddress}, Timeout: {Timeout}s", 
+                _httpClient.BaseAddress, _config.TimeoutSeconds);
+        }
 
         _retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
@@ -49,34 +66,54 @@ public class VisionService
         string? detail = null,
         CancellationToken cancellationToken = default)
     {
-        var request = new VisionRequest
+        // Build request as dictionary to ensure exact JSON format for OpenAI API (snake_case)
+        var requestDict = new Dictionary<string, object>
         {
-            Model = "gpt-4-vision-preview",
-            Messages = new List<VisionMessage>
+            ["model"] = "gpt-4o",
+            ["messages"] = new[]
             {
-                new()
+                new Dictionary<string, object>
                 {
-                    Role = "user",
-                    Content = new List<VisionContent>
+                    ["role"] = "user",
+                    ["content"] = new object[]
                     {
-                        new() { Type = "text", Text = prompt },
-                        new() { Type = "image_url", ImageUrl = new ImageUrl { Url = imageUrl, Detail = detail ?? "auto" } }
+                        new Dictionary<string, object> { ["type"] = "text", ["text"] = prompt },
+                        new Dictionary<string, object>
+                        {
+                            ["type"] = "image_url",
+                            ["image_url"] = new Dictionary<string, object>
+                            {
+                                ["url"] = imageUrl,
+                                ["detail"] = detail ?? "auto"
+                            }
+                        }
                     }
                 }
             },
-            MaxTokens = 300
+            ["max_tokens"] = 300
         };
 
-        var json = JsonSerializer.Serialize(request, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var json = JsonSerializer.Serialize(requestDict);
 
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         var response = await _retryPolicy.ExecuteAsync(async () =>
         {
-            var httpResponse = await _httpClient.PostAsync("/chat/completions", content, cancellationToken);
+            // Use relative path (without leading /) since BaseAddress ends with /
+            var endpoint = "chat/completions";
+            if (_config.EnableLogging)
+            {
+                var fullUrl = new Uri(_httpClient.BaseAddress!, endpoint).ToString();
+                _logger.LogInformation("Vision API request to: {FullUrl}, Model: gpt-4o", fullUrl);
+            }
+            var httpResponse = await _httpClient.PostAsync(endpoint, content, cancellationToken);
+            
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                var errorContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
+                _logger.LogWarning("Vision API error {StatusCode}: {ErrorContent}", httpResponse.StatusCode, errorContent);
+            }
+            
             httpResponse.EnsureSuccessStatusCode();
             return httpResponse;
         });
@@ -105,7 +142,7 @@ public class VisionService
 
 public class VisionRequest
 {
-    public string Model { get; set; } = "gpt-4-vision-preview";
+    public string Model { get; set; } = "gpt-4o";  // Updated to current vision-capable model
     public List<VisionMessage> Messages { get; set; } = new();
     public int? MaxTokens { get; set; }
 }

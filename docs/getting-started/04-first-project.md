@@ -239,7 +239,9 @@ Now that you've built your first project:
 ## Common Issues
 
 **Issue:** "API key not found"
-- Ensure you've set the `OpenAI__ApiKey` environment variable
+- If using `.env` file: Run `source scripts/setup-env.sh` (macOS/Linux) or `.\scripts\setup-env.ps1` (Windows) before running the app
+- If using manual environment variable: Ensure you've set the `OpenAI__ApiKey` environment variable
+- Verify it's set: `echo $OpenAI__ApiKey` (macOS/Linux) or `echo $env:OpenAI__ApiKey` (Windows PowerShell)
 
 **Issue:** "Rate limit exceeded"
 - You may be hitting OpenAI rate limits. Wait a moment and try again

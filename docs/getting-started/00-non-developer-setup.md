@@ -97,9 +97,41 @@ You have three options, from simplest to most advanced:
 
 ## Step 3: Set Up Your API Key
 
-### For curl (Mac/Linux/Windows)
+### 🔐 Recommended: Use .env File (Most Secure)
 
-**Option A: Environment Variable (Recommended)**
+**This project includes a secure setup script that loads your API key from a `.env` file.**
+
+1. **Create `.env` file** in the project root:
+   ```bash
+   OPENAI_API_KEY=sk-your-actual-api-key-here
+   ```
+
+2. **Load the environment variables** before running examples:
+
+   **Mac/Linux:**
+   ```bash
+   source scripts/setup-env.sh
+   ```
+
+   **Windows PowerShell:**
+   ```powershell
+   .\scripts\setup-env.ps1
+   ```
+
+   **Windows Command Prompt:**
+   ```cmd
+   scripts\setup-env.bat
+   ```
+
+**Why this is better:**
+- ✅ Keeps API keys out of version control (`.env` is in `.gitignore`)
+- ✅ Easy to use - just run the script before examples
+- ✅ Works with all example scripts automatically
+- ✅ Secure - never commit your `.env` file
+
+See [README-SECURITY.md](../../README-SECURITY.md) for complete security guide.
+
+### Alternative: Manual Environment Variables
 
 **Mac/Linux:**
 ```bash
@@ -124,24 +156,21 @@ $env:OPENAI_API_KEY="sk-your-actual-api-key-here"
   ```
 - **Windows:** Use System Properties → Environment Variables
 
-**Option B: Include in Each Command**
-
-You can include the API key directly in curl commands (less secure but simpler for testing):
-```bash
-curl https://api.openai.com/v1/models \
-  -H "Authorization: Bearer sk-your-actual-api-key-here"
-```
-
 ### For Python
 
-Create a file called `.env` in your project folder (or use environment variables):
+**Recommended:** Use the setup script (loads from `.env`):
+```bash
+source scripts/setup-env.sh  # Mac/Linux
+# or
+.\scripts\setup-env.ps1      # Windows PowerShell
+```
 
-**Using environment variable:**
+**Or manually set environment variable:**
 ```bash
 export OPENAI_API_KEY="sk-your-actual-api-key-here"
 ```
 
-**Or in Python code:**
+**Or in Python code (not recommended - use environment variables instead):**
 ```python
 import os
 os.environ['OPENAI_API_KEY'] = 'sk-your-actual-api-key-here'
@@ -341,7 +370,9 @@ See the [Full Setup Guide](01-setup.md) for developers who want to build .NET ap
 
 ### "Is my API key secure?"
 - **Never commit API keys to version control** (Git repositories)
+- **Use `.env` file with setup script** (recommended - see Step 3 above)
 - **Use environment variables** when possible
+- See [README-SECURITY.md](../../README-SECURITY.md) for complete security guide
 - **Rotate keys** if you suspect they've been compromised
 - **Use different keys** for development vs. production
 - **GoodRx employees:** Follow your organization's security policies. Never share API keys outside of approved channels.
@@ -367,7 +398,8 @@ pip3 install requests
 
 ### "401 Unauthorized" error
 - Check your API key is correct (starts with `sk-`)
-- Verify environment variable is set: `echo $OPENAI_API_KEY` (Mac/Linux) or `echo %OPENAI_API_KEY%` (Windows)
+- If using `.env` file: Verify it exists and run `source scripts/setup-env.sh` (Mac/Linux) or `.\scripts\setup-env.ps1` (Windows)
+- Verify environment variable is set: `echo $OpenAI__ApiKey` (Mac/Linux) or `echo $env:OpenAI__ApiKey` (Windows PowerShell)
 - Make sure there are no extra spaces in your API key
 
 ### "Network error" or "Connection timeout"

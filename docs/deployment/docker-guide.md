@@ -47,7 +47,7 @@ docker-compose build requirements-assistant
 ```bash
 docker run -d \
   -p 5001:8080 \
-  -e OpenAI__ApiKey=your-api-key \
+  -e OpenAI__ApiKey="${OpenAI__ApiKey:-your-api-key}" \
   -e ASPNETCORE_ENVIRONMENT=Development \
   --name requirements-assistant \
   requirements-assistant:latest
@@ -71,7 +71,9 @@ docker-compose down
 
 ## Environment Variables
 
-Create a `.env` file for Docker Compose:
+**Recommended:** Use the project's `.env` file and setup script:
+
+1. **Add Docker-specific variables to your `.env` file** (alongside `OPENAI_API_KEY`):
 
 ```env
 OPENAI_API_KEY=your-openai-api-key
@@ -84,6 +86,20 @@ CONFLUENCE_API_TOKEN=your-confluence-token
 GITHUB_TOKEN=your-github-token
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 ```
+
+2. **Load environment variables** before running Docker:
+   ```bash
+   source scripts/setup-env.sh  # macOS/Linux
+   # or
+   .\scripts\setup-env.ps1      # Windows PowerShell
+   ```
+
+3. **Use environment variables in Docker commands:**
+   ```bash
+   docker run -e OpenAI__ApiKey="$OpenAI__ApiKey" ...
+   ```
+
+**Alternative:** Create a separate `.env` file for Docker Compose (Docker Compose automatically loads `.env` files):
 
 ## Health Checks
 

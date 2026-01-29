@@ -862,6 +862,79 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Image Refinement Assistant",
+			"item": [
+				{
+					"name": "Refine Images",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"prompts\": [\n    \"A futuristic cityscape at sunset with flying cars and neon lights\",\n    \"A serene mountain landscape with a crystal-clear lake reflecting snow-capped peaks\"\n  ],\n  \"numberOfImagesToGenerate\": 8,\n  \"topImagesToReturn\": 3,\n  \"evaluationCriteria\": \"Focus on visual appeal, composition quality, and color harmony\",\n  \"size\": \"1024x1024\",\n  \"quality\": \"standard\",\n  \"model\": \"dall-e-3\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/imagerefinement/refine",
+							"host": ["{{base_url}}"],
+							"path": ["api", "imagerefinement", "refine"]
+						},
+						"description": "Generate multiple images from prompts, evaluate them systematically, and return top candidates"
+					}
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/imagerefinement/health",
+							"host": ["{{base_url}}"],
+							"path": ["api", "imagerefinement", "health"]
+						}
+					}
+				},
+				{
+					"name": "Export Refinement Result",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"originalDescription\": \"...\",\n  \"allGeneratedImages\": [...],\n  \"topImages\": [...],\n  \"totalImagesGenerated\": 8,\n  \"imagesEvaluated\": 8,\n  \"summary\": \"...\",\n  \"processedAt\": \"2026-01-23T10:30:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/imagerefinement/export?folderName=my_export",
+							"host": ["{{base_url}}"],
+							"path": ["api", "imagerefinement", "export"],
+							"query": [
+								{
+									"key": "folderName",
+									"value": "my_export",
+									"description": "Optional custom folder name"
+								}
+							]
+						},
+						"description": "Exports refinement result: saves all images and metadata to local folder. Requires a refinement result from the refine endpoint."
+					}
+				}
+			]
 		}
 	]
 }

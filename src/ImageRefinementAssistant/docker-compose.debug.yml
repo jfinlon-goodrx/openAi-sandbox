@@ -1,0 +1,35 @@
+version: '3.8'
+
+# Docker Compose override for debugging
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.debug.yml up
+
+services:
+  image-refinement-api:
+    build:
+      target: development
+    command: dotnet watch run --urls "http://+:8080" --no-launch-profile
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+    volumes:
+      - ./ImageRefinementAssistant.Api:/app
+      - ./ImageRefinementAssistant.Core:/src/src/ImageRefinementAssistant/ImageRefinementAssistant.Core
+      - ../../shared:/src/shared
+    # Enable VSDBG for debugging
+    # Uncomment to enable remote debugging
+    # environment:
+    #   - DOTNET_RUNNING_IN_CONTAINER=true
+    #   - DOTNET_USE_POLLING_FILE_WATCHER=true
+
+  image-refinement-web:
+    build:
+      target: development
+    command: dotnet watch run --urls "http://+:8080" --no-launch-profile
+    environment:
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+      - DOTNET_WATCH_RESTART_ON_RUDE_EDIT=true
+    volumes:
+      - ./ImageRefinementAssistant.Web:/app
+      - ./ImageRefinementAssistant.Api:/src/src/ImageRefinementAssistant/ImageRefinementAssistant.Api
+      - ./ImageRefinementAssistant.Core:/src/src/ImageRefinementAssistant/ImageRefinementAssistant.Core
+      - ../../shared:/src/shared

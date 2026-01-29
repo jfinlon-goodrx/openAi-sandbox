@@ -4,7 +4,7 @@ A comprehensive portfolio of sample projects demonstrating OpenAI Platform capab
 
 ## Overview
 
-This repository contains **twelve production-ready projects** that showcase the full range of OpenAI Platform capabilities:
+This repository contains **thirteen production-ready projects** that showcase the full range of OpenAI Platform capabilities:
 
 ### Software Development Projects
 
@@ -28,6 +28,7 @@ These projects demonstrate how OpenAI Platform can be applied to different indus
 10. **Publishing Assistant** ⭐ NEW FEATURES - Book reviews, summaries, marketing blurbs, cover image generation (DALL-E), Vision API analysis, file conversion, and **PDF manuscript review with intelligent chunking and RAG** (80-88% token reduction)
 11. **Pharmacy Assistant** - Patient education, drug interactions, prescription labels, adherence planning, side effect analysis with RAG and Moderation API
 12. **Advertising Agency Assistant** - Ad copy, campaign strategy, audience analysis, brand voice, creative briefs, A/B testing, and Vision API for ad creative analysis
+13. **Image Refinement Assistant** ⭐ NEW - Systematic image generation and evaluation workflow: generates 5-10 images from prompts, evaluates them with GPT-4 Vision, and returns top candidates for human selection. **Includes visual web gallery** with prompts, star ratings, and scores sorted best-to-worst.
 
 ## Getting Started
 
@@ -54,6 +55,26 @@ openAi-sandbox/
   - **Other organizations:** Sign up at [platform.openai.com](https://platform.openai.com)
 - Visual Studio 2022, VS Code, or Rider
 
+### 🔐 API Key Setup (Important!)
+
+**Secure API key management:** This project uses environment variables loaded from a `.env` file to keep `appsettings.json` clean and secure.
+
+1. **Create `.env` file** in project root:
+   ```bash
+   OPENAI_API_KEY=sk-your-actual-api-key-here
+   ```
+
+2. **Load environment variables** before running:
+   ```bash
+   # macOS/Linux
+   source scripts/setup-env.sh
+   
+   # Windows PowerShell
+   .\scripts\setup-env.ps1
+   ```
+
+See [Security Guide](README-SECURITY.md) for complete details and best practices.
+
 ## Quick Start
 
 ### Option 1: Use REST API Examples (No Development Environment Required) ⭐ RECOMMENDED FOR NON-DEVELOPERS
@@ -64,6 +85,7 @@ Try the APIs immediately using curl, Python, or Postman - no .NET setup needed!
 
 - **[REST API Examples](samples/REST-API-Examples/README.md)** - curl, Python, and Postman examples
 - **[Direct OpenAI API Examples](samples/REST-API-Examples/openai-direct-examples.sh)** - Call OpenAI directly
+- **[Image Refinement Assistant - Docker Guide](docs/project-docs/image-refinement-assistant-docker.md)** ⭐ NEW - Run in Docker containers with debugging support
 
 ### Option 2: Build and Run Projects
 
@@ -125,7 +147,7 @@ See [Integration Guides](docs/integrations/) for setup and complete examples.
 - [DevOps Guide](docs/role-guides/devops-guide.md) ⭐ - Log analysis, CI/CD optimization, infrastructure
 
 ### Project Documentation
-- [All Projects](docs/project-docs/) - Detailed documentation for all 12 projects
+- [All Projects](docs/project-docs/) - Detailed documentation for all 13 projects
 - [Advanced Features](docs/advanced-features/) - Vision API, RAG, Moderation, Batch Processing, JSON Mode
 - [AI Agents & Services](docs/concepts/ai-agents-and-services.md) ⭐ NEW - Conceptual guide to autonomous AI agents
 - [Best Practices](docs/best-practices/) - Security, cost optimization, error handling
@@ -230,6 +252,7 @@ Use pre-built workflows for automated code reviews, deployments, and notificatio
 | Publishing Assistant | GPT-4, DALL-E, Vision, RAG, Embeddings | - | Reviews, summaries, cover images, file conversion, **PDF review with chunking** ⭐ |
 | Pharmacy Assistant | GPT-4, RAG, Moderation | - | Patient education, interactions, prescriptions |
 | Advertising Assistant | GPT-4, Vision | - | Ad copy, campaigns, creative analysis |
+| Image Refinement Assistant | DALL-E, GPT-4 Vision | - | **Systematic generation & evaluation workflow** ⭐ NEW - Generate 5-10 images, AI evaluation, top candidate selection, **visual web gallery with prompts & scores**, **export functionality** (images + metadata), **Docker support with debugging** |
 
 ## Sample Code & Examples
 

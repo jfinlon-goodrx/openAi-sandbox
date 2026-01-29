@@ -42,17 +42,13 @@ public class CircuitBreakerService
     }
 
     /// <summary>
-    /// Executes an async operation with circuit breaker protection
+    /// Executes an async operation with circuit breaker protection (for HttpResponseMessage only)
     /// </summary>
-    public async Task<T> ExecuteAsync<T>(Func<Task<T>> operation)
+    public async Task<HttpResponseMessage> ExecuteAsync(Func<Task<HttpResponseMessage>> operation)
     {
         try
         {
-            return await _circuitBreaker.ExecuteAsync(async () =>
-            {
-                var result = await operation();
-                return result;
-            });
+            return await _circuitBreaker.ExecuteAsync(operation);
         }
         catch (BrokenCircuitException ex)
         {

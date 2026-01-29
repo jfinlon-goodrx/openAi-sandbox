@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   requirements-assistant:
     build:
@@ -66,13 +64,13 @@ services:
       - "7006:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - OpenAI__ApiKey=${OPENAI_API_KEY}
-      - Jira__BaseUrl=${JIRA_BASE_URL}
-      - Jira__Username=${JIRA_USERNAME}
-      - Jira__ApiToken=${JIRA_API_TOKEN}
-      - Confluence__BaseUrl=${CONFLUENCE_BASE_URL}
-      - Confluence__Username=${CONFLUENCE_USERNAME}
-      - Confluence__ApiToken=${CONFLUENCE_API_TOKEN}
+      - OpenAI__ApiKey=${OPENAI_API_KEY:-}
+      - Jira__BaseUrl=${JIRA_BASE_URL:-}
+      - Jira__Username=${JIRA_USERNAME:-}
+      - Jira__ApiToken=${JIRA_API_TOKEN:-}
+      - Confluence__BaseUrl=${CONFLUENCE_BASE_URL:-}
+      - Confluence__Username=${CONFLUENCE_USERNAME:-}
+      - Confluence__ApiToken=${CONFLUENCE_API_TOKEN:-}
     volumes:
       - ./logs:/app/logs
     healthcheck:
@@ -90,8 +88,8 @@ services:
       - "7007:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - OpenAI__ApiKey=${OPENAI_API_KEY}
-      - GitHub__Token=${GITHUB_TOKEN}
+      - OpenAI__ApiKey=${OPENAI_API_KEY:-}
+      - GitHub__Token=${GITHUB_TOKEN:-}
     volumes:
       - ./logs:/app/logs
     healthcheck:
@@ -99,5 +97,72 @@ services:
       interval: 30s
       timeout: 10s
 
+  image-refinement-api:
+    build:
+      context: .
+      dockerfile: src/ImageRefinementAssistant/ImageRefinementAssistant.Api/Dockerfile
+      target: development
+    command: dotnet watch run --urls "http://+:8080"
+    ports:
+      - "5011:8080"
+      - "5012:5000"  # Debug port
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+      - OpenAI__BaseUrl=https://api.openai.com/v1
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+    env_file:
+      - .env
+    volumes:
+      - ./src/ImageRefinementAssistant:/src/src/ImageRefinementAssistant
+      - ./shared:/src/shared
+      - ./logs:/app/logs
+      - image-refinement-api-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/imagerefinement/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - image-refinement-network
+
+  image-refinement-web:
+    build:
+      context: .
+      dockerfile: src/ImageRefinementAssistant/ImageRefinementAssistant.Web/Dockerfile
+      target: development
+    command: dotnet watch run --urls "http://+:8080"
+    ports:
+      - "5010:8080"
+      - "5013:5001"  # Debug port
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ApiBaseUrl=http://image-refinement-api:8080
+      - DOTNET_USE_POLLING_FILE_WATCHER=true
+    env_file:
+      - .env
+    volumes:
+      - ./src/ImageRefinementAssistant:/src/src/ImageRefinementAssistant
+      - ./shared:/src/shared
+      - ./logs:/app/logs
+    depends_on:
+      - image-refinement-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - image-refinement-network
+
 volumes:
   logs:
+  image-refinement-api-data:
+
+networks:
+  image-refinement-network:
+    driver: bridge

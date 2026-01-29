@@ -85,6 +85,49 @@ dotnet build
 
 **Why do I need it?** All the projects in this portfolio use OpenAI's AI models, which require authentication.
 
+### 🔐 Recommended: Use .env File (Most Secure)
+
+**This project includes a secure setup script that loads your API key from a `.env` file.**
+
+1. **Create `.env` file** in the project root:
+   ```bash
+   OPENAI_API_KEY=sk-your-actual-api-key-here
+   ```
+
+2. **Load the environment variables** before running applications:
+
+   **macOS/Linux:**
+   ```bash
+   source scripts/setup-env.sh
+   ```
+
+   **Windows PowerShell:**
+   ```powershell
+   .\scripts\setup-env.ps1
+   ```
+
+   **Windows Command Prompt:**
+   ```cmd
+   scripts\setup-env.bat
+   ```
+
+**Why this is recommended:**
+- ✅ Keeps API keys out of version control (`.env` is in `.gitignore`)
+- ✅ Easy to use - just run the script before starting applications
+- ✅ Works with all projects automatically
+- ✅ Secure - never commit your `.env` file
+- ✅ .NET automatically reads from environment variables
+
+**After running the script, you can start any project:**
+```bash
+cd src/RequirementsAssistant/RequirementsAssistant.Api
+dotnet run
+```
+
+The application will automatically use the API key from the environment variable.
+
+See [README-SECURITY.md](../../README-SECURITY.md) for complete security guide.
+
 ### Getting Your API Key
 
 #### For GoodRx Employees
@@ -122,11 +165,9 @@ dotnet build
 5. Give it a name (e.g., "Learning Portfolio")
 6. Copy the key immediately (you'll only see it once!)
 
-### Option 1: Environment Variables (Recommended for Production)
+### Option 2: Manual Environment Variables (Alternative)
 
-**What are environment variables?** Settings stored in your computer's environment that applications can read. More secure than storing in files.
-
-**Why recommended?** Keeps your API key out of code files, reducing the risk of accidentally sharing it.
+**If you prefer not to use the `.env` file approach**, you can set environment variables manually:
 
 **Windows (PowerShell):**
 ```powershell
@@ -153,11 +194,13 @@ source ~/.zshrc
 
 **Windows:** Use System Properties → Environment Variables to add it permanently.
 
-### Option 2: User Secrets (Recommended for Development)
+**Note:** The `.env` file approach (Option 1) is recommended as it's easier and more secure.
+
+### Option 3: User Secrets (Alternative for Development)
 
 **What are User Secrets?** A secure way to store sensitive data (like API keys) during development. They're stored outside your project folder and never committed to version control.
 
-**Why use this?** Safer than storing in `appsettings.json` and easier than environment variables for development.
+**Why use this?** Alternative to environment variables, useful if you prefer per-project secrets.
 
 **Setup:**
 ```bash
@@ -177,7 +220,9 @@ dotnet user-secrets list
 
 You should see your API key listed (it will be partially hidden for security).
 
-### Option 3: appsettings.json (Not Recommended - Use Only for Quick Testing)
+**Note:** The `.env` file approach (Option 1) is simpler and works across all projects.
+
+### Option 4: appsettings.json (Not Recommended - Use Only for Quick Testing)
 
 **What is appsettings.json?** A configuration file that stores application settings.
 
@@ -489,24 +534,29 @@ Now that you're set up, here's what to do next:
 **Symptoms:** Error messages about missing or invalid API keys when running the application.
 
 **Solutions:**
-1. **Verify your API key is set:**
-   - If using environment variables: Check with `echo $OpenAI__ApiKey` (macOS/Linux) or `echo %OpenAI__ApiKey%` (Windows)
-   - If using User Secrets: Run `dotnet user-secrets list` to see configured secrets
-   - If using appsettings.json: Check the file exists and contains your key
+1. **If using `.env` file approach (Recommended):**
+   - Verify `.env` file exists in project root with `OPENAI_API_KEY=sk-...`
+   - Run the setup script: `source scripts/setup-env.sh` (macOS/Linux) or `.\scripts\setup-env.ps1` (Windows)
+   - Verify it loaded: `echo $OpenAI__ApiKey` (macOS/Linux) or `echo $env:OpenAI__ApiKey` (Windows PowerShell)
+   - Make sure you run the setup script in the same terminal session where you run `dotnet run`
 
-2. **Verify the key format:**
+2. **If using manual environment variables:**
+   - Check with `echo $OpenAI__ApiKey` (macOS/Linux) or `echo %OpenAI__ApiKey%` (Windows CMD) or `echo $env:OpenAI__ApiKey` (PowerShell)
+   - Restart your terminal/IDE after setting environment variables
+
+3. **If using User Secrets:**
+   - Run `dotnet user-secrets list` to see configured secrets
+   - Verify the key is set: `dotnet user-secrets get "OpenAI:ApiKey"`
+
+4. **Verify the key format:**
    - OpenAI API keys start with `sk-`
    - Make sure there are no extra spaces or quotes
    - Copy the entire key from the OpenAI dashboard
 
-3. **Check the key is active:**
+5. **Check the key is active:**
    - Go to [OpenAI API Keys](https://platform.openai.com/api-keys)
    - Verify your key is active and not revoked
    - Check your account has available credits
-
-4. **Restart your terminal/IDE:**
-   - Environment variables only apply to new terminal sessions
-   - Close and reopen your terminal/IDE after setting environment variables
 
 #### "Rate limit exceeded" or "429 Too Many Requests"
 

@@ -75,11 +75,17 @@ local.settings.json
 # Secrets and configuration
 appsettings.Development.json
 appsettings.Local.json
+appsettings.Production.json
 *.secrets.json
 secrets.json
+# Only ignore appsettings.json if it contains actual API keys (be careful!)
+# appsettings.json files with empty API keys are kept in repo for reference
 
 # OpenAI API Keys (if stored locally)
 *.apikey
+.env
+.env.local
+.env.*.local
 
 # OS files
 .DS_Store

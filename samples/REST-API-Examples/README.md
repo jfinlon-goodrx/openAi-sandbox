@@ -16,10 +16,13 @@ Complete examples for testing OpenAI Platform Learning Portfolio APIs without ne
 
 Once you have your API key and tool of choice configured (see [setup guide](../../docs/getting-started/00-non-developer-setup.md)):
 
-### Option 1: curl (Bash)
+### Option 1: curl (Bash) - Recommended
 
 ```bash
-# Set your API key (if not already set)
+# Load API key from .env file (recommended - keeps keys secure)
+source ../../scripts/setup-env.sh
+
+# Or set manually if preferred
 export API_KEY="your-api-key-here"
 export BASE_URL="http://localhost:5001"
 
@@ -27,13 +30,18 @@ export BASE_URL="http://localhost:5001"
 bash openai-platform-examples.sh
 ```
 
+**Note:** The script automatically loads from `.env` if `setup-env.sh` is available.
+
 ### Option 2: Python
 
 ```bash
 # Install dependencies (if not already installed)
 pip install requests
 
-# Set environment variables (if not already set)
+# Load API key from .env file (recommended)
+source ../../scripts/setup-env.sh
+
+# Or set manually if preferred
 export API_KEY="your-api-key-here"
 export BASE_URL="http://localhost:5001"
 
@@ -606,13 +614,24 @@ curl -X GET http://localhost:5001/api/metrics \
 
 ## Environment Variables
 
-Set these environment variables before running examples:
+### Recommended: Load from .env file
+
+```bash
+# Load API key securely from .env file
+source ../../scripts/setup-env.sh
+```
+
+This automatically sets `OpenAI__ApiKey` from your `.env` file.
+
+### Manual Setup (Alternative)
 
 ```bash
 export BASE_URL="http://localhost:5001"
 export API_KEY="your-api-key-here"
 export JWT_TOKEN=""  # Will be set after login
 ```
+
+**Security Note:** See [README-SECURITY.md](../../README-SECURITY.md) for best practices on API key management. Never commit API keys to version control!
 
 ## Response Headers Reference
 

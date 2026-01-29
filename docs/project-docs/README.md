@@ -113,6 +113,17 @@ Ad copy, campaign strategy, and creative briefs.
 - A/B test hypotheses
 - Vision API for ad creative analysis
 
+### [Image Refinement Assistant](image-refinement-assistant.md) ⭐ NEW
+Systematic image generation and evaluation workflow.
+- Batch image generation with DALL-E
+- AI-powered image evaluation with GPT-4 Vision
+- Automated ranking and top candidate selection
+- Visual web gallery with prompts, scores, and star ratings
+- Export functionality (images + metadata to local folder)
+- **Docker support with debugging** - See [Docker Setup Guide](image-refinement-assistant-docker.md)
+- Custom evaluation criteria
+- Detailed feedback with scores and analysis
+
 ## Project Features Matrix
 
 ### Software Development Projects
@@ -135,6 +146,7 @@ Ad copy, campaign strategy, and creative briefs.
 | Publishing Assistant | GPT-4, DALL-E, Vision | - | Publishing |
 | Pharmacy Assistant | GPT-4, RAG, Moderation | - | Pharmacy |
 | Advertising Assistant | GPT-4, Vision | - | Advertising |
+| Image Refinement Assistant | DALL-E, GPT-4 Vision | - | Design, Marketing - **Docker support** ⭐ |
 
 ## Getting Started
 

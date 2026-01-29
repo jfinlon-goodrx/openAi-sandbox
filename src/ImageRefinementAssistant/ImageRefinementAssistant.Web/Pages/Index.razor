@@ -1,0 +1,590 @@
+@page "/"
+@rendermode RenderMode.InteractiveServer
+@inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Image Refinement Assistant</PageTitle>
+
+<div class="container mt-4">
+    <h2>Image Refinement Assistant</h2>
+    <p class="text-muted">Generate multiple images from prompts, evaluate them with AI, and select the best candidates.</p>
+    
+    <div class="form-section">
+        <h3>Generate & Refine Images</h3>
+        
+        <div class="form-group">
+            <label for="prompts">Prompts (one per line)</label>
+            <textarea 
+                id="prompts" 
+                class="form-control" 
+                rows="5" 
+                @bind="promptsText" 
+                placeholder="Enter image prompts, one per line&#10;Example:&#10;A futuristic cityscape at sunset with flying cars and neon lights&#10;A serene mountain landscape with a crystal-clear lake reflecting snow-capped peaks"></textarea>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="numberToGenerate">Number of Images to Generate</label>
+                    <input type="number" id="numberToGenerate" class="form-control" @bind="numberOfImagesToGenerate" min="1" max="20" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="topToReturn">Top Images to Return</label>
+                    <input type="number" id="topToReturn" class="form-control" @bind="topImagesToReturn" min="1" max="20" />
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="evaluationCriteria">Evaluation Criteria (optional)</label>
+                    <input type="text" id="evaluationCriteria" class="form-control" @bind="evaluationCriteria" placeholder="e.g., Focus on visual appeal and composition" />
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn btn-primary" @onclick="RefineImages" disabled="@isProcessing">
+            @if (isProcessing)
+            {
+                <span>Processing...</span>
+            }
+            else
+            {
+                <span>Generate & Evaluate Images</span>
+            }
+        </button>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="error">
+            <strong>Error:</strong> @errorMessage
+        </div>
+    }
+    
+    @if (isProcessing)
+    {
+        <div class="loading">
+            <p>Generating images and evaluating them... This may take a few minutes.</p>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    }
+    
+    @if (refinementResult != null && refinementResult.AllGeneratedImages != null && refinementResult.AllGeneratedImages.Any())
+    {
+        <div class="mt-4">
+            <h3>Image Gallery</h3>
+            <p class="text-muted">
+                Showing @refinementResult.AllGeneratedImages.Count images, sorted by score (best to worst).
+                @if (refinementResult.TopImages != null && refinementResult.TopImages.Any())
+                {
+                    <span>Top @refinementResult.TopImages.Count images are highlighted.</span>
+                }
+                <br />
+                <small>💡 <strong>Tip:</strong> Click the "⬇️ Download" button on any image to save it. DALL-E image URLs expire after some time, so download promptly.</small>
+            </p>
+            
+            <div class="image-gallery">
+                @foreach (var (image, index) in refinementResult.AllGeneratedImages.Select((img, idx) => (img, idx)))
+                {
+                    var isTopImage = refinementResult.TopImages?.Any(t => t.ImageUrl == image.ImageUrl) ?? false;
+                    var imageKey = image.ImageUrl; // Use ImageUrl as unique key
+                    var isSelected = selectedImages.Contains(imageKey);
+                    <div class="image-card @(isTopImage ? "border-success border-2" : "") @(isSelected ? "selected" : "")">
+                        @if (isTopImage)
+                        {
+                            <div class="rank-badge">Top @(refinementResult.TopImages!.IndexOf(refinementResult.TopImages.First(t => t.ImageUrl == image.ImageUrl)) + 1)</div>
+                        }
+                        <div class="rank-badge" style="top: 1rem; left: 1rem; background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                            #@(index + 1)
+                        </div>
+                        
+                        <div style="position: relative; margin-bottom: 1rem;">
+                            <div style="position: absolute; top: 0.5rem; left: 0.5rem; z-index: 10;">
+                                <input 
+                                    type="checkbox" 
+                                    checked="@isSelected"
+                                    @onchange="@((ChangeEventArgs e) => ToggleImageSelection(imageKey, e.Value is bool value && value))"
+                                    style="width: 20px; height: 20px; cursor: pointer;"
+                                    title="Select this image for export" />
+                            </div>
+                            <img src="@image.ImageUrl" alt="Generated image" loading="lazy" />
+                            <div style="position: absolute; top: 0.5rem; right: 0.5rem;">
+                                <button class="btn-download" @onclick="() => DownloadImage(image.ImageUrl, image.Prompt, index + 1)" title="Download this image">
+                                    ⬇️ Download
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-bottom: 0.5rem;">
+                            <button class="btn-download" style="width: 100%; font-size: 0.9rem;" @onclick="() => DownloadImage(image.ImageUrl, image.Prompt, index + 1)" title="Download this image">
+                                💾 Save Image
+                            </button>
+                        </div>
+                        
+                        <div class="prompt-text">
+                            <strong>Prompt:</strong> @image.Prompt
+                            @if (!string.IsNullOrEmpty(image.RevisedPrompt) && image.RevisedPrompt != image.Prompt)
+                            {
+                                <br /><small class="text-muted"><em>Revised: @image.RevisedPrompt</em></small>
+                            }
+                        </div>
+                        
+                        <div class="score-display">
+                            <div class="stars">
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    @if (i < (int)(image.OverallScore / 2))
+                                    {
+                                        <span>★</span>
+                                    }
+                                    else if (i < (image.OverallScore / 2))
+                                    {
+                                        <span>☆</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #ddd;">☆</span>
+                                    }
+                                }
+                            </div>
+                            <span class="score-text">@image.OverallScore.ToString("F1")/10.0</span>
+                        </div>
+                        
+                        <div class="score-details">
+                            Quality: @image.QualityScore.ToString("F1")/10 | 
+                            Relevance: @image.RelevanceScore.ToString("F1")/10
+                        </div>
+                        
+                        @if (image.Strengths != null && image.Strengths.Any())
+                        {
+                            <div class="strengths">
+                                <strong>✓ Strengths:</strong>
+                                <ul>
+                                    @foreach (var strength in image.Strengths.Take(3))
+                                    {
+                                        <li>@strength</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        
+                        @if (image.Weaknesses != null && image.Weaknesses.Any())
+                        {
+                            <div class="weaknesses">
+                                <strong>✗ Weaknesses:</strong>
+                                <ul>
+                                    @foreach (var weakness in image.Weaknesses.Take(3))
+                                    {
+                                        <li>@weakness</li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        
+                        @if (!string.IsNullOrEmpty(image.EvaluationDetails))
+                        {
+                            <details class="mt-2">
+                                <summary style="cursor: pointer; color: #007bff; font-size: 0.85rem;">View Full Evaluation</summary>
+                                <div style="margin-top: 0.5rem; padding: 0.5rem; background-color: #f8f9fa; border-radius: 4px; font-size: 0.85rem;">
+                                    @image.EvaluationDetails
+                                </div>
+                            </details>
+                        }
+                    </div>
+                }
+            </div>
+            
+            @if (!string.IsNullOrEmpty(refinementResult.Summary))
+            {
+                <div class="mt-4 p-3 bg-light border rounded">
+                    <h5>Summary</h5>
+                    <p class="mb-0">@refinementResult.Summary</p>
+                </div>
+            }
+            
+            <div class="export-section">
+                <h4>💾 Export Selected Images & Metadata</h4>
+                <p class="text-muted">
+                    Select images using the checkboxes above, then export them as a ZIP file with metadata.
+                    @if (selectedImages.Count > 0)
+                    {
+                        <strong>@selectedImages.Count image(s) selected.</strong>
+                    }
+                    else
+                    {
+                        <strong>No images selected. All images will be exported.</strong>
+                    }
+                </p>
+                
+                <button class="btn btn-secondary btn-sm" @onclick="SelectAll" style="margin-right: 0.5rem;">
+                    Select All
+                </button>
+                <button class="btn btn-secondary btn-sm" @onclick="DeselectAll" style="margin-right: 0.5rem;">
+                    Deselect All
+                </button>
+                <button class="btn btn-secondary btn-sm" @onclick="SelectTopImages">
+                    Select Top @(refinementResult.TopImages?.Count ?? 0)
+                </button>
+                
+                <button class="btn btn-primary" @onclick="ExportSelected" disabled="@isExporting" style="margin-top: 1rem; display: block;">
+                    @if (isExporting)
+                    {
+                        <span>⏳ Creating ZIP file...</span>
+                    }
+                    else
+                    {
+                        <span>📦 Export Selected (@(selectedImages.Count > 0 ? selectedImages.Count.ToString() : "All") Images)</span>
+                    }
+                </button>
+                @if (!string.IsNullOrEmpty(exportMessage))
+                {
+                    <div class="export-message @(exportMessage.Contains("Error") ? "error" : "")">
+                        @if (exportMessage.Contains("Error"))
+                        {
+                            <strong>❌ Error:</strong>
+                        }
+                        @exportMessage
+                    </div>
+                }
+                @if (!string.IsNullOrEmpty(zipDownloadUrl))
+                {
+                    <div class="export-message" style="margin-top: 1rem;">
+                        <button class="btn btn-success" @onclick="() => DownloadZipFile(zipDownloadUrl)">
+                            ⬇️ Download ZIP File
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private string promptsText = string.Empty;
+    private int numberOfImagesToGenerate = 8;
+    private int topImagesToReturn = 3;
+    private string evaluationCriteria = string.Empty;
+    private bool isProcessing = false;
+    private bool isExporting = false;
+    private string errorMessage = string.Empty;
+    private string exportMessage = string.Empty;
+    private string customExportPath = string.Empty;
+    private string zipDownloadUrl = string.Empty;
+    private HashSet<string> selectedImages = new();
+    private ImageRefinementResult? refinementResult = null;
+
+    private async Task RefineImages()
+    {
+        if (string.IsNullOrWhiteSpace(promptsText))
+        {
+            errorMessage = "Please enter at least one prompt.";
+            return;
+        }
+
+        if (numberOfImagesToGenerate < 1)
+        {
+            errorMessage = "Number of images to generate must be at least 1.";
+            return;
+        }
+
+        if (topImagesToReturn > numberOfImagesToGenerate)
+        {
+            errorMessage = "Top images to return cannot exceed number of images to generate.";
+            return;
+        }
+
+        isProcessing = true;
+        errorMessage = string.Empty;
+        refinementResult = null;
+
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("ImageRefinementApi");
+            var prompts = promptsText.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(p => p.Trim())
+                .Where(p => !string.IsNullOrEmpty(p))
+                .ToList();
+
+            var request = new
+            {
+                prompts = prompts,
+                numberOfImagesToGenerate = numberOfImagesToGenerate,
+                topImagesToReturn = topImagesToReturn,
+                evaluationCriteria = string.IsNullOrWhiteSpace(evaluationCriteria) ? null : evaluationCriteria,
+                size = "1024x1024",
+                quality = "standard",
+                model = "dall-e-3"
+            };
+
+            var response = await httpClient.PostAsJsonAsync("/api/imagerefinement/refine", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                refinementResult = await response.Content.ReadFromJsonAsync<ImageRefinementResult>();
+                
+                // Ensure images are sorted by score (best to worst)
+                if (refinementResult != null && refinementResult.AllGeneratedImages != null)
+                {
+                    refinementResult.AllGeneratedImages = refinementResult.AllGeneratedImages
+                        .OrderByDescending(img => img.OverallScore)
+                        .ToList();
+                }
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                errorMessage = $"Error {response.StatusCode}: {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+
+    private async Task DownloadImage(string imageUrl, string prompt, int index)
+    {
+        try
+        {
+            // Download image directly from DALL-E URL
+            // Note: DALL-E URLs expire after some time, so download promptly
+            using var httpClient = new HttpClient();
+            var imageResponse = await httpClient.GetAsync(imageUrl);
+            
+            if (imageResponse.IsSuccessStatusCode)
+            {
+                var imageBytes = await imageResponse.Content.ReadAsByteArrayAsync();
+                var contentType = imageResponse.Content.Headers.ContentType?.MediaType ?? "image/png";
+                var extension = contentType.Split('/').LastOrDefault() ?? "png";
+                
+                // Create a safe filename from the prompt
+                var safePrompt = System.Text.RegularExpressions.Regex.Replace(
+                    prompt.Length > 50 ? prompt.Substring(0, 50) : prompt,
+                    @"[^a-zA-Z0-9\s-]", "");
+                safePrompt = safePrompt.Replace(" ", "_");
+                var fileName = $"image_{index}_{safePrompt}.{extension}";
+                
+                // Trigger browser download
+                await DownloadFile(imageBytes, fileName, contentType);
+            }
+            else
+            {
+                errorMessage = $"Failed to download image: {imageResponse.StatusCode}. The image URL may have expired.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error downloading image: {ex.Message}";
+        }
+    }
+
+    private async Task DownloadFile(byte[] fileBytes, string fileName, string contentType)
+    {
+        // Use JavaScript interop to trigger download
+        var base64 = Convert.ToBase64String(fileBytes);
+        var dataUrl = $"data:{contentType};base64,{base64}";
+        
+        await JSRuntime.InvokeVoidAsync("downloadFile", dataUrl, fileName);
+    }
+
+    private async Task DownloadZipFile(string zipFileId)
+    {
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("ImageRefinementApi");
+            // Use relative path since HttpClient already has BaseAddress configured
+            var response = await httpClient.GetAsync($"/api/imagerefinement/download-zip/{zipFileId}");
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var zipBytes = await response.Content.ReadAsByteArrayAsync();
+                
+                // Try to get filename from Content-Disposition header, or use a default
+                string zipFileName;
+                if (response.Content.Headers.ContentDisposition?.FileName != null)
+                {
+                    zipFileName = response.Content.Headers.ContentDisposition.FileName.Trim('"');
+                }
+                else
+                {
+                    zipFileName = $"image_refinement_{zipFileId.Substring(0, 8)}.zip";
+                }
+                
+                await DownloadFile(zipBytes, zipFileName, "application/zip");
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                exportMessage = $"Error downloading ZIP: {response.StatusCode} - {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            exportMessage = $"Error downloading ZIP file: {ex.Message}";
+        }
+    }
+
+    private void ToggleImageSelection(string imageUrl, bool isSelected)
+    {
+        if (isSelected)
+        {
+            selectedImages.Add(imageUrl);
+        }
+        else
+        {
+            selectedImages.Remove(imageUrl);
+        }
+    }
+
+    private void SelectAll()
+    {
+        if (refinementResult?.AllGeneratedImages != null)
+        {
+            selectedImages = refinementResult.AllGeneratedImages.Select(img => img.ImageUrl).ToHashSet();
+        }
+    }
+
+    private void DeselectAll()
+    {
+        selectedImages.Clear();
+    }
+
+    private void SelectTopImages()
+    {
+        if (refinementResult?.TopImages != null)
+        {
+            selectedImages = refinementResult.TopImages.Select(img => img.ImageUrl).ToHashSet();
+        }
+    }
+
+    private async Task ExportSelected()
+    {
+        if (refinementResult == null || refinementResult.AllGeneratedImages == null || !refinementResult.AllGeneratedImages.Any())
+        {
+            exportMessage = "No images to export. Please generate images first.";
+            return;
+        }
+
+        isExporting = true;
+        exportMessage = string.Empty;
+        zipDownloadUrl = string.Empty;
+
+        try
+        {
+            var httpClient = HttpClientFactory.CreateClient("ImageRefinementApi");
+            
+            // Determine which images to export
+            var imagesToExport = selectedImages.Count > 0
+                ? refinementResult.AllGeneratedImages.Where(img => selectedImages.Contains(img.ImageUrl)).ToList()
+                : refinementResult.AllGeneratedImages.ToList();
+            
+            if (!imagesToExport.Any())
+            {
+                exportMessage = "No images selected for export.";
+                return;
+            }
+
+            // Create export request with selected images
+            var exportRequest = new
+            {
+                refinementResult = refinementResult,
+                selectedImageUrls = imagesToExport.Select(img => img.ImageUrl).ToList()
+            };
+            
+            var response = await httpClient.PostAsJsonAsync("/api/imagerefinement/export-zip", exportRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var exportResult = await response.Content.ReadFromJsonAsync<ZipExportResult>();
+                
+                if (exportResult != null && !string.IsNullOrEmpty(exportResult.ZipFileId))
+                {
+                    // Store the zip file ID - we'll use it to download via the API
+                    zipDownloadUrl = exportResult.ZipFileId;
+                    exportMessage = $"✅ ZIP file created successfully! {exportResult.ImagesSaved} image(s) and metadata included. Click the download button below.";
+                }
+                else
+                {
+                    exportMessage = "Export completed but no download link returned.";
+                }
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                exportMessage = $"Error {response.StatusCode}: {errorContent}";
+            }
+        }
+        catch (Exception ex)
+        {
+            exportMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isExporting = false;
+        }
+    }
+
+    public class ImageRefinementResult
+    {
+        public string OriginalDescription { get; set; } = string.Empty;
+        public List<ImageEvaluationResult> AllGeneratedImages { get; set; } = new();
+        public List<ImageEvaluationResult> TopImages { get; set; } = new();
+        public int TotalImagesGenerated { get; set; }
+        public int ImagesEvaluated { get; set; }
+        public string Summary { get; set; } = string.Empty;
+        public DateTime ProcessedAt { get; set; }
+    }
+
+    public class ImageEvaluationResult
+    {
+        public string ImageUrl { get; set; } = string.Empty;
+        public string Prompt { get; set; } = string.Empty;
+        public string? RevisedPrompt { get; set; }
+        public double QualityScore { get; set; }
+        public double RelevanceScore { get; set; }
+        public double OverallScore { get; set; }
+        public string EvaluationDetails { get; set; } = string.Empty;
+        public List<string> Strengths { get; set; } = new();
+        public List<string> Weaknesses { get; set; } = new();
+        public DateTime GeneratedAt { get; set; }
+        public DateTime EvaluatedAt { get; set; }
+    }
+
+    public class ExportResult
+    {
+        public string ExportPath { get; set; } = string.Empty;
+        public int ImagesSaved { get; set; }
+        public string MetadataPath { get; set; } = string.Empty;
+        public string CsvPath { get; set; } = string.Empty;
+        public string SummaryPath { get; set; } = string.Empty;
+        public List<SavedImageInfo> SavedImages { get; set; } = new();
+    }
+
+    public class SavedImageInfo
+    {
+        public int Rank { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public string Prompt { get; set; } = string.Empty;
+        public string? RevisedPrompt { get; set; }
+        public double QualityScore { get; set; }
+        public double RelevanceScore { get; set; }
+        public double OverallScore { get; set; }
+        public bool IsTopImage { get; set; }
+    }
+
+    public class ZipExportResult
+    {
+        public string ZipFileId { get; set; } = string.Empty;
+        public int ImagesSaved { get; set; }
+        public string ZipFileName { get; set; } = string.Empty;
+    }
+}

@@ -29,18 +29,54 @@ Security is critical when working with AI APIs. This guide covers best practices
 ```
 
 **Good:**
+- ✅ **Use `.env` file with setup script** (Recommended - see below)
 - Use environment variables
 - Use .NET User Secrets for development
 - Use Azure Key Vault for production
 - Use GitHub Secrets for CI/CD
 
-### Environment Variables
+### 🔐 Recommended: .env File with Setup Script
+
+**This project includes a secure setup script that loads your API key from a `.env` file.**
+
+1. **Create `.env` file** in project root:
+   ```bash
+   OPENAI_API_KEY=sk-your-actual-api-key-here
+   ```
+
+2. **Load environment variables** before running applications:
+
+   **macOS/Linux:**
+   ```bash
+   source scripts/setup-env.sh
+   ```
+
+   **Windows PowerShell:**
+   ```powershell
+   .\scripts\setup-env.ps1
+   ```
+
+   **Windows Command Prompt:**
+   ```cmd
+   scripts\setup-env.bat
+   ```
+
+**Why this is recommended:**
+- ✅ Keeps API keys out of version control (`.env` is in `.gitignore`)
+- ✅ Easy to use - just run the script before starting applications
+- ✅ Works with all projects automatically
+- ✅ Secure - never commit your `.env` file
+- ✅ .NET automatically reads from environment variables
+
+See [README-SECURITY.md](../../README-SECURITY.md) for complete guide.
+
+### Alternative: Manual Environment Variables
 
 ```bash
 export OpenAI__ApiKey="sk-your-key-here"
 ```
 
-### User Secrets (Development)
+### Alternative: User Secrets (Development)
 
 ```bash
 dotnet user-secrets init

@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace OpenAIShared;
@@ -58,8 +59,8 @@ public class StreamingService
         CancellationToken cancellationToken = default)
     {
         httpResponse.ContentType = "text/event-stream";
-        httpResponse.Headers.Add("Cache-Control", "no-cache");
-        httpResponse.Headers.Add("Connection", "keep-alive");
+        httpResponse.Headers["Cache-Control"] = "no-cache";
+        httpResponse.Headers["Connection"] = "keep-alive";
 
         await StreamChatCompletionAsync(request, httpResponse.Body, cancellationToken);
     }

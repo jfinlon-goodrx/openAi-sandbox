@@ -2,9 +2,14 @@
 
 # Direct OpenAI API Examples
 # These examples call OpenAI APIs directly - no development environment needed
-# Replace YOUR_OPENAI_API_KEY with your actual API key
 
-OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+# Load environment variables from .env file (if setup script exists)
+if [ -f "../../scripts/setup-env.sh" ]; then
+    source ../../scripts/setup-env.sh > /dev/null 2>&1
+fi
+
+# Use OpenAI__ApiKey from .env if available, otherwise fall back to OPENAI_API_KEY or default
+OPENAI_API_KEY="${OpenAI__ApiKey:-${OPENAI_API_KEY:-YOUR_OPENAI_API_KEY}}"
 OPENAI_BASE_URL="https://api.openai.com/v1"
 
 # Colors for output
@@ -124,4 +129,16 @@ curl -s "$OPENAI_BASE_URL/images/generations" \
   }' | jq '.'
 
 echo -e "\n${BLUE}=== Examples Complete ===${NC}"
-echo "Remember to replace YOUR_OPENAI_API_KEY with your actual API key!"
+echo ""
+if [ "$OPENAI_API_KEY" = "YOUR_OPENAI_API_KEY" ]; then
+    echo "⚠️  API Key not set!"
+    echo "💡 Tip: To use your API key from .env file, run this first:"
+    echo "  source ../../scripts/setup-env.sh"
+    echo ""
+    echo "Or set manually:"
+    echo "  export OPENAI_API_KEY=sk-your-api-key-here"
+else
+    echo "✅ Using API key from environment"
+fi
+echo ""
+echo "See README-SECURITY.md for secure API key management."

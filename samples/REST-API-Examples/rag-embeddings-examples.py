@@ -2,6 +2,10 @@
 """
 RAG and Vector Embeddings Examples
 Comprehensive examples for creating embeddings and using RAG (Retrieval-Augmented Generation)
+
+Note: This script reads API keys from environment variables.
+To load from .env file, run: source ../../scripts/setup-env.sh
+Or set manually: export OPENAI_API_KEY=your-api-key-here
 """
 
 import os
@@ -11,9 +15,10 @@ import math
 from typing import List, Dict, Any, Tuple
 
 # Configuration
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your-openai-api-key")
+# Try OpenAI__ApiKey first (from setup-env.sh), then fall back to specific vars or defaults
+OPENAI_API_KEY = os.getenv("OpenAI__ApiKey") or os.getenv("OPENAI_API_KEY", "your-openai-api-key")
 BASE_URL = os.getenv("BASE_URL", "http://localhost:5001")
-API_KEY = os.getenv("API_KEY", "your-api-key")
+API_KEY = os.getenv("OpenAI__ApiKey") or os.getenv("API_KEY", "your-api-key")
 
 def print_section(title: str):
     """Print a formatted section header"""
@@ -318,7 +323,11 @@ def main():
     print("="*70)
     print("RAG and Vector Embeddings Examples")
     print("="*70)
-    print(f"OpenAI API Key: {OPENAI_API_KEY[:20]}...")
+    if OPENAI_API_KEY and OPENAI_API_KEY != "your-openai-api-key":
+        print(f"OpenAI API Key: {OPENAI_API_KEY[:20]}...")
+    else:
+        print("⚠️  OpenAI API Key: Not set (using default placeholder)")
+        print("💡 Tip: Run 'source ../../scripts/setup-env.sh' to load from .env file")
     print("="*70)
     
     try:

@@ -2,6 +2,10 @@
 """
 OpenAI Platform Learning Portfolio - Python API Examples
 Updated with new features: Streaming, Authentication, Metrics, Database, Autonomous Agent
+
+Note: This script reads API keys from environment variables.
+To load from .env file, run: source ../../scripts/setup-env.sh
+Or set manually: export API_KEY=your-api-key-here
 """
 
 import os
@@ -10,8 +14,9 @@ import requests
 from typing import Optional, Dict, Any
 
 # Configuration
+# Try OpenAI__ApiKey first (from setup-env.sh), then API_KEY, then default
 BASE_URL = os.getenv("BASE_URL", "http://localhost:5001")
-API_KEY = os.getenv("API_KEY", "your-api-key-here")
+API_KEY = os.getenv("OpenAI__ApiKey") or os.getenv("API_KEY", "your-api-key-here")
 JWT_TOKEN = os.getenv("JWT_TOKEN", "")
 
 def make_request(method: str, endpoint: str, data: Optional[Dict] = None, 
@@ -328,6 +333,51 @@ def test_correlation_id():
     print(f"\nCorrelation ID sent: {correlation_id}")
     print("Check logs for correlation ID tracking")
 
+def refine_images():
+    """Generate multiple images, evaluate them, and get top candidates"""
+    request_data = {
+        "prompts": [
+            "A futuristic cityscape at sunset with flying cars and neon lights",
+            "A serene mountain landscape with a crystal-clear lake reflecting snow-capped peaks"
+        ],
+        "numberOfImagesToGenerate": 8,
+        "topImagesToReturn": 3,
+        "evaluationCriteria": "Focus on visual appeal, composition quality, and color harmony",
+        "size": "1024x1024",
+        "quality": "standard",
+        "model": "dall-e-3"
+    }
+    response = make_request("POST", "/api/imagerefinement/refine", data=request_data)
+    print_response("Image Refinement", response)
+    
+    # Print top images summary
+    if "topImages" in response:
+        print("\nTop Images Selected:")
+        for idx, img in enumerate(response["topImages"], 1):
+            print(f"  {idx}. Score: {img.get('overallScore', 0):.2f}/10.0")
+            print(f"     URL: {img.get('imageUrl', 'N/A')}")
+            print(f"     Strengths: {', '.join(img.get('strengths', [])[:3])}")
+
+def image_refinement_health():
+    """Check Image Refinement Assistant health"""
+    response = make_request("GET", "/api/imagerefinement/health")
+    print_response("Image Refinement Health", response)
+
+def export_refinement_result():
+    """Export refinement result: saves all images and metadata to local folder"""
+    # Note: This requires a refinement result from refine_images() first
+    print("\n⚠️  Note: Export requires a refinement result.")
+    print("   First run refine_images() to get a result, then pass it to export.")
+    print("\nExample:")
+    print("  result = refine_images()")
+    print("  export_response = requests.post(")
+    print("      f'{BASE_URL}/api/imagerefinement/export',")
+    print("      json=result,")
+    print("      headers={'X-API-Key': API_KEY}")
+    print("  )")
+    print("  export_info = export_response.json()")
+    print("  print(f\"Exported to: {export_info['exportPath']}\")")
+
 # ============================================================================
 # MAIN
 # ============================================================================
@@ -337,7 +387,12 @@ def main():
     print("OpenAI Platform Learning Portfolio - Python Examples")
     print("="*60)
     print(f"Base URL: {BASE_URL}")
-    print(f"API Key: {API_KEY[:20]}...")
+    if API_KEY and API_KEY != "your-api-key-here":
+        print(f"API Key: {API_KEY[:20]}...")
+    else:
+        print("⚠️  API Key: Not set (using default placeholder)")
+        print("💡 Tip: Run 'source ../../scripts/setup-env.sh' to load from .env file")
+        print("   Or set: export API_KEY=your-api-key-here")
     print("="*60)
     
     try:
@@ -379,6 +434,11 @@ def main():
         # Testing features
         test_rate_limiting()
         test_correlation_id()
+        
+        # Image Refinement Assistant
+        refine_images()
+        image_refinement_health()
+        export_refinement_result()  # Shows example, doesn't actually export without a result
         
         print("\n" + "="*60)
         print("All examples completed successfully!")

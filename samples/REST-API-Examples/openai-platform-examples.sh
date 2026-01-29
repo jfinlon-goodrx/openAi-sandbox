@@ -3,9 +3,15 @@
 # OpenAI Platform Learning Portfolio - API Examples
 # Updated with new features: Streaming, Authentication, Metrics, Database, Autonomous Agent
 
+# Load environment variables from .env file (if setup script exists)
+if [ -f "../../scripts/setup-env.sh" ]; then
+    source ../../scripts/setup-env.sh > /dev/null 2>&1
+fi
+
 # Configuration
 BASE_URL="${BASE_URL:-http://localhost:5001}"
-API_KEY="${API_KEY:-your-api-key-here}"
+# Use OpenAI__ApiKey from .env if available, otherwise fall back to API_KEY or default
+API_KEY="${OpenAI__ApiKey:-${API_KEY:-your-api-key-here}}"
 JWT_TOKEN="${JWT_TOKEN:-}"
 
 # Colors for output
@@ -246,8 +252,47 @@ curl -X GET "${BASE_URL}/api/metrics" \
   -H "X-Correlation-ID: ${CORRELATION_ID}" \
   -v 2>&1 | grep -i "correlation"
 
+# ============================================================================
+# IMAGE REFINEMENT ASSISTANT
+# ============================================================================
+echo -e "\n${GREEN}21. Refine Images (Generate, Evaluate, Select Top 3)${NC}"
+curl -X POST "${BASE_URL}/api/imagerefinement/refine" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: ${API_KEY}" \
+  -d '{
+    "prompts": [
+      "A futuristic cityscape at sunset with flying cars and neon lights",
+      "A serene mountain landscape with a crystal-clear lake reflecting snow-capped peaks"
+    ],
+    "numberOfImagesToGenerate": 8,
+    "topImagesToReturn": 3,
+    "evaluationCriteria": "Focus on visual appeal, composition quality, and color harmony",
+    "size": "1024x1024",
+    "quality": "standard",
+    "model": "dall-e-3"
+  }' | jq '.'
+
+echo -e "\n${GREEN}22. Image Refinement Health Check${NC}"
+curl -X GET "${BASE_URL}/api/imagerefinement/health" \
+  -H "X-API-Key: ${API_KEY}" \
+  | jq '.'
+
+echo -e "\n${GREEN}23. Export Refinement Result (Save Images + Metadata)${NC}"
+echo "Note: First run example 21 to get a refinement result, then export it"
+echo "Example export command (replace REFINEMENT_RESULT_JSON with actual result):"
+echo "curl -X POST \"${BASE_URL}/api/imagerefinement/export?folderName=my_export\" \\"
+echo "  -H \"Content-Type: application/json\" \\"
+echo "  -H \"X-API-Key: \${API_KEY}\" \\"
+echo "  -d @refinement_result.json | jq '.'"
+
 echo -e "\n${BLUE}=== Examples Complete ===${NC}"
-echo "Set environment variables to customize:"
+echo ""
+echo "💡 Tip: To use your API key from .env file, run this first:"
+echo "  source ../../scripts/setup-env.sh"
+echo ""
+echo "Or set environment variables manually:"
 echo "  export BASE_URL=http://localhost:5001"
 echo "  export API_KEY=your-api-key"
 echo "  export JWT_TOKEN=your-jwt-token"
+echo ""
+echo "See README-SECURITY.md for secure API key management."

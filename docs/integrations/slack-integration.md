@@ -27,12 +27,28 @@ Slack integration enables automated notifications and updates from all OpenAI Pl
 
 ### 2. Configure Webhook URL
 
-**Option 1: Environment Variable**
+**Option 1: .env File (Recommended)**
+
+Add to your `.env` file:
+```bash
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+```
+
+Then load it:
+```bash
+source scripts/setup-env.sh  # macOS/Linux
+# or
+.\scripts\setup-env.ps1      # Windows PowerShell
+```
+
+The script will set `Slack__WebhookUrl` automatically.
+
+**Option 2: Environment Variable**
 ```bash
 export Slack__WebhookUrl="https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
 ```
 
-**Option 2: appsettings.json**
+**Option 3: appsettings.json**
 ```json
 {
   "Slack": {

@@ -3,10 +3,16 @@
 # RAG and Vector Embeddings Examples
 # Comprehensive examples for creating embeddings and using RAG (Retrieval-Augmented Generation)
 
+# Load environment variables from .env file (if setup script exists)
+if [ -f "../../scripts/setup-env.sh" ]; then
+    source ../../scripts/setup-env.sh > /dev/null 2>&1
+fi
+
 # Configuration
 BASE_URL="${BASE_URL:-http://localhost:5001}"
-API_KEY="${API_KEY:-your-api-key-here}"
-OPENAI_API_KEY="${OPENAI_API_KEY:-your-openai-api-key}"
+# Use OpenAI__ApiKey from .env if available, otherwise fall back to API_KEY or default
+API_KEY="${OpenAI__ApiKey:-${API_KEY:-your-api-key-here}}"
+OPENAI_API_KEY="${OpenAI__ApiKey:-${OPENAI_API_KEY:-your-openai-api-key}}"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -299,7 +305,13 @@ echo "  - Azure Cognitive Search (with vector support)"
 echo "  - PostgreSQL with pgvector extension"
 
 echo -e "\n${BLUE}=== Examples Complete ===${NC}"
-echo "Set environment variables to customize:"
+echo ""
+echo "💡 Tip: To use your API key from .env file, run this first:"
+echo "  source ../../scripts/setup-env.sh"
+echo ""
+echo "Or set environment variables manually:"
 echo "  export BASE_URL=http://localhost:5001"
 echo "  export API_KEY=your-api-key"
 echo "  export OPENAI_API_KEY=your-openai-api-key"
+echo ""
+echo "See README-SECURITY.md for secure API key management."
